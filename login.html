@@ -18,8 +18,8 @@
   <!-- #### END FONTS #### -->
 
   <!-- #### STYLESHEETS #### -->
-  <link rel="stylesheet" href="/css/styles.css"/>
-  <link rel="stylesheet" href="/css/nav.css"/>
+  <link rel="stylesheet" href="./css/styles.css"/>
+ <link rel="stylesheet" href="./css/nav.css"/>
   <!-- #### END STYLESHEETS #### -->
 
   <!-- #### PAGE STYLES #### -->
@@ -62,10 +62,10 @@
 
   <!-- #### NAVBAR #### -->
   <nav class="navbar">
-    <a href="/index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <a href="./index.html" class="nav-logo">iCraft<span>Course</span></a>
     <div class="nav-actions" style="margin-left:auto">
       <span style="font-size:0.85rem;color:var(--gray)">Don't have an account?</span>
-      <a href="/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="./register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
   </nav>
   <!-- #### END NAVBAR #### -->
@@ -87,7 +87,7 @@
     <div class="auth-right">
       <div class="auth-form-header">
         <h2>Log in to your account</h2>
-        <p>Don't have an account? <a href="/register.html">Create one free</a></p>
+        <p>Don't have an account? <a href="./register.html">Create one free</a></p>
       </div>
 
       <div class="alert" id="auth-alert"></div>
@@ -151,76 +151,128 @@
 
   <!-- #### LOGIN SCRIPTS #### -->
   <script type="module">
+  import { loginUser, loginWithGoogle, sendResetLink } from "./js/auth.js";
+  import { requireGuest } from "./js/guards.js";
 
-    import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail }
-                               from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp }
-                               from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  requireGuest("./dashboard.html");
 
-    // #### FIREBASE SETUP ####
-    const firebaseConfig = {
-      apiKey:            "AIzaSyClSZ-Y2GjprWLSDMG0LlwNcz4fU9w89ko",
-      authDomain:        "icraftcourses.firebaseapp.com",
-      projectId:         "icraftcourses",
-      storageBucket:     "icraftcourses.firebasestorage.app",
-      messagingSenderId: "919073015993",
-      appId:             "1:919073015993:web:63291f712a15c1d11eb368"
-    };
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
-    // #### END FIREBASE SETUP ####
+  function showAlert(msg, type = "error") {
+    const el = document.getElementById("auth-alert");
+    el.className = `alert alert-${type}`;
+    el.textContent = msg;
+    el.style.display = "flex";
+  }
 
+  // ------------------------------------------------------
+  // Email login
+  // ------------------------------------------------------
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    // #### HELPER FUNCTIONS ####
-    function showAlert(msg, type = "error") {
-      const el = document.getElementById("auth-alert");
-      el.className = `alert alert-${type}`;
-      el.textContent = msg;
-      el.style.display = "flex";
+    document.getElementById("auth-alert").style.display = "none";
+    document.getElementById("err-email").style.display = "none";
+    document.getElementById("err-password").style.display = "none";
+
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    if (!email) {
+      document.getElementById("err-email").style.display = "block";
+      return;
     }
-    function getFriendlyError(code) {
-      const errors = {
-        "auth/user-not-found":       "No account found with this email.",
-        "auth/wrong-password":       "Incorrect password. Please try again.",
-        "auth/invalid-credential":   "Incorrect email or password. Please try again.",
-        "auth/too-many-requests":    "Too many attempts. Please wait and try again.",
-        "auth/invalid-email":        "Please enter a valid email address.",
-        "auth/network-request-failed": "Network error. Check your internet connection."
-      };
-      return errors[code] || "Something went wrong: " + code;
+
+    if (!password) {
+      document.getElementById("err-password").style.display = "block";
+      return;
     }
-    // #### END HELPER FUNCTIONS ####
 
+    const btn = document.getElementById("btn-login");
+    btn.disabled = true;
+    btn.textContent = "Logging in...";
 
-    // #### LOGIN FORM SUBMIT ####
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      document.getElementById("auth-alert").style.display = "none";
-      document.getElementById("err-email").style.display    = "none";
-      document.getElementById("err-password").style.display = "none";
+    const result = await loginUser({ email, password });
 
-      const email    = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
+    if (result.success) {
+      window.location.href = "./dashboard.html";
+      return;
+    }
 
-      if (!email)    { document.getElementById("err-email").style.display    = "block"; return; }
-      if (!password) { document.getElementById("err-password").style.display = "block"; return; }
+    showAlert(result.error, "error");
+    btn.disabled = false;
+    btn.textContent = "Log In";
+  });
 
-      const btn = document.getElementById("btn-login");
-      btn.disabled    = true;
-      btn.textContent = "Logging in...";
+  // ------------------------------------------------------
+  // Google login
+  // ------------------------------------------------------
+  document.getElementById("btn-google-login").addEventListener("click", async () => {
+    document.getElementById("auth-alert").style.display = "none";
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // Success — redirect to dashboard
-        window.location.href = "/dashboard.html";
-      } catch (err) {
-        showAlert(getFriendlyError(err.code), "error");
-        btn.disabled    = false;
-        btn.textContent = "Log In";
-      }
-    });
+    const result = await loginWithGoogle();
+
+    if (result.success) {
+      window.location.href = "./dashboard.html";
+      return;
+    }
+
+    if (result.code !== "auth/popup-closed-by-user") {
+      showAlert(result.error, "error");
+    }
+  });
+
+  // ------------------------------------------------------
+  // Forgot password modal
+  // ------------------------------------------------------
+  const modal = document.getElementById("reset-modal");
+
+  document.getElementById("btn-forgot-password").addEventListener("click", (e) => {
+    e.preventDefault();
+    modal.classList.add("open");
+
+    const email = document.getElementById("login-email").value.trim();
+    if (email) document.getElementById("reset-email").value = email;
+  });
+
+  document.getElementById("btn-close-modal").addEventListener("click", () => {
+    modal.classList.remove("open");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("open");
+  });
+
+  document.getElementById("btn-send-reset").addEventListener("click", async () => {
+    const email = document.getElementById("reset-email").value.trim();
+    const resetAlert = document.getElementById("reset-alert");
+
+    resetAlert.style.display = "none";
+    document.getElementById("err-reset-email").style.display = "none";
+
+    if (!email || !email.includes("@")) {
+      document.getElementById("err-reset-email").style.display = "block";
+      return;
+    }
+
+    const btn = document.getElementById("btn-send-reset");
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+
+    const result = await sendResetLink(email);
+
+    if (result.success) {
+      resetAlert.className = "alert alert-success";
+      resetAlert.textContent = "Reset link sent! Check your email inbox.";
+      resetAlert.style.display = "flex";
+    } else {
+      resetAlert.className = "alert alert-error";
+      resetAlert.textContent = result.error;
+      resetAlert.style.display = "flex";
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Send Reset Link";
+  });
+</script>
     // #### END LOGIN FORM SUBMIT ####
 
 
