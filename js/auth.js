@@ -3,7 +3,7 @@
 // PURPOSE: Shared auth actions for login/register/logout
 // ========================================================
 
-import { auth, db } from "./firebase-config.js";
+import { auth, db, isFirebaseConfigured } from "./firebase-config.js";
 
 import {
   createUserWithEmailAndPassword,
@@ -26,6 +26,14 @@ import {
 // --------------------------------------------------------
 // Helpers
 // --------------------------------------------------------
+function firebaseNotReady() {
+  return {
+    success: false,
+    code: "firebase/not-configured",
+    error: "Firebase is not configured yet. Add your Firebase project values first."
+  };
+}
+
 function mapRegisterError(code) {
   const errors = {
     "auth/email-already-in-use": "This email is already registered. Please log in instead.",
@@ -53,6 +61,10 @@ function mapLoginError(code) {
 // User profile upsert
 // --------------------------------------------------------
 async function ensureUserProfile(user, extra = {}) {
+  if (!isFirebaseConfigured || !db) {
+    throw new Error("Firebase is not configured.");
+  }
+
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
 
@@ -88,6 +100,10 @@ async function ensureUserProfile(user, extra = {}) {
 // Register
 // --------------------------------------------------------
 export async function registerUser({ name, email, password }) {
+  if (!isFirebaseConfigured || !auth || !db) {
+    return firebaseNotReady();
+  }
+
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const user = cred.user;
@@ -113,6 +129,10 @@ export async function registerUser({ name, email, password }) {
 // Email login
 // --------------------------------------------------------
 export async function loginUser({ email, password }) {
+  if (!isFirebaseConfigured || !auth || !db) {
+    return firebaseNotReady();
+  }
+
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     const user = cred.user;
@@ -135,6 +155,10 @@ export async function loginUser({ email, password }) {
 // Google login/register
 // --------------------------------------------------------
 export async function loginWithGoogle() {
+  if (!isFirebaseConfigured || !auth || !db) {
+    return firebaseNotReady();
+  }
+
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
@@ -151,9 +175,10 @@ export async function loginWithGoogle() {
     return {
       success: false,
       code: err.code,
-      error: err.code === "auth/popup-closed-by-user"
-        ? "Google sign-in was cancelled."
-        : "Google sign-in failed. Please try again."
+      error:
+        err.code === "auth/popup-closed-by-user"
+          ? "Google sign-in was cancelled."
+          : "Google sign-in failed. Please try again."
     };
   }
 }
@@ -162,6 +187,10 @@ export async function loginWithGoogle() {
 // Password reset
 // --------------------------------------------------------
 export async function sendResetLink(email) {
+  if (!isFirebaseConfigured || !auth) {
+    return firebaseNotReady();
+  }
+
   try {
     await sendPasswordResetEmail(auth, email);
     return { success: true };
@@ -178,6 +207,10 @@ export async function sendResetLink(email) {
 // Logout
 // --------------------------------------------------------
 export async function logoutUser() {
+  if (!isFirebaseConfigured || !auth) {
+    return firebaseNotReady();
+  }
+
   try {
     await signOut(auth);
     return { success: true };
@@ -195,11 +228,20 @@ export async function logoutUser() {
 // --------------------------------------------------------
 export function getCurrentAuthUser() {
   return new Promise((resolve) => {
+    if (!isFirebaseConfigured || !auth) {
+      resolve(null);
+      return;
+    }
+
     onAuthStateChanged(auth, (user) => resolve(user || null));
   });
 }
 
 export async function getCurrentUserProfile() {
+  if (!isFirebaseConfigured || !auth || !db) {
+    return null;
+  }
+
   const user = await getCurrentAuthUser();
   if (!user) return null;
 
