@@ -18,8 +18,8 @@
   <!-- #### END FONTS #### -->
 
   <!-- #### STYLESHEETS #### -->
-  <link rel="stylesheet" href="/css/styles.css"/>
-  <link rel="stylesheet" href="/css/nav.css"/>
+  <link rel="stylesheet" href="./css/styles.css"/>
+  <link rel="stylesheet" href="./css/nav.css"/>
   <!-- #### END STYLESHEETS #### -->
 
   <!-- #### PAGE STYLES #### -->
@@ -93,10 +93,10 @@
 
   <!-- #### NAVBAR #### -->
   <nav class="navbar">
-    <a href="/index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <a href="./index.html" class="nav-logo">iCraft<span>Course</span></a>
     <div class="nav-actions" style="margin-left:auto">
       <span style="font-size:0.85rem;color:var(--gray)">Already have an account?</span>
-      <a href="/login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="./login.html" class="btn btn-secondary btn-sm">Log In</a>
     </div>
   </nav>
   <!-- #### END NAVBAR #### -->
@@ -120,7 +120,7 @@
     <div class="auth-right">
       <div class="auth-form-header">
         <h2>Create your account</h2>
-        <p>Already have an account? <a href="/login.html">Log in here</a></p>
+        <p>Already have an account? <a href="./login.html">Log in here</a></p>
       </div>
 
       <div class="alert" id="auth-alert"></div>
@@ -165,7 +165,7 @@
         </div>
         <div class="checkbox-group">
           <input type="checkbox" id="reg-terms"/>
-          <label for="reg-terms">I agree to the <a href="/terms.html" target="_blank">Terms of Use</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a></label>
+          <label for="reg-terms">I agree to the <a href="./terms.html" target="_blank">Terms of Use</a> and <a href="./privacy.html" target="_blank">Privacy Policy</a></label>
         </div>
         <span class="form-error" id="err-terms" style="margin-top:-0.75rem;margin-bottom:1rem;display:none;">Please accept the terms to continue.</span>
         <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-register">Create Account</button>
@@ -178,175 +178,135 @@
 
   <!-- #### REGISTER SCRIPTS #### -->
   <script type="module">
+  import { registerUser, loginWithGoogle } from "./js/auth.js";
+  import { requireGuest } from "./js/guards.js";
 
-    // Import Firebase directly — no middleman
-    import { initializeApp }                from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup }
-                                            from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp }
-                                            from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  requireGuest("./dashboard.html");
 
-    // #### FIREBASE SETUP ####
-    const firebaseConfig = {
-      apiKey:            "AIzaSyClSZ-Y2GjprWLSDMG0LlwNcz4fU9w89ko",
-      authDomain:        "icraftcourses.firebaseapp.com",
-      projectId:         "icraftcourses",
-      storageBucket:     "icraftcourses.firebasestorage.app",
-      messagingSenderId: "919073015993",
-      appId:             "1:919073015993:web:63291f712a15c1d11eb368"
-    };
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db   = getFirestore(app);
-    // #### END FIREBASE SETUP ####
+  function showAlert(msg, type = "error") {
+    const el = document.getElementById("auth-alert");
+    el.className = `alert alert-${type}`;
+    el.textContent = msg;
+    el.style.display = "flex";
+  }
 
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = "block";
+  }
 
-    // #### HELPER FUNCTIONS ####
-    function showAlert(msg, type = "error") {
-      const el = document.getElementById("auth-alert");
-      el.className = `alert alert-${type}`;
-      el.textContent = msg;
-      el.style.display = "flex";
+  function hideError(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  }
+
+  // ------------------------------------------------------
+  // Password strength
+  // ------------------------------------------------------
+  document.getElementById("reg-password").addEventListener("input", (e) => {
+    const val = e.target.value;
+    const bar = document.getElementById("strength-bar");
+    const label = document.getElementById("strength-label");
+
+    bar.className = "password-strength-bar";
+
+    if (val.length === 0) {
+      label.textContent = "";
+    } else if (val.length < 6) {
+      bar.classList.add("strength-weak");
+      label.textContent = "Weak — at least 6 characters required";
+      label.style.color = "var(--red)";
+    } else if (val.length < 10) {
+      bar.classList.add("strength-medium");
+      label.textContent = "Medium — consider adding numbers or symbols";
+      label.style.color = "var(--orange)";
+    } else {
+      bar.classList.add("strength-strong");
+      label.textContent = "Strong password ✓";
+      label.style.color = "var(--green)";
     }
-    function showError(id, msg) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.textContent = msg;
-      el.style.display = "block";
+  });
+
+  // ------------------------------------------------------
+  // Email register
+  // ------------------------------------------------------
+  document.getElementById("register-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    ["err-name", "err-email", "err-password", "err-confirm", "err-terms"].forEach(hideError);
+    document.getElementById("auth-alert").style.display = "none";
+
+    const name = document.getElementById("reg-name").value.trim();
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const confirm = document.getElementById("reg-confirm").value;
+    const terms = document.getElementById("reg-terms").checked;
+
+    let valid = true;
+
+    if (!name) {
+      showError("err-name", "Please enter your full name.");
+      valid = false;
     }
-    function hideError(id) {
-      const el = document.getElementById(id);
-      if (el) el.style.display = "none";
+
+    if (!email || !email.includes("@")) {
+      showError("err-email", "Please enter a valid email address.");
+      valid = false;
     }
-    function getFriendlyError(code) {
-      const errors = {
-        "auth/email-already-in-use": "This email is already registered. Please log in instead.",
-        "auth/invalid-email":        "Please enter a valid email address.",
-        "auth/weak-password":        "Password must be at least 6 characters.",
-        "auth/too-many-requests":    "Too many attempts. Please wait and try again.",
-        "auth/network-request-failed": "Network error. Check your internet connection."
-      };
-      return errors[code] || "Something went wrong: " + code;
+
+    if (password.length < 6) {
+      showError("err-password", "Password must be at least 6 characters.");
+      valid = false;
     }
-    // #### END HELPER FUNCTIONS ####
 
+    if (password !== confirm) {
+      showError("err-confirm", "Passwords do not match.");
+      valid = false;
+    }
 
-    // #### PASSWORD STRENGTH ####
-    document.getElementById("reg-password").addEventListener("input", (e) => {
-      const val   = e.target.value;
-      const bar   = document.getElementById("strength-bar");
-      const label = document.getElementById("strength-label");
-      bar.className = "password-strength-bar";
-      if (val.length === 0) { label.textContent = ""; }
-      else if (val.length < 6) { bar.classList.add("strength-weak"); label.textContent = "Weak — at least 6 characters required"; label.style.color = "var(--red)"; }
-      else if (val.length < 10) { bar.classList.add("strength-medium"); label.textContent = "Medium — consider adding numbers or symbols"; label.style.color = "var(--orange)"; }
-      else { bar.classList.add("strength-strong"); label.textContent = "Strong password ✓"; label.style.color = "var(--green)"; }
-    });
-    // #### END PASSWORD STRENGTH ####
+    if (!terms) {
+      showError("err-terms", "Please accept the terms to continue.");
+      valid = false;
+    }
 
+    if (!valid) return;
 
-    // #### REGISTER FORM SUBMIT ####
-    document.getElementById("register-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const btn = document.getElementById("btn-register");
+    btn.disabled = true;
+    btn.textContent = "Creating account...";
 
-      // Clear errors
-      ["err-name","err-email","err-password","err-confirm","err-terms"].forEach(hideError);
-      document.getElementById("auth-alert").style.display = "none";
+    const result = await registerUser({ name, email, password });
 
-      const name     = document.getElementById("reg-name").value.trim();
-      const email    = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
-      const confirm  = document.getElementById("reg-confirm").value;
-      const terms    = document.getElementById("reg-terms").checked;
+    if (result.success) {
+      window.location.href = "./dashboard.html";
+      return;
+    }
 
-      // Validate
-      let valid = true;
-      if (!name)                    { showError("err-name",     "Please enter your full name.");           valid = false; }
-      if (!email||!email.includes("@")) { showError("err-email","Please enter a valid email address.");   valid = false; }
-      if (password.length < 6)      { showError("err-password", "Password must be at least 6 characters."); valid = false; }
-      if (password !== confirm)     { showError("err-confirm",  "Passwords do not match.");               valid = false; }
-      if (!terms)                   { showError("err-terms",    "Please accept the terms to continue.");  valid = false; }
-      if (!valid) return;
+    showAlert(result.error, "error");
+    btn.disabled = false;
+    btn.textContent = "Create Account";
+  });
 
-      // Loading state
-      const btn = document.getElementById("btn-register");
-      btn.disabled = true;
-      btn.textContent = "Creating account...";
+  // ------------------------------------------------------
+  // Google register/login
+  // ------------------------------------------------------
+  document.getElementById("btn-google-register").addEventListener("click", async () => {
+    document.getElementById("auth-alert").style.display = "none";
 
-      try {
-        // 1. Create auth user
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        const user = cred.user;
+    const result = await loginWithGoogle();
 
-        // 2. Set display name
-        await updateProfile(user, { displayName: name });
+    if (result.success) {
+      window.location.href = "./dashboard.html";
+      return;
+    }
 
-        // 3. Write to Firestore — await fully before redirecting
-        showAlert("Auth done. Now writing to Firestore...", "info");
-        try {
-          await setDoc(doc(db, "users", user.uid), {
-            uid:             user.uid,
-            displayName:     name,
-            email:           email,
-            photoURL:        "",
-            role:            "student",
-            isBanned:        false,
-            enrolledCourses: [],
-            createdAt:       serverTimestamp()
-          });
-          showAlert("Firestore write SUCCESS! Redirecting...", "success");
-          setTimeout(() => { window.location.href = "/dashboard.html"; }, 3000);
-        } catch (fsErr) {
-          // Show Firestore error visibly on screen — do NOT redirect
-          showAlert("Firestore FAILED: " + fsErr.code + " — " + fsErr.message, "error");
-          console.error("Firestore write error:", fsErr);
-          btn.disabled    = false;
-          btn.textContent = "Create Account";
-          return;
-        }
-
-      } catch (err) {
-        console.error("Register error:", err);
-        showAlert(getFriendlyError(err.code), "error");
-        btn.disabled = false;
-        btn.textContent = "Create Account";
-      }
-    });
-    // #### END REGISTER FORM SUBMIT ####
-
-
-    // #### GOOGLE REGISTER ####
-    document.getElementById("btn-google-register").addEventListener("click", async () => {
-      document.getElementById("auth-alert").style.display = "none";
-      try {
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: "select_account" });
-        const result = await signInWithPopup(auth, provider);
-        const user   = result.user;
-
-        // Write to Firestore
-        await setDoc(doc(db, "users", user.uid), {
-          uid:             user.uid,
-          displayName:     user.displayName || "User",
-          email:           user.email,
-          photoURL:        user.photoURL || "",
-          role:            "student",
-          isBanned:        false,
-          enrolledCourses: [],
-          createdAt:       serverTimestamp()
-        }, { merge: true }); // merge:true so existing users aren't overwritten
-
-        window.location.href = "/dashboard.html";
-
-      } catch (err) {
-        if (err.code !== "auth/popup-closed-by-user") {
-          showAlert("Google sign-in failed. Please try again.", "error");
-        }
-      }
-    });
-    // #### END GOOGLE REGISTER ####
-
-  </script>
+    if (result.code !== "auth/popup-closed-by-user") {
+      showAlert(result.error, "error");
+    }
+  });
+</script>
   <!-- #### END REGISTER SCRIPTS #### -->
 
 </body>
