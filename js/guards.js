@@ -3,7 +3,7 @@
 // PURPOSE: Shared route guards
 // ========================================================
 
-import { auth, db } from "./firebase-config.js";
+import { auth, db, isFirebaseConfigured } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
@@ -12,6 +12,10 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase
 // For login/register pages
 // --------------------------------------------------------
 export function requireGuest(redirectTo = "./dashboard.html") {
+  if (!isFirebaseConfigured || !auth) {
+    return;
+  }
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       window.location.href = redirectTo;
@@ -24,6 +28,11 @@ export function requireGuest(redirectTo = "./dashboard.html") {
 // For dashboard and protected pages
 // --------------------------------------------------------
 export function requireAuth(redirectTo = "./login.html") {
+  if (!isFirebaseConfigured || !auth) {
+    window.location.href = redirectTo;
+    return;
+  }
+
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       window.location.href = redirectTo;
@@ -36,6 +45,11 @@ export function requireAuth(redirectTo = "./login.html") {
 // For admin page
 // --------------------------------------------------------
 export function requireAdmin(redirectTo = "./dashboard.html") {
+  if (!isFirebaseConfigured || !auth || !db) {
+    window.location.href = "./login.html";
+    return;
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = "./login.html";
