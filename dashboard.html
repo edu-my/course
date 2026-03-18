@@ -355,6 +355,9 @@
 
   </script>
   <!-- #### END DASHBOARD SCRIPTS #### -->
-
+<script type="module">
+  import { requireAuth } from "./js/guards.js";
+  requireAuth("./login.html");
+</script>
 </body>
 </html>
