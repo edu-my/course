@@ -8,16 +8,28 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyClSZ-Y2GjprWLSDMG0LlwNcz4fU9w89ko",
-  authDomain: "icraftcourses.firebaseapp.com",
-  projectId: "icraftcourses",
-  storageBucket: "icraftcourses.firebasestorage.app",
-  messagingSenderId: "919073015993",
-  appId: "1:919073015993:web:63291f712a15c1d11eb368"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const isFirebaseConfigured = Object.values(firebaseConfig).every(
+  (value) => typeof value === "string" && value.trim() !== ""
+);
 
-export { app, auth, db };
+let app = null;
+let auth = null;
+let db = null;
+
+if (isFirebaseConfigured) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+} else {
+  console.warn("Firebase is not configured yet. Update js/firebase-config.js with real project values.");
+}
+
+export { app, auth, db, isFirebaseConfigured };
