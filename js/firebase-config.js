@@ -1,14 +1,19 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+// ========================================================
+// FILE: js/firebase-config.js
+// PURPOSE: Central Firebase initialization
+// ========================================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyClSZ-Y2GjprWLSDMG0LlwNcz4fU9w89ko",
   authDomain: "icraftcourses.firebaseapp.com",
   projectId: "icraftcourses",
   storageBucket: "icraftcourses.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  messagingSenderId: "919073015993",
+  appId: "1:919073015993:web:63291f712a15c1d11eb368"
 };
 
 const app = initializeApp(firebaseConfig);
