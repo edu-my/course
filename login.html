@@ -241,7 +241,7 @@
     if (e.target === modal) modal.classList.remove("open");
   });
 
-  document.getElementById("btn-send-reset").addEventListener("click", async () => {
+    document.getElementById("btn-send-reset").addEventListener("click", async () => {
     const email = document.getElementById("reset-email").value.trim();
     const resetAlert = document.getElementById("reset-alert");
 
@@ -273,91 +273,7 @@
     btn.textContent = "Send Reset Link";
   });
 </script>
-    // #### END LOGIN FORM SUBMIT ####
-
-
-    // #### GOOGLE LOGIN ####
-    document.getElementById("btn-google-login").addEventListener("click", async () => {
-      document.getElementById("auth-alert").style.display = "none";
-      try {
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: "select_account" });
-        const result = await signInWithPopup(auth, provider);
-        const user   = result.user;
-
-        // Create Firestore profile if first time
-        await setDoc(doc(db, "users", user.uid), {
-          uid:             user.uid,
-          displayName:     user.displayName || "User",
-          email:           user.email,
-          photoURL:        user.photoURL || "",
-          role:            "student",
-          isBanned:        false,
-          enrolledCourses: [],
-          createdAt:       serverTimestamp()
-        }, { merge: true });
-
-        window.location.href = "/dashboard.html";
-      } catch (err) {
-        if (err.code !== "auth/popup-closed-by-user") {
-          showAlert("Google sign-in failed. Please try again.", "error");
-        }
-      }
-    });
-    // #### END GOOGLE LOGIN ####
-
-
-    // #### FORGOT PASSWORD MODAL ####
-    const modal = document.getElementById("reset-modal");
-
-    document.getElementById("btn-forgot-password").addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.classList.add("open");
-      const email = document.getElementById("login-email").value.trim();
-      if (email) document.getElementById("reset-email").value = email;
-    });
-
-    document.getElementById("btn-close-modal").addEventListener("click", () => {
-      modal.classList.remove("open");
-    });
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.classList.remove("open");
-    });
-
-    document.getElementById("btn-send-reset").addEventListener("click", async () => {
-      const email     = document.getElementById("reset-email").value.trim();
-      const resetAlert = document.getElementById("reset-alert");
-      resetAlert.style.display = "none";
-      document.getElementById("err-reset-email").style.display = "none";
-
-      if (!email || !email.includes("@")) {
-        document.getElementById("err-reset-email").style.display = "block";
-        return;
-      }
-
-      const btn = document.getElementById("btn-send-reset");
-      btn.disabled = true;
-      btn.textContent = "Sending...";
-
-      try {
-        await sendPasswordResetEmail(auth, email);
-        resetAlert.className   = "alert alert-success";
-        resetAlert.textContent = "Reset link sent! Check your email inbox.";
-        resetAlert.style.display = "flex";
-      } catch (err) {
-        resetAlert.className   = "alert alert-error";
-        resetAlert.textContent = "Could not send reset email. Please check the address.";
-        resetAlert.style.display = "flex";
-      }
-
-      btn.disabled = false;
-      btn.textContent = "Send Reset Link";
-    });
-    // #### END FORGOT PASSWORD MODAL ####
-
-  </script>
-  <!-- #### END LOGIN SCRIPTS #### -->
+<!-- #### END LOGIN SCRIPTS #### -->
 
 </body>
 </html>
