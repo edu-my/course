@@ -1,35 +1,32 @@
 // ========================================================
 // FILE: js/firebase-config.js
-// PURPOSE: Central Firebase initialization
+// PURPOSE: Firebase initialisation — all API keys live
+//          ONLY in this file. Never paste keys elsewhere.
+// PROJECT: kolamdata (iCraftCourse)
+// HOSTING: GitHub Pages — edu-my.github.io/course/
 // ========================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+// #### FIREBASE SDK IMPORTS ####
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getAuth }       from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+import { getFirestore }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+// #### END FIREBASE SDK IMPORTS ####
 
+
+// #### FIREBASE CONFIG ####
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey:            "AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+  authDomain:        "kolamdata.firebaseapp.com",
+  projectId:         "kolamdata",
+  storageBucket:     "kolamdata.firebasestorage.app",
+  messagingSenderId: "16403132310",
+  appId:             "1:16403132310:web:464c4ad2d19812f95077b7"
 };
+// #### END FIREBASE CONFIG ####
 
-const isFirebaseConfigured = Object.values(firebaseConfig).every(
-  (value) => typeof value === "string" && value.trim() !== ""
-);
 
-let app = null;
-let auth = null;
-let db = null;
-
-if (isFirebaseConfigured) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-} else {
-  console.warn("Firebase is not configured yet. Update js/firebase-config.js with real project values.");
-}
-
-export { app, auth, db, isFirebaseConfigured };
+// #### FIREBASE INIT ####
+const app  = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db   = getFirestore(app);
+// #### END FIREBASE INIT ####
