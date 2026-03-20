@@ -172,6 +172,11 @@ textarea.form-control { resize:vertical; min-height:100px; }
 .progress-fill.green { background:var(--green); }
 /* #### END PROGRESS BAR #### */
 
+/* #### GLOBAL MOBILE DRAWER FIX #### */
+.nav-mobile-drawer { display: none !important; }
+.nav-mobile-drawer.open { display: flex !important; }
+/* #### END GLOBAL MOBILE DRAWER FIX #### */
+
 /* #### RESPONSIVE #### */
 @media (max-width:1024px) { .grid-4{grid-template-columns:1fr 1fr;} .grid-3{grid-template-columns:1fr 1fr;} }
 @media (max-width:768px)  {
