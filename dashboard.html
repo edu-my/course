@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Dashboard — iCraftCourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <style>
+    .welcome-bar{background:var(--dark);padding:2.5rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .welcome-bar h1{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1.5px;color:white;margin-bottom:.25rem;}
+    .welcome-bar p{color:rgba(255,255,255,.5);font-size:.9rem;}
+    .dashboard-wrap{padding:3rem var(--page-padding);max-width:1100px;margin:0 auto;}
+    .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem;}
+    .dash-stat{background:white;border-radius:var(--radius-lg);padding:1.5rem;border-top:3px solid var(--red);box-shadow:var(--shadow-sm);}
+    .dash-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--red);letter-spacing:1px;}
+    .dash-stat-label{font-size:.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+    .section-head h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;}
+    .enrolled-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+    .enrolled-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;box-shadow:var(--shadow-sm);}
+    .enrolled-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
+    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
+    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
+    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
+    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
+    .enrolled-body{padding:1rem;}
+    .enrolled-cat{font-size:.7rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.3rem;}
+    .enrolled-title{font-weight:700;font-size:.92rem;margin-bottom:.75rem;color:var(--dark);}
+    .enrolled-footer{padding:.85rem 1rem;border-top:1px solid var(--gray-light);display:flex;justify-content:space-between;align-items:center;}
+    .empty-dash{grid-column:1/-1;text-align:center;padding:3rem;background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);}
+    @media(max-width:768px){.dash-grid{grid-template-columns:1fr 1fr;}.enrolled-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link">Courses</a><a href="dashboard.html" class="nav-link  active">Dashboard</a></div>
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+    </div>
+  </div>
+  <div class="welcome-bar">
+    <div><h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1><p>Your learning progress at a glance.</p></div>
+    <a href="courses.html" class="btn btn-primary">Browse Courses</a>
+  </div>
+  <div class="dashboard-wrap">
+    <div class="dash-grid">
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-enrolled">&#8212;</div><div class="dash-stat-label">Courses Enrolled</div></div>
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-completed">&#8212;</div><div class="dash-stat-label">Completed</div></div>
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-certs">&#8212;</div><div class="dash-stat-label">Certificates</div></div>
+    </div>
+    <div class="section-head"><h2>MY COURSES</h2><a href="courses.html" class="btn btn-secondary btn-sm">+ Enroll in More</a></div>
+    <div class="enrolled-grid" id="enrolled-grid">
+      <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;"><div class="spinner spinner-sm"></div>&nbsp;Loading...</div>
+    </div>
+  </div>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,collection,query,where,getDocs,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+    onAuthStateChanged(auth,async(user)=>{
+      if(!user){window.location.href="login.html";return;}
+      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+      if(user){g?.classList.add("hidden");u?.classList.remove("hidden");mg?.classList.add("hidden");mu?.classList.remove("hidden");
+        const n=user.displayName||"User",el=id=>document.getElementById(id);
+        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+        if(el("nav-name"))el("nav-name").textContent=n;
+        if(el("dd-name"))el("dd-name").textContent=n;
+        if(el("dd-email"))el("dd-email").textContent=user.email||"";
+      }else{g?.classList.remove("hidden");u?.classList.add("hidden");mg?.classList.remove("hidden");mu?.classList.add("hidden");}
+      const n=user.displayName||"Student";
+      const wn=document.getElementById("welcome-name");if(wn)wn.textContent=n.toUpperCase();
+      try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin")window.setAdminNav?.(true);}catch(e){}
+      await loadDashboard(user);
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    async function loadDashboard(user){
+      try{
+        const eq=query(collection(db,"enrollments"),where("userId","==",user.uid));
+        const es=await getDocs(eq); const enrolls=[]; es.forEach(d=>enrolls.push({id:d.id,...d.data()}));
+        const cs=await getDocs(query(collection(db,"certificates"),where("userId","==",user.uid)));
+        document.getElementById("stat-enrolled").textContent=enrolls.length;
+        document.getElementById("stat-completed").textContent=enrolls.filter(e=>e.isCompleted).length;
+        document.getElementById("stat-certs").textContent=cs.size;
+        await renderEnrolled(enrolls,user);
+      }catch(e){document.getElementById("enrolled-grid").innerHTML='<div class="empty-dash"><p>Could not load: '+e.message+'</p></div>';}
+    }
+    async function renderEnrolled(enrolls,user){
+      const grid=document.getElementById("enrolled-grid");
+      if(!enrolls.length){grid.innerHTML='<div class="empty-dash"><div style="font-size:3rem">&#128218;</div><h3>No courses yet</h3><p style="margin:.5rem 0 1rem">Enroll in a course to start learning!</p><a href="courses.html" class="btn btn-primary">Browse Courses</a></div>';return;}
+      const cards=await Promise.all(enrolls.map(async e=>{
+        try{
+          const cs=await getDoc(doc(db,"courses",e.courseId));if(!cs.exists())return"";
+          const c=cs.data(),prog=e.progressPercent||0,bg=bgMap[c.category]||"thumb-default";
+          const done=e.isCompleted,btnTxt=prog>0?"Continue &#8594;":"Start &#8594;";
+          return '<div class="enrolled-card"><div class="enrolled-thumb '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
+            +'<div class="enrolled-body"><div class="enrolled-cat">'+(c.category||"Course")+'</div>'
+            +'<div class="enrolled-title">'+c.title+'</div>'
+            +'<div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray);margin-bottom:.35rem"><span>Progress</span><span>'+prog+'%</span></div>'
+            +'<div class="progress-wrap"><div class="progress-fill'+(done?" green":"") +'" style="width:'+prog+'%"></div></div></div>'
+            +'<div class="enrolled-footer"><span style="font-size:.75rem;font-weight:600;color:'+(done?"var(--green)":"var(--blue")+');">'+(done?"&#9989; Completed":prog+"% complete")+'</span>'
+            +'<a href="player.html?id='+e.courseId+'" class="btn btn-primary btn-sm">'+btnTxt+'</a></div></div>';
+        }catch(e){return"";}
+      }));
+      grid.innerHTML=cards.filter(Boolean).join("")||'<div class="empty-dash"><p>No courses found.</p></div>';
+    }
+  </script>
+  <script src="js/nav.js"></script>
+</body>
+</html>

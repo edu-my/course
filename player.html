@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Player — iCraftCourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <style>
+    body{background:#111;}
+    .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    .nav-link{color:rgba(255,255,255,.6);} .nav-link:hover{color:white;background:rgba(255,255,255,.05);}
+    .nav-user-name{color:rgba(255,255,255,.8);}
+    .player-wrap{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - var(--nav-height));overflow:hidden;}
+    .sidebar{background:#1A1A1A;border-right:1px solid #2A2A2A;display:flex;flex-direction:column;overflow:hidden;}
+    .sidebar-header{padding:1.25rem;border-bottom:1px solid #2A2A2A;flex-shrink:0;}
+    .sidebar-course-title{font-weight:700;font-size:.88rem;color:white;margin-bottom:.5rem;}
+    .sidebar-prog-wrap{height:5px;background:#2A2A2A;border-radius:10px;margin-bottom:.35rem;overflow:hidden;}
+    .sidebar-prog-fill{height:100%;background:var(--red);border-radius:10px;transition:width .4s;}
+    .sidebar-prog-label{font-size:.72rem;color:rgba(255,255,255,.4);}
+    .sidebar-modules{flex:1;overflow-y:auto;padding:.75rem 0;}
+    .sidebar-modules::-webkit-scrollbar{width:4px;} .sidebar-modules::-webkit-scrollbar-thumb{background:#333;border-radius:4px;}
+    .mod-group{margin-bottom:.25rem;}
+    .mod-toggle{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;cursor:pointer;transition:background .15s;user-select:none;}
+    .mod-toggle:hover{background:rgba(255,255,255,.04);}
+    .mod-num{width:24px;height:24px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:white;flex-shrink:0;}
+    .mod-name{flex:1;font-size:.83rem;font-weight:600;color:rgba(255,255,255,.8);}
+    .mod-chevron{color:rgba(255,255,255,.3);font-size:.7rem;transition:transform .2s;}
+    .mod-group.open .mod-chevron{transform:rotate(180deg);}
+    .les-list{display:none;flex-direction:column;}
+    .mod-group.open .les-list{display:flex;}
+    .les-btn{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem .65rem 3rem;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
+    .les-btn:hover{background:rgba(255,255,255,.04);}
+    .les-btn.active{background:rgba(215,43,43,.15);border-left:3px solid var(--red);padding-left:calc(3rem - 3px);}
+    .les-btn-name{flex:1;font-size:.8rem;color:rgba(255,255,255,.65);}
+    .les-btn-dur{font-size:.68rem;color:rgba(255,255,255,.25);}
+    .les-btn-check{font-size:.75rem;flex-shrink:0;}
+    .player-main{display:flex;flex-direction:column;overflow:hidden;background:#111;}
+    .video-cont{position:relative;width:100%;background:#000;flex-shrink:0;}
+    .video-cont iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
+    .placeholder{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:#1A1A1A;color:rgba(255,255,255,.3);font-size:.9rem;}
+    .info-bar{padding:1.25rem 1.5rem;border-bottom:1px solid #2A2A2A;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;}
+    .info-mod{font-size:.72rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:.25rem;}
+    .info-title{font-size:1.1rem;font-weight:700;color:white;}
+    .info-actions{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+    .btn-complete{background:var(--green);color:white;border:none;padding:.6rem 1.25rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap;}
+    .btn-complete:hover{background:#166b39;} .btn-complete.done{background:#2A2A2A;color:rgba(255,255,255,.4);cursor:default;}
+    .btn-next{background:var(--red);color:white;border:none;padding:.6rem 1.25rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap;}
+    .btn-next:hover{background:var(--red-dark);} .btn-next:disabled{opacity:.4;cursor:not-allowed;}
+    .cert-banner{margin:1.25rem 1.5rem;background:rgba(30,138,76,.15);border:1px solid rgba(30,138,76,.3);border-radius:var(--radius);padding:1rem 1.25rem;display:none;align-items:center;gap:1rem;}
+    .cert-banner.show{display:flex;}
+    .player-loading{position:fixed;inset:0;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:rgba(255,255,255,.5);z-index:10;}
+    .player-loading.hidden{display:none;}
+    @media(max-width:768px){.player-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.sidebar{height:auto;max-height:40vh;border-right:none;border-bottom:1px solid #2A2A2A;}}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="courses.html" class="nav-link">&#8592; Courses</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="player-loading" id="player-loading"><div class="spinner" style="border-top-color:white"></div><p>Loading course...</p></div>
+  <div class="player-wrap" id="player-wrap" style="display:none">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-course-title" id="sidebar-title">Loading...</div>
+        <div class="sidebar-prog-wrap"><div class="sidebar-prog-fill" id="prog-fill" style="width:0%"></div></div>
+        <div class="sidebar-prog-label" id="prog-label">0% complete</div>
+      </div>
+      <div class="sidebar-modules" id="sidebar-modules"></div>
+    </div>
+    <div class="player-main">
+      <div class="video-cont" id="video-cont">
+        <div class="placeholder" id="placeholder"><div style="font-size:3rem">&#9654;&#65039;</div><p>Select a lesson to begin</p></div>
+        <iframe id="video-iframe" src="" allowfullscreen style="display:none"></iframe>
+      </div>
+      <div class="info-bar">
+        <div>
+          <div class="info-mod" id="info-mod">Select a lesson</div>
+          <div class="info-title" id="info-title">&#8212;</div>
+        </div>
+        <div class="info-actions">
+          <button class="btn-complete" id="btn-complete" onclick="markComplete()">&#10003; Mark as Complete</button>
+          <button class="btn-next" id="btn-next" onclick="nextLesson()">Next &#8594;</button>
+        </div>
+      </div>
+      <div class="cert-banner" id="cert-banner">
+        <div style="font-size:2rem;flex-shrink:0">&#127942;</div>
+        <div><strong style="display:block;color:white;font-size:.95rem;margin-bottom:.2rem">Course complete! Certificate ready.</strong><span style="font-size:.82rem;color:rgba(255,255,255,.5)">Download your CPD certificate now.</span></div>
+        <a href="certificates.html" class="btn btn-success btn-sm" style="flex-shrink:0">Get Certificate &#8594;</a>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,doc,getDoc,updateDoc,setDoc,arrayUnion,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    const courseId=new URLSearchParams(location.search).get("id");
+    if(!courseId)location.href="courses.html";
+    let currentUser=null,courseData=null,enrollData=null,currentLesson=null,allLessons=[];
+    onAuthStateChanged(auth,async(user)=>{
+      if(!user){location.href="login.html";return;}
+      currentUser=user;
+      const u=document.getElementById("nav-user");if(u)u.classList.remove("hidden");
+      const n=user.displayName||"User",el=id=>document.getElementById(id);
+      if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+      if(el("nav-name"))el("nav-name").textContent=n;
+      if(el("dd-name"))el("dd-name").textContent=n;
+      if(el("dd-email"))el("dd-email").textContent=user.email||"";
+      await loadPlayer();
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    async function loadPlayer(){
+      try{
+        const cs=await getDoc(doc(db,"courses",courseId));
+        if(!cs.exists()){showErr("Course not found.");return;}
+        courseData={id:cs.id,...cs.data()};
+        const enrollId=currentUser.uid+"_"+courseId;
+        let es=await getDoc(doc(db,"enrollments",enrollId));
+        if(!es.exists()&&!courseData.isFree){location.href="course.html?id="+courseId;return;}
+        if(!es.exists()&&courseData.isFree){
+          await setDoc(doc(db,"enrollments",enrollId),{enrollmentId:enrollId,userId:currentUser.uid,courseId,courseName:courseData.title,enrolledAt:serverTimestamp(),completedLessons:[],progressPercent:0,isCompleted:false,completedAt:null,lastLessonId:null,certificateIssued:false});
+          enrollData={completedLessons:[],progressPercent:0,isCompleted:false};
+        }else{enrollData=es.exists()?es.data():{completedLessons:[],progressPercent:0};}
+        buildLessons();renderSidebar();
+        const last=enrollData.lastLessonId,found=allLessons.find(l=>l.lessonId===last);
+        if(found)loadLesson(found.mi,found.li);else if(allLessons.length)loadLesson(allLessons[0].mi,allLessons[0].li);
+        document.getElementById("player-loading").classList.add("hidden");
+        document.getElementById("player-wrap").style.display="grid";
+      }catch(e){showErr("Failed: "+e.message);}
+    }
+    function buildLessons(){
+      allLessons=[];
+      (courseData.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((l,li)=>{allLessons.push({lessonId:l.lessonId,mi,li,modTitle:m.title,lesson:l});});});
+    }
+    function renderSidebar(){
+      const done=enrollData.completedLessons||[],total=allLessons.length;
+      const prog=total?Math.round(done.length/total*100):0;
+      document.getElementById("sidebar-title").textContent=courseData.title;
+      document.getElementById("prog-fill").style.width=prog+"%";
+      document.getElementById("prog-label").textContent=prog+"% complete &mdash; "+done.length+" of "+total+" lessons";
+      document.getElementById("sidebar-modules").innerHTML=(courseData.modules||[]).map((m,mi)=>{
+        const ll=(m.lessons||[]).map((l,li)=>{
+          const d=done.includes(l.lessonId);
+          return '<button class="les-btn'+(d?" completed":"")+'" id="lb-'+l.lessonId+'" onclick="loadLesson('+mi+','+li+')">'
+            +'<span>'+(l.type==="video"?"&#9654;":"&#x1F4C4;")+'</span>'
+            +'<span class="les-btn-name">'+l.title+'</span>'
+            +'<span class="les-btn-dur">'+(l.duration||"")+'</span>'
+            +'<span class="les-btn-check">'+(d?"&#9989;":"")+'</span></button>';
+        }).join("");
+        return '<div class="mod-group open" id="mg-'+mi+'">'
+          +'<div class="mod-toggle" onclick="document.getElementById('mg-'+mi+'').classList.toggle('open')">'
+          +'<div class="mod-num">'+(mi+1)+'</div><div class="mod-name">'+m.title+'</div>'
+          +'<div style="font-size:.7rem;color:rgba(255,255,255,.3)">'+(m.lessons||[]).length+' les</div>'
+          +'<span class="mod-chevron">&#9660;</span></div>'
+          +'<div class="les-list">'+ll+'</div></div>';
+      }).join("");
+    }
+    window.loadLesson=function(mi,li){
+      const m=(courseData.modules||[])[mi];if(!m)return;
+      const l=(m.lessons||[])[li];if(!l)return;
+      currentLesson=l;
+      document.querySelectorAll(".les-btn").forEach(b=>b.classList.remove("active"));
+      const ab=document.getElementById("lb-"+l.lessonId);
+      if(ab){ab.classList.add("active");ab.scrollIntoView({behavior:"smooth",block:"nearest"});}
+      document.getElementById("info-mod").textContent="Module "+(mi+1)+" · "+m.title;
+      document.getElementById("info-title").textContent=l.title;
+      const iframe=document.getElementById("video-iframe"),ph=document.getElementById("placeholder");
+      if(l.type==="video"&&l.contentURL){
+        iframe.src=ytEmbed(l.contentURL);iframe.style.display="block";ph.style.display="none";
+      }else{iframe.style.display="none";ph.style.display="flex";}
+      const done=(enrollData.completedLessons||[]).includes(l.lessonId);
+      const cb=document.getElementById("btn-complete");
+      cb.textContent=done?"&#9989; Completed":"&#10003; Mark as Complete";
+      cb.className="btn-complete"+(done?" done":"");
+      const fi=allLessons.findIndex(x=>x.lessonId===l.lessonId);
+      document.getElementById("btn-next").disabled=fi>=allLessons.length-1;
+      saveLastLesson(l.lessonId);
+    };
+    window.markComplete=async function(){
+      if(!currentLesson)return;
+      const id=currentLesson.lessonId,done=enrollData.completedLessons||[];
+      if(done.includes(id))return;
+      const nd=[...done,id],total=allLessons.length,prog=total?Math.round(nd.length/total*100):0,isComp=nd.length>=total;
+      try{
+        await updateDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId),{completedLessons:arrayUnion(id),progressPercent:prog,isCompleted:isComp,completedAt:isComp?serverTimestamp():null});
+        enrollData.completedLessons=nd;enrollData.progressPercent=prog;enrollData.isCompleted=isComp;
+        const lb=document.getElementById("lb-"+id);
+        if(lb){lb.classList.add("completed");const chk=lb.querySelector(".les-btn-check");if(chk)chk.textContent="&#9989;";}
+        document.getElementById("prog-fill").style.width=prog+"%";
+        document.getElementById("prog-label").textContent=prog+"% complete &mdash; "+nd.length+" of "+total+" lessons";
+        const cb=document.getElementById("btn-complete");cb.textContent="&#9989; Completed";cb.className="btn-complete done";
+        if(isComp){await issueCert();document.getElementById("cert-banner").classList.add("show");}
+      }catch(e){alert("Could not save progress: "+e.message);}
+    };
+    window.nextLesson=function(){
+      const fi=allLessons.findIndex(x=>x.lessonId===currentLesson?.lessonId);
+      if(fi>=0&&fi<allLessons.length-1){const nx=allLessons[fi+1];loadLesson(nx.mi,nx.li);}
+    };
+    async function saveLastLesson(id){
+      try{await updateDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId),{lastLessonId:id});}catch(e){}
+    }
+    async function issueCert(){
+      try{
+        const es=await getDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId));
+        if(es.data()?.certificateIssued)return;
+        const cid="ICC-"+new Date().getFullYear()+"-"+Math.floor(10000+Math.random()*90000);
+        await setDoc(doc(db,"certificates",cid),{certId:cid,userId:currentUser.uid,courseId,userName:currentUser.displayName||"Student",courseName:courseData.title,issuedAt:serverTimestamp()});
+        await updateDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId),{certificateIssued:true});
+      }catch(e){console.error("Cert error:",e);}
+    }
+    function ytEmbed(url){
+      if(!url)return"";
+      if(url.includes("/embed/"))return url;
+      const s=url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);if(s)return"https://www.youtube.com/embed/"+s[1];
+      const w=url.match(/[?&]v=([a-zA-Z0-9_-]+)/);if(w)return"https://www.youtube.com/embed/"+w[1];
+      return url;
+    }
+    function showErr(msg){document.getElementById("player-loading").innerHTML='<p style="color:rgba(255,255,255,.5);text-align:center;padding:2rem">'+msg+'<br/><br/><a href="courses.html" style="color:var(--red)">&#8592; Back to Courses</a></p>';}
+  </script>
+  <script src="js/nav.js"></script>
+</body>
+</html>

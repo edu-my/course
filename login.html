@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log In — iCraftCourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+</head>
+<body>
+  <style>
+    .auth-page{min-height:calc(100vh - var(--nav-height));display:grid;grid-template-columns:1fr 1fr;}
+    .auth-left{background:var(--red);padding:4rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+    .auth-left::before{content:'';position:absolute;bottom:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.05);}
+    .auth-left-content{position:relative;z-index:2;}
+    .auth-tagline{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:white;line-height:1;letter-spacing:2px;margin-bottom:1rem;}
+    .auth-left p{color:rgba(255,255,255,.75);font-size:1rem;line-height:1.7;max-width:380px;margin-bottom:2rem;}
+    .auth-perks{display:flex;flex-direction:column;gap:.75rem;}
+    .auth-perk{display:flex;align-items:center;gap:.75rem;color:rgba(255,255,255,.85);font-size:.9rem;}
+    .perk-icon{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .auth-right{background:var(--off-white);padding:3rem 4rem;display:flex;flex-direction:column;justify-content:center;}
+    .auth-form-header{margin-bottom:2rem;}
+    .auth-form-header h2{font-size:1.8rem;font-weight:700;margin-bottom:.35rem;}
+    .auth-form-header p{font-size:.88rem;color:var(--gray);}
+    .auth-form-header a{color:var(--red);font-weight:600;}
+    .btn-google{width:100%;background:white;color:var(--dark);border:2px solid var(--gray-light);padding:.7rem 1.5rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;transition:all .2s;margin-bottom:1.5rem;}
+    .btn-google:hover{border-color:var(--gray);box-shadow:var(--shadow-sm);}
+    .auth-divider{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;color:var(--gray);font-size:.82rem;}
+    .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--gray-light);}
+    .forgot-link{text-align:right;margin-top:-.75rem;margin-bottom:1.25rem;}
+    .forgot-link a{font-size:.82rem;color:var(--gray);text-decoration:none;}
+    .forgot-link a:hover{color:var(--red);}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:500;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:white;border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg);}
+    .modal-box h3{margin-bottom:.35rem;} .modal-box p{font-size:.85rem;color:var(--gray);margin-bottom:1.25rem;}
+    .modal-actions{display:flex;gap:.75rem;margin-top:1rem;}
+    #login-alert{display:none;} #reset-alert{display:none;margin-bottom:1rem;}
+    @media(max-width:900px){.auth-page{grid-template-columns:1fr;}.auth-left{display:none;}.auth-right{padding:2rem 1.5rem;}}
+  </style>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-actions" style="margin-left:auto">
+      <span style="font-size:.85rem;color:var(--gray)">No account?</span>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-left"><div class="auth-left-content">
+      <div class="auth-tagline">WELCOME<br/>BACK.</div>
+      <p>Continue your learning journey.</p>
+      <div class="auth-perks">
+        <div class="auth-perk"><div class="perk-icon">&#128202;</div><span>Resume where you left off</span></div>
+        <div class="auth-perk"><div class="perk-icon">&#127942;</div><span>Download certificates</span></div>
+        <div class="auth-perk"><div class="perk-icon">&#128218;</div><span>Access enrolled courses</span></div>
+      </div>
+    </div></div>
+    <div class="auth-right">
+      <div class="auth-form-header">
+        <h2>Log in to your account</h2>
+        <p>No account? <a href="register.html">Create one free</a></p>
+      </div>
+      <div class="alert" id="login-alert"></div>
+      <button class="btn-google" id="btn-google-login">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.1 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 19 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.5 26.9 36 24 36c-5.2 0-9.6-3-11.3-7.3l-6.5 5C9.5 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.3 35.7 44 30.3 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
+        Continue with Google
+      </button>
+      <div class="auth-divider">or log in with email</div>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="l-email">Email Address</label>
+          <input type="email" id="l-email" class="form-control" placeholder="you@example.com" autocomplete="email"/>
+          <span class="form-error" id="e-email">Please enter your email.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="l-pass">Password</label>
+          <input type="password" id="l-pass" class="form-control" placeholder="Your password" autocomplete="current-password"/>
+          <span class="form-error" id="e-pass">Please enter your password.</span>
+        </div>
+        <div class="forgot-link"><a href="#" id="btn-forgot">Forgot password?</a></div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-login">Log In</button>
+      </form>
+    </div>
+  </div>
+  <div class="modal-overlay" id="reset-modal">
+    <div class="modal-box">
+      <h3>Reset Password</h3>
+      <p>Enter your email and we'll send a reset link.</p>
+      <div class="alert" id="reset-alert"></div>
+      <div class="form-group">
+        <label class="form-label" for="r-email">Email</label>
+        <input type="email" id="r-email" class="form-control" placeholder="you@example.com"/>
+        <span class="form-error" id="e-r-email">Please enter a valid email.</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="btn-send-reset">Send Reset Link</button>
+        <button class="btn btn-secondary" id="btn-close-modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,doc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    function showAlert(msg,t="error"){const el=document.getElementById("login-alert");el.className="alert alert-"+t;el.textContent=msg;el.style.display="flex";}
+    function errMsg(code){return {"auth/user-not-found":"No account found.","auth/wrong-password":"Incorrect password.","auth/invalid-credential":"Incorrect email or password.","auth/too-many-requests":"Too many attempts. Wait and try again."}[code]||"Error: "+code;}
+    document.getElementById("login-form").addEventListener("submit",async e=>{
+      e.preventDefault();
+      document.getElementById("login-alert").style.display="none";
+      document.querySelectorAll(".form-error").forEach(x=>x.classList.remove("show"));
+      const email=document.getElementById("l-email").value.trim();
+      const pass=document.getElementById("l-pass").value;
+      if(!email){document.getElementById("e-email").classList.add("show");return;}
+      if(!pass){document.getElementById("e-pass").classList.add("show");return;}
+      const btn=document.getElementById("btn-login");
+      btn.disabled=true;btn.textContent="Logging in...";
+      try{await signInWithEmailAndPassword(auth,email,pass);location.href="dashboard.html";}
+      catch(err){showAlert(errMsg(err.code));btn.disabled=false;btn.textContent="Log In";}
+    });
+    document.getElementById("btn-google-login").addEventListener("click",async()=>{
+      document.getElementById("login-alert").style.display="none";
+      try{
+        const p=new GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
+        const r=await signInWithPopup(auth,p);
+        await setDoc(doc(db,"users",r.user.uid),{uid:r.user.uid,displayName:r.user.displayName||"User",email:r.user.email,photoURL:r.user.photoURL||"",role:"student",isBanned:false,enrolledCourses:[],createdAt:serverTimestamp()},{merge:true});
+        location.href="dashboard.html";
+      }catch(err){if(err.code!=="auth/popup-closed-by-user")showAlert("Google sign-in failed.");}
+    });
+    const modal=document.getElementById("reset-modal");
+    document.getElementById("btn-forgot").addEventListener("click",e=>{e.preventDefault();modal.classList.add("open");const em=document.getElementById("l-email").value.trim();if(em)document.getElementById("r-email").value=em;});
+    document.getElementById("btn-close-modal").addEventListener("click",()=>modal.classList.remove("open"));
+    modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open");});
+    document.getElementById("btn-send-reset").addEventListener("click",async()=>{
+      const email=document.getElementById("r-email").value.trim();
+      const ra=document.getElementById("reset-alert");ra.style.display="none";
+      document.getElementById("e-r-email").classList.remove("show");
+      if(!email||!email.includes("@")){document.getElementById("e-r-email").classList.add("show");return;}
+      const btn=document.getElementById("btn-send-reset");btn.disabled=true;btn.textContent="Sending...";
+      try{await sendPasswordResetEmail(auth,email);ra.className="alert alert-success";ra.textContent="Reset link sent!";ra.style.display="flex";}
+      catch(e){ra.className="alert alert-error";ra.textContent="Could not send email.";ra.style.display="flex";}
+      btn.disabled=false;btn.textContent="Send Reset Link";
+    });
+  </script>
+  <script src="js/nav.js"></script>
+</body>
+</html>
