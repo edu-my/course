@@ -2,8 +2,8 @@
 <html lang="en">
 <!-- ========================================================
      FILE: dashboard.html
-     PURPOSE: Student dashboard — placeholder until Phase 6.
-              Shows enrolled courses and basic user info.
+     PURPOSE: Student dashboard — enrolled courses,
+              progress, pending payments, certificates
      ======================================================== -->
 <head>
   <!-- #### HEAD META #### -->
@@ -14,89 +14,58 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="./css/styles.css"/>
-  <link rel="stylesheet" href="./css/nav.css"/>
-
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
   <!-- #### PAGE STYLES #### -->
   <style>
-    .dashboard-wrap { padding: 3rem var(--page-padding); max-width: 1100px; margin: 0 auto; }
-    .welcome-bar {
-      background: var(--dark);
-      padding: 2.5rem var(--page-padding);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 1rem;
-    }
-    .welcome-bar h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem; letter-spacing: 1.5px;
-      color: white; margin-bottom: 0.25rem;
-    }
-    .welcome-bar p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
-    .dash-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
-    .dash-stat {
-      background: white; border-radius: var(--radius-lg);
-      padding: 1.5rem; border-top: 3px solid var(--red);
-      box-shadow: var(--shadow-sm);
-    }
-    .dash-stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--red); letter-spacing:1px; }
-    .dash-stat-label { font-size:0.8rem; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
-    .section-head {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
-    .section-head h2 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:1px; }
-    .enrolled-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
-    .enrolled-card {
-      background: white; border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-light); overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .enrolled-card:hover { transform:translateY(-3px); box-shadow: var(--shadow-red); }
-    .enrolled-thumb {
-      height: 120px; display:flex; align-items:center; justify-content:center; font-size:2.5rem;
-    }
+    .welcome-bar{background:var(--dark);padding:2.5rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .welcome-bar h1{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:1.5px;color:white;margin-bottom:0.25rem;}
+    .welcome-bar p{color:rgba(255,255,255,0.5);font-size:0.9rem;}
+    .dashboard-wrap{padding:3rem var(--page-padding);max-width:1100px;margin:0 auto;}
+    .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem;}
+    .dash-stat{background:white;border-radius:var(--radius-lg);padding:1.5rem;border-top:3px solid var(--red);box-shadow:var(--shadow-sm);}
+    .dash-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--red);letter-spacing:1px;}
+    .dash-stat-label{font-size:0.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+    .section-head h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;}
+    .enrolled-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+    .enrolled-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform 0.2s,box-shadow 0.2s;}
+    .enrolled-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-red);}
+    .enrolled-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
     .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
     .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
     .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
     .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
     .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    .enrolled-body { padding: 1rem; }
-    .enrolled-cat { font-size:0.7rem; color:var(--red); font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.3rem; }
-    .enrolled-title { font-weight:700; font-size:0.92rem; margin-bottom:0.75rem; color:var(--dark); }
-    .enrolled-progress-label { display:flex; justify-content:space-between; font-size:0.75rem; color:var(--gray); margin-bottom:0.35rem; }
-    .enrolled-footer { padding: 0.85rem 1rem; border-top:1px solid var(--gray-light); display:flex; justify-content:space-between; align-items:center; }
-    .enrolled-status { font-size:0.75rem; font-weight:600; }
-    .status-active   { color: var(--green); }
-    .status-pending  { color: var(--orange); }
-    .status-complete { color: var(--blue); }
-    .empty-dash {
-      grid-column: 1/-1; text-align:center; padding:3rem 1rem;
-      background:white; border-radius:var(--radius-lg); border:1px solid var(--gray-light);
-    }
-    .empty-dash .empty-icon { font-size:3rem; margin-bottom:1rem; }
-    .empty-dash h3 { font-size:1.1rem; margin-bottom:0.5rem; }
-    .empty-dash p  { font-size:0.85rem; color:var(--gray); margin-bottom:1.25rem; }
-    @media(max-width:900px){ .dash-grid{grid-template-columns:1fr 1fr;} .enrolled-grid{grid-template-columns:1fr 1fr;} }
-    @media(max-width:600px){ .dash-grid{grid-template-columns:1fr;} .enrolled-grid{grid-template-columns:1fr;} }
+    .enrolled-body{padding:1rem;}
+    .enrolled-cat{font-size:0.7rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.3rem;}
+    .enrolled-title{font-weight:700;font-size:0.92rem;margin-bottom:0.75rem;color:var(--dark);}
+    .enrolled-progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--gray);margin-bottom:0.35rem;}
+    .enrolled-footer{padding:0.85rem 1rem;border-top:1px solid var(--gray-light);display:flex;justify-content:space-between;align-items:center;}
+    .enrolled-status{font-size:0.75rem;font-weight:600;}
+    .status-active{color:var(--green);} .status-pending{color:var(--orange);} .status-complete{color:var(--blue);}
+    .empty-dash{grid-column:1/-1;text-align:center;padding:3rem 1rem;background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);}
+    .empty-dash .empty-icon{font-size:3rem;margin-bottom:1rem;}
+    .empty-dash h3{font-size:1.1rem;margin-bottom:0.5rem;}
+    .empty-dash p{font-size:0.85rem;color:var(--gray);margin-bottom:1.25rem;}
+    @media(max-width:900px){.dash-grid{grid-template-columns:1fr 1fr;}.enrolled-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){.dash-grid{grid-template-columns:1fr;}.enrolled-grid{grid-template-columns:1fr;}}
   </style>
-  <script src="/js/nav.js"></script>
   <!-- #### END PAGE STYLES #### -->
 </head>
-
 <body>
 
   <!-- #### NAVBAR #### -->
   <nav class="navbar">
-    <a href="./index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
     <div class="nav-links">
-      <a href="./index.html"     class="nav-link">Home</a>
-      <a href="./courses.html"   class="nav-link">Courses</a>
-      <a href="./dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="index.html"     class="nav-link">Home</a>
+      <a href="courses.html"   class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
     </div>
     <div class="nav-actions hidden" id="nav-guest">
-      <a href="./login.html"    class="btn btn-secondary btn-sm">Log In</a>
-      <a href="./register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="login.html"    class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
     <div class="nav-user" id="nav-user">
       <div class="nav-avatar" id="nav-avatar-initials">U</div>
@@ -106,9 +75,9 @@
           <div class="nav-dropdown-name"  id="dropdown-name">User</div>
           <div class="nav-dropdown-email" id="dropdown-email">user@email.com</div>
         </div>
-        <a href="./dashboard.html"    class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
-        <a href="./certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
-        <a href="./profile.html"      class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <a href="dashboard.html"    class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+        <a href="profile.html"      class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
         <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
       </div>
     </div>
@@ -118,16 +87,16 @@
 
   <!-- #### MOBILE DRAWER #### -->
   <div class="nav-mobile-drawer" id="nav-mobile-drawer">
-    <a href="./index.html"     class="nav-link">Home</a>
-    <a href="./courses.html"   class="nav-link">Courses</a>
-    <a href="./dashboard.html" class="nav-link active">Dashboard</a>
+    <a href="index.html"     class="nav-link">Home</a>
+    <a href="courses.html"   class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link active">Dashboard</a>
     <div class="hidden" id="nav-mobile-user">
-      <a href="./profile.html" class="nav-link">👤 My Profile</a>
+      <a href="profile.html" class="nav-link">👤 My Profile</a>
       <button class="btn btn-secondary" id="btn-logout-mobile">🚪 Log Out</button>
     </div>
     <div id="nav-mobile-guest" class="hidden">
-      <a href="./login.html"    class="btn btn-secondary">Log In</a>
-      <a href="./register.html" class="btn btn-primary">Get Started</a>
+      <a href="login.html"    class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
     </div>
   </div>
   <!-- #### END MOBILE DRAWER #### -->
@@ -138,226 +107,122 @@
       <h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1>
       <p>Here's your learning progress at a glance.</p>
     </div>
-    <a href="./courses.html" class="btn btn-primary">Browse More Courses</a>
+    <a href="courses.html" class="btn btn-primary">Browse More Courses</a>
   </div>
   <!-- #### END WELCOME BAR #### -->
 
   <!-- #### DASHBOARD CONTENT #### -->
   <div class="dashboard-wrap">
-
-    <!-- Stats -->
-    <div class="dash-grid" id="dash-stats">
-      <div class="dash-stat">
-        <div class="dash-stat-num" id="stat-enrolled">—</div>
-        <div class="dash-stat-label">Courses Enrolled</div>
-      </div>
-      <div class="dash-stat">
-        <div class="dash-stat-num" id="stat-completed">—</div>
-        <div class="dash-stat-label">Courses Completed</div>
-      </div>
-      <div class="dash-stat">
-        <div class="dash-stat-num" id="stat-certs">—</div>
-        <div class="dash-stat-label">Certificates Earned</div>
-      </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-enrolled">—</div><div class="dash-stat-label">Courses Enrolled</div></div>
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-completed">—</div><div class="dash-stat-label">Courses Completed</div></div>
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-certs">—</div><div class="dash-stat-label">Certificates Earned</div></div>
     </div>
-
-    <!-- My Courses -->
     <div class="section-head">
       <h2>MY COURSES</h2>
-      <a href="./courses.html" class="btn btn-secondary btn-sm">+ Enroll in More</a>
+      <a href="courses.html" class="btn btn-secondary btn-sm">+ Enroll in More</a>
     </div>
     <div class="enrolled-grid" id="enrolled-grid">
-      <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;">
-        <div class="spinner spinner-sm"></div>&nbsp; Loading your courses...
-      </div>
+      <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;"><div class="spinner spinner-sm"></div>&nbsp;Loading your courses...</div>
     </div>
-
   </div>
   <!-- #### END DASHBOARD CONTENT #### -->
 
-
   <!-- #### DASHBOARD SCRIPTS #### -->
   <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-    import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut }
-                               from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc }
-                               from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-
-    // #### FIREBASE SETUP ####
     const firebaseConfig = {
-      apiKey:            "AIzaSyClSZ-Y2GjprWLSDMG0LlwNcz4fU9w89ko",
-      authDomain:        "icraftcourses.firebaseapp.com",
-      projectId:         "icraftcourses",
-      storageBucket:     "icraftcourses.firebasestorage.app",
-      messagingSenderId: "919073015993",
-      appId:             "1:919073015993:web:63291f712a15c1d11eb368"
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
     };
     const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db   = getFirestore(app);
-    // #### END FIREBASE SETUP ####
-
 
     // #### AUTH GUARD ####
-    // Redirect to login if not logged in
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "/login.html";
-        return;
-      }
-
-      // Update navbar
-      const name    = user.displayName || "Student";
-      const initials = name.charAt(0).toUpperCase();
-      document.getElementById("welcome-name").textContent         = name.toUpperCase();
-      document.getElementById("nav-user-name").textContent        = name;
-      document.getElementById("nav-avatar-initials").textContent  = initials;
-      document.getElementById("dropdown-name").textContent        = name;
-      document.getElementById("dropdown-email").textContent       = user.email;
+      if (!user) { window.location.href="login.html"; return; }
+      const name=user.displayName||"Student";
+      document.getElementById("welcome-name").textContent        = name.toUpperCase();
+      document.getElementById("nav-user-name").textContent       = name;
+      document.getElementById("nav-avatar-initials").textContent = name.charAt(0).toUpperCase();
+      document.getElementById("dropdown-name").textContent       = name;
+      document.getElementById("dropdown-email").textContent      = user.email;
       document.getElementById("nav-guest").classList.add("hidden");
       document.getElementById("nav-user").classList.remove("hidden");
-
-      // Load dashboard data
       await loadDashboard(user);
     });
     // #### END AUTH GUARD ####
 
-
     // #### LOAD DASHBOARD ####
     async function loadDashboard(user) {
       try {
-        // Load enrollments for this user
-        const enrollQ  = query(collection(db, "enrollments"), where("userId", "==", user.uid));
+        const enrollQ  = query(collection(db,"enrollments"), where("userId","==",user.uid));
         const enrollSnap = await getDocs(enrollQ);
         const enrollments = [];
-        enrollSnap.forEach(d => enrollments.push({ id: d.id, ...d.data() }));
-
-        // Load certificates
-        const certQ    = query(collection(db, "certificates"), where("userId", "==", user.uid));
+        enrollSnap.forEach(d => enrollments.push({id:d.id,...d.data()}));
+        const certQ  = query(collection(db,"certificates"), where("userId","==",user.uid));
         const certSnap = await getDocs(certQ);
-        const certCount = certSnap.size;
-
-        // Update stats
-        const completed = enrollments.filter(e => e.isCompleted).length;
         document.getElementById("stat-enrolled").textContent  = enrollments.length;
-        document.getElementById("stat-completed").textContent = completed;
-        document.getElementById("stat-certs").textContent     = certCount;
-
-        // Render enrolled courses
-        await renderEnrolled(enrollments);
-
-      } catch (err) {
-        console.error("Dashboard load error:", err);
-        document.getElementById("enrolled-grid").innerHTML =
-          `<div class="empty-dash"><div class="empty-icon">⚠️</div><h3>Could not load courses</h3><p>${err.message}</p></div>`;
+        document.getElementById("stat-completed").textContent = enrollments.filter(e=>e.isCompleted).length;
+        document.getElementById("stat-certs").textContent     = certSnap.size;
+        await renderEnrolled(enrollments, user);
+      } catch(err) {
+        document.getElementById("enrolled-grid").innerHTML=`<div class="empty-dash"><div class="empty-icon">⚠️</div><h3>Could not load courses</h3><p>${err.message}</p></div>`;
       }
     }
     // #### END LOAD DASHBOARD ####
 
-
-    // #### RENDER ENROLLED COURSES ####
-    async function renderEnrolled(enrollments) {
-      const grid = document.getElementById("enrolled-grid");
-
-      // Also check pending payments
-      const payQ   = query(collection(db, "payments"), where("userId", "==", auth.currentUser.uid));
-      const paySnap = await getDocs(payQ);
-      const pendingPayments = [];
-      paySnap.forEach(d => {
-        if (d.data().status === "pending") pendingPayments.push(d.data());
-      });
-
-      if (enrollments.length === 0 && pendingPayments.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-dash">
-            <div class="empty-icon">📚</div>
-            <h3>No courses yet</h3>
-            <p>You haven't enrolled in any courses. Start learning today!</p>
-            <a href="/courses.html" class="btn btn-primary">Browse Courses</a>
-          </div>`;
+    // #### RENDER ENROLLED ####
+    async function renderEnrolled(enrollments, user) {
+      const grid=document.getElementById("enrolled-grid");
+      const payQ=query(collection(db,"payments"),where("userId","==",user.uid));
+      const paySnap=await getDocs(payQ);
+      const pendingPayments=[];
+      paySnap.forEach(d=>{ if(d.data().status==="pending") pendingPayments.push(d.data()); });
+      if(enrollments.length===0&&pendingPayments.length===0){
+        grid.innerHTML=`<div class="empty-dash"><div class="empty-icon">📚</div><h3>No courses yet</h3><p>You haven't enrolled in any courses. Start learning today!</p><a href="courses.html" class="btn btn-primary">Browse Courses</a></div>`;
         return;
       }
-
-      // Fetch course details for each enrollment
-      const cards = await Promise.all(enrollments.map(async (enroll) => {
-        try {
-          const courseSnap = await getDoc(doc(db, "courses", enroll.courseId));
-          if (!courseSnap.exists()) return "";
-          const course  = courseSnap.data();
-          const progress = enroll.progressPercent || 0;
-          const bgCls   = { "AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education" }[course.category] || "thumb-default";
-          const emoji   = course.thumbnailEmoji || "📚";
-          const statusTxt = enroll.isCompleted ? "✅ Completed" : `${progress}% complete`;
-          const statusCls = enroll.isCompleted ? "status-complete" : "status-active";
-          const btnText   = progress > 0 ? "Continue →" : "Start →";
-
-          return `
-            <div class="enrolled-card">
-              <div class="enrolled-thumb ${bgCls}">${emoji}</div>
-              <div class="enrolled-body">
-                <div class="enrolled-cat">${course.category || "Course"}</div>
-                <div class="enrolled-title">${course.title}</div>
-                <div class="enrolled-progress-label">
-                  <span>Progress</span><span>${progress}%</span>
-                </div>
-                <div class="progress-wrap">
-                  <div class="progress-fill ${enroll.isCompleted ? "green" : ""}" style="width:${progress}%"></div>
-                </div>
-              </div>
-              <div class="enrolled-footer">
-                <span class="enrolled-status ${statusCls}">${statusTxt}</span>
-                <a href="/player.html?id=${enroll.courseId}" class="btn btn-primary btn-sm">${btnText}</a>
-              </div>
-            </div>`;
-        } catch(e) { return ""; }
+      const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+      const cards=await Promise.all(enrollments.map(async(enroll)=>{
+        try{
+          const cs=await getDoc(doc(db,"courses",enroll.courseId));
+          if(!cs.exists()) return "";
+          const c=cs.data();
+          const progress=enroll.progressPercent||0;
+          const bgCls=bgMap[c.category]||"thumb-default";
+          const statusTxt=enroll.isCompleted?"✅ Completed":`${progress}% complete`;
+          const statusCls=enroll.isCompleted?"status-complete":"status-active";
+          const btnText=progress>0?"Continue →":"Start →";
+          return `<div class="enrolled-card"><div class="enrolled-thumb ${bgCls}">${c.thumbnailEmoji||"📚"}</div><div class="enrolled-body"><div class="enrolled-cat">${c.category||"Course"}</div><div class="enrolled-title">${c.title}</div><div class="enrolled-progress-label"><span>Progress</span><span>${progress}%</span></div><div class="progress-wrap"><div class="progress-fill ${enroll.isCompleted?"green":""}" style="width:${progress}%"></div></div></div><div class="enrolled-footer"><span class="enrolled-status ${statusCls}">${statusTxt}</span><a href="player.html?id=${enroll.courseId}" class="btn btn-primary btn-sm">${btnText}</a></div></div>`;
+        }catch(e){return "";}
       }));
-
-      // Add pending payment cards
-      const pendingCards = await Promise.all(pendingPayments.map(async (pay) => {
-        try {
-          const courseSnap = await getDoc(doc(db, "courses", pay.courseId));
-          if (!courseSnap.exists()) return "";
-          const course = courseSnap.data();
-          const bgCls  = { "AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education" }[course.category] || "thumb-default";
-          return `
-            <div class="enrolled-card">
-              <div class="enrolled-thumb ${bgCls}">${course.thumbnailEmoji || "📚"}</div>
-              <div class="enrolled-body">
-                <div class="enrolled-cat">${course.category || "Course"}</div>
-                <div class="enrolled-title">${course.title}</div>
-                <p style="font-size:0.8rem;color:var(--orange);">⏳ Payment pending approval</p>
-              </div>
-              <div class="enrolled-footer">
-                <span class="enrolled-status status-pending">Awaiting approval</span>
-              </div>
-            </div>`;
-        } catch(e) { return ""; }
+      const pendingCards=await Promise.all(pendingPayments.map(async(pay)=>{
+        try{
+          const cs=await getDoc(doc(db,"courses",pay.courseId));
+          if(!cs.exists()) return "";
+          const c=cs.data();
+          return `<div class="enrolled-card"><div class="enrolled-thumb ${bgMap[c.category]||"thumb-default"}">${c.thumbnailEmoji||"📚"}</div><div class="enrolled-body"><div class="enrolled-cat">${c.category||"Course"}</div><div class="enrolled-title">${c.title}</div><p style="font-size:0.8rem;color:var(--orange)">⏳ Payment pending approval</p></div><div class="enrolled-footer"><span class="enrolled-status status-pending">Awaiting approval</span></div></div>`;
+        }catch(e){return "";}
       }));
-
-      grid.innerHTML = [...cards, ...pendingCards].filter(Boolean).join("") ||
-        `<div class="empty-dash"><div class="empty-icon">📚</div><h3>No courses yet</h3><p>Browse and enroll in a course to get started.</p><a href="/courses.html" class="btn btn-primary">Browse Courses</a></div>`;
+      grid.innerHTML=[...cards,...pendingCards].filter(Boolean).join("")||`<div class="empty-dash"><div class="empty-icon">📚</div><h3>No courses yet</h3><p>Browse and enroll in a course to get started.</p><a href="courses.html" class="btn btn-primary">Browse Courses</a></div>`;
     }
-    // #### END RENDER ENROLLED COURSES ####
-
+    // #### END RENDER ENROLLED ####
 
     // #### LOGOUT ####
-    document.getElementById("btn-logout")?.addEventListener("click", () => signOut(auth).then(() => window.location.href = "/index.html"));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click", () => signOut(auth).then(() => window.location.href = "/index.html"));
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>window.location.href="index.html"));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>window.location.href="index.html"));
     // #### END LOGOUT ####
-
-    // #### HAMBURGER ####
-    const hamburger = document.getElementById("nav-hamburger");
-    const drawer    = document.getElementById("nav-mobile-drawer");
-    hamburger?.addEventListener("click", () => { hamburger.classList.toggle("open"); drawer.classList.toggle("open"); });
-    // #### END HAMBURGER ####
-
   </script>
+  <script src="js/nav.js"></script>
   <!-- #### END DASHBOARD SCRIPTS #### -->
-<script type="module">
-  import { requireAuth } from "./js/guards.js";
-  requireAuth("./login.html");
-</script>
 </body>
 </html>
