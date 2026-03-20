@@ -1,95 +1,79 @@
-/* ========================================================
-   FILE: css/nav.css
-   PURPOSE: Navigation bar, mobile drawer, footer styles.
-   ======================================================== */
+// ========================================================
+// FILE: js/nav.js
+// PURPOSE: Shared navbar — dropdown toggle, hamburger.
+//          Admin link is injected by each page's own
+//          auth script via window.injectAdminLink()
+// ========================================================
 
-/* #### NAVBAR #### */
-.navbar {
-  position:sticky; top:0; z-index:200;
-  height:var(--nav-height);
-  background:var(--white);
-  border-bottom:3px solid var(--red);
-  box-shadow:0 2px 12px rgba(215,43,43,0.07);
-  display:flex; align-items:center;
-  padding:0 var(--page-padding); gap:2rem;
-}
-/* #### END NAVBAR #### */
+// #### NAV INIT ####
+setTimeout(() => {
 
-/* #### NAV LOGO #### */
-.nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--red); letter-spacing:2px; text-decoration:none; flex-shrink:0; }
-.nav-logo span { color:var(--dark); }
-.nav-logo:hover { color:var(--red-dark); }
-/* #### END NAV LOGO #### */
+  // #### NAV DROPDOWN TOGGLE ####
+  const navUser     = document.getElementById("nav-user");
+  const navDropdown = navUser?.querySelector(".nav-dropdown");
 
-/* #### NAV LINKS #### */
-.nav-links { display:flex; align-items:center; gap:0.25rem; flex:1; }
-.nav-link  { padding:0.45rem 0.85rem; border-radius:var(--radius); font-size:0.88rem; font-weight:500; color:var(--dark); text-decoration:none; transition:all 0.2s; white-space:nowrap; }
-.nav-link:hover  { background:var(--red-light); color:var(--red); }
-.nav-link.active { background:var(--red-light); color:var(--red); font-weight:600; }
-/* #### END NAV LINKS #### */
+  navUser?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    navUser.classList.toggle("open");
+  });
 
-/* #### NAV ACTIONS #### */
-.nav-actions { display:flex; align-items:center; gap:0.65rem; flex-shrink:0; margin-left:auto; }
-/* #### END NAV ACTIONS #### */
+  navDropdown?.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
 
-/* #### NAV USER MENU #### */
-.nav-user { position:relative; display:flex; align-items:center; gap:0.5rem; cursor:pointer; }
-.nav-avatar { width:36px; height:36px; background:var(--red); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
-.nav-user-name { font-size:0.85rem; font-weight:600; color:var(--dark); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.nav-dropdown {
-  position:absolute; top:calc(100% + 12px); right:0;
-  background:var(--white); border:1px solid var(--gray-light);
-  border-radius:var(--radius-lg); box-shadow:var(--shadow-lg);
-  min-width:200px; overflow:hidden;
-  opacity:0; pointer-events:none; transform:translateY(-6px);
-  transition:all 0.2s; z-index:300;
-}
-.nav-dropdown::before { content:''; position:absolute; top:-12px; left:0; right:0; height:12px; background:transparent; }
-.nav-user.open .nav-dropdown { opacity:1; pointer-events:auto; transform:translateY(0); }
-.nav-dropdown-header { padding:1rem; border-bottom:1px solid var(--gray-light); background:var(--off-white); }
-.nav-dropdown-name  { font-weight:700; font-size:0.88rem; color:var(--dark); }
-.nav-dropdown-email { font-size:0.75rem; color:var(--gray); margin-top:0.1rem; }
-.nav-dropdown-item  { display:flex; align-items:center; gap:0.65rem; padding:0.7rem 1rem; font-size:0.85rem; color:var(--dark); text-decoration:none; cursor:pointer; transition:background 0.15s; border:none; background:none; width:100%; text-align:left; font-family:'DM Sans',sans-serif; }
-.nav-dropdown-item:hover { background:var(--off-white); color:var(--red); }
-.nav-dropdown-item.danger { color:var(--red); border-top:1px solid var(--gray-light); }
-.nav-dropdown-item .item-icon { font-size:1rem; width:20px; text-align:center; }
-/* #### END NAV USER MENU #### */
+  document.addEventListener("click", () => {
+    navUser?.classList.remove("open");
+  });
+  // #### END NAV DROPDOWN TOGGLE ####
 
-/* #### HAMBURGER #### */
-.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:0.35rem; margin-left:auto; background:none; border:none; }
-.nav-hamburger span { display:block; width:24px; height:2px; background:var(--dark); border-radius:2px; transition:all 0.3s; }
-.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity:0; }
-.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-/* #### END HAMBURGER #### */
 
-/* #### MOBILE DRAWER #### */
-.nav-mobile-drawer { display:none; position:fixed; top:var(--nav-height); left:0; right:0; background:var(--white); border-bottom:3px solid var(--red); box-shadow:var(--shadow-lg); z-index:190; padding:1rem var(--page-padding) 1.5rem; flex-direction:column; gap:0.25rem; }
-.nav-mobile-drawer.open { display:flex !important; }
-.nav-mobile-drawer .nav-link { padding:0.75rem 1rem; font-size:1rem; }
-.nav-mobile-drawer .nav-actions { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--gray-light); flex-direction:column; width:100%; }
-.nav-mobile-drawer .nav-actions .btn { width:100%; }
-/* #### END MOBILE DRAWER #### */
+  // #### HAMBURGER MENU TOGGLE ####
+  const hamburger = document.getElementById("nav-hamburger");
+  const drawer    = document.getElementById("nav-mobile-drawer");
 
-/* #### FOOTER #### */
-.footer { background:var(--dark); color:rgba(255,255,255,0.5); padding:4rem var(--page-padding) 2rem; }
-.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
-.footer-brand .nav-logo { display:block; margin-bottom:0.75rem; }
-.footer-brand p { color:rgba(255,255,255,0.45); font-size:0.85rem; line-height:1.7; }
-.footer-col h5 { color:var(--white); font-weight:700; font-size:0.88rem; margin-bottom:1rem; }
-.footer-col ul { display:flex; flex-direction:column; gap:0.5rem; }
-.footer-col ul li a { color:rgba(255,255,255,0.4); font-size:0.83rem; text-decoration:none; transition:color 0.2s; }
-.footer-col ul li a:hover { color:var(--red); }
-.footer-bottom { border-top:1px solid rgba(255,255,255,0.08); padding-top:1.5rem; display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:rgba(255,255,255,0.3); }
-/* #### END FOOTER #### */
+  if (hamburger) {
+    const newHamburger = hamburger.cloneNode(true);
+    hamburger.parentNode.replaceChild(newHamburger, hamburger);
+    newHamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      newHamburger.classList.toggle("open");
+      drawer?.classList.toggle("open");
+    });
+  }
 
-/* #### RESPONSIVE #### */
-@media (max-width:768px) {
-  .nav-links,.nav-actions { display:none; }
-  .nav-hamburger { display:flex; }
-  .footer-grid { grid-template-columns:1fr 1fr; gap:2rem; }
-  .footer-brand { grid-column:1/-1; }
-  .footer-bottom { flex-direction:column; gap:0.5rem; text-align:center; }
-}
-@media (max-width:480px) { .footer-grid { grid-template-columns:1fr; } }
-/* #### END RESPONSIVE #### */
+  drawer?.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      document.getElementById("nav-hamburger")?.classList.remove("open");
+      drawer?.classList.remove("open");
+    });
+  });
+  // #### END HAMBURGER MENU TOGGLE ####
+
+}, 300);
+// #### END NAV INIT ####
+
+
+// #### INJECT ADMIN LINK ####
+// Called by each page's auth script when user is confirmed admin
+// Pass isAdmin=true to show the link, false to hide it
+window.setAdminNav = function(isAdmin) {
+  if (!isAdmin) return;
+  const navUser   = document.getElementById("nav-user");
+  const dropdown  = navUser?.querySelector(".nav-dropdown");
+  const logoutBtn = dropdown?.querySelector(".danger");
+
+  if (dropdown && logoutBtn && !document.getElementById("admin-nav-link")) {
+    const adminLink     = document.createElement("a");
+    adminLink.id        = "admin-nav-link";
+    adminLink.className = "nav-dropdown-item";
+    adminLink.innerHTML = '<span class="item-icon">🛠️</span> Admin Panel';
+    adminLink.style.borderTop = "1px solid var(--gray-light)";
+
+    // Detect if we're inside the admin folder
+    const isInAdmin = window.location.pathname.includes("/admin/");
+    adminLink.href  = isInAdmin ? "index.html" : "admin/index.html";
+
+    dropdown.insertBefore(adminLink, logoutBtn);
+  }
+};
+// #### END INJECT ADMIN LINK ####
