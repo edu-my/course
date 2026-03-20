@@ -287,6 +287,8 @@
         document.getElementById("nav-avatar-initials").textContent = name.charAt(0).toUpperCase();
         document.getElementById("dropdown-name").textContent       = name;
         document.getElementById("dropdown-email").textContent      = user.email;
+      // Inject admin link if admin
+      try { const ud = await (await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js")).getDoc((await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js")).doc(db,"users",user.uid)); if(ud.exists()&&ud.data().role==="admin") window.setAdminNav?.(true); } catch(e) {}
       } else {
         navGuest?.classList.remove("hidden");
         navUser?.classList.add("hidden");
@@ -334,11 +336,4 @@
 
     // #### LOGOUT ####
     document.getElementById("btn-logout")?.addEventListener("click", () => signOut(auth).then(() => location.href="index.html"));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click", () => signOut(auth).then(() => location.href="index.html"));
-    // #### END LOGOUT ####
-  </script>
-  <script src="js/nav.js"></script>
-  <!-- #### END SCRIPTS #### -->
-
-</body>
-</html>
+    document.getElementById("btn-logou
