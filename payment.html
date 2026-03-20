@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ========================================================
+     FILE: payment.html
+     PURPOSE: Payment page — QR code display, student
+              submits reference number + receipt link.
+              Admin reviews and approves in admin panel.
+              Loaded via ?course=COURSE_ID
+     ======================================================== -->
+<head>
+  <!-- #### HEAD META #### -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment — iCraftCourse</title>
+  <!-- #### END HEAD META #### -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <!-- #### PAGE STYLES #### -->
+  <style>
+    .payment-page{min-height:calc(100vh - var(--nav-height));background:var(--off-white);padding:3rem var(--page-padding);}
+    .payment-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+    .course-summary{background:white;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;border:1px solid var(--gray-light);}
+    .course-summary-header{background:var(--dark);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+    .course-summary-emoji{font-size:2rem;}
+    .course-summary-info h3{color:white;font-size:1rem;margin-bottom:0.2rem;}
+    .course-summary-info span{font-size:0.8rem;color:rgba(255,255,255,0.45);}
+    .course-summary-body{padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}
+    .course-summary-price{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--red);letter-spacing:1px;}
+    .course-summary-label{font-size:0.8rem;color:var(--gray);}
+    .qr-card{background:white;border-radius:var(--radius-lg);padding:2rem;text-align:center;box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);}
+    .qr-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;margin-bottom:0.3rem;}
+    .qr-card p{font-size:0.82rem;color:var(--gray);margin-bottom:1.5rem;}
+    .qr-image-wrap{width:200px;height:200px;margin:0 auto 1.25rem;border:3px solid var(--dark);border-radius:var(--radius);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--off-white);position:relative;}
+    .qr-image-wrap img{width:100%;height:100%;object-fit:contain;}
+    .qr-placeholder{font-size:5rem;color:var(--dark);}
+    .qr-corner{position:absolute;width:20px;height:20px;border-color:var(--red);border-style:solid;}
+    .qr-tl{top:6px;left:6px;border-width:3px 0 0 3px;}
+    .qr-tr{top:6px;right:6px;border-width:3px 3px 0 0;}
+    .qr-bl{bottom:6px;left:6px;border-width:0 0 3px 3px;}
+    .qr-br{bottom:6px;right:6px;border-width:0 3px 3px 0;}
+    .qr-amount{font-size:0.88rem;color:var(--gray);margin-top:0.5rem;}
+    .qr-amount strong{color:var(--red);font-size:1.1rem;}
+    .payment-methods{display:flex;justify-content:center;gap:0.5rem;margin-top:1rem;flex-wrap:wrap;}
+    .payment-method-badge{background:var(--gray-light);color:var(--gray);font-size:0.72rem;font-weight:600;padding:0.25rem 0.6rem;border-radius:20px;}
+    .payment-steps-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);margin-bottom:1.5rem;}
+    .payment-steps-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;margin-bottom:1rem;}
+    .pay-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;}
+    .pay-step:last-child{margin-bottom:0;}
+    .pay-step-num{width:28px;height:28px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;}
+    .pay-step-text strong{display:block;font-size:0.9rem;margin-bottom:0.15rem;color:var(--dark);}
+    .pay-step-text span{font-size:0.8rem;color:var(--gray);line-height:1.5;}
+    .payment-form-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);}
+    .payment-form-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;margin-bottom:1.25rem;}
+    .status-steps{display:flex;flex-direction:column;gap:0;}
+    .status-step{display:flex;gap:1rem;align-items:flex-start;position:relative;padding-bottom:1.25rem;}
+    .status-step:last-child{padding-bottom:0;}
+    .status-step::before{content:'';position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--gray-light);}
+    .status-step:last-child::before{display:none;}
+    .status-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;position:relative;z-index:1;}
+    .status-dot.done{background:var(--green);color:white;}
+    .status-dot.active{background:var(--orange);color:white;}
+    .status-dot.waiting{background:var(--gray-light);color:var(--gray);}
+    .status-dot.success{background:var(--green);color:white;}
+    .status-dot.failed{background:var(--red);color:white;}
+    .status-step-text strong{display:block;font-size:0.9rem;color:var(--dark);margin-bottom:0.15rem;}
+    .status-step-text span{font-size:0.8rem;color:var(--gray);}
+    .enrolled-box{background:var(--green-light);border:1px solid #A8DFC0;border-radius:var(--radius-lg);padding:2rem;text-align:center;}
+    .enrolled-box .enrolled-icon{font-size:3rem;margin-bottom:1rem;}
+    .enrolled-box h3{font-size:1.1rem;margin-bottom:0.5rem;color:var(--green);}
+    .enrolled-box p{font-size:0.85rem;color:var(--gray);margin-bottom:1.25rem;}
+    @media(max-width:768px){.payment-wrap{grid-template-columns:1fr;}}
+  </style>
+  <!-- #### END PAGE STYLES #### -->
+</head>
+<body>
+
+  <!-- #### NAVBAR #### -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="courses.html"   class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+    <div class="nav-actions hidden" id="nav-guest"><a href="login.html" class="btn btn-secondary btn-sm">Log In</a></div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar-initials">U</div>
+      <div class="nav-user-name" id="nav-user-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name"  id="dropdown-name">User</div>
+          <div class="nav-dropdown-email" id="dropdown-email">user@email.com</div>
+        </div>
+        <a href="dashboard.html"    class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <!-- #### END NAVBAR #### -->
+
+  <!-- #### MOBILE DRAWER #### -->
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="courses.html"   class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <div class="hidden" id="nav-mobile-user">
+      <button class="btn btn-secondary" id="btn-logout-mobile">🚪 Log Out</button>
+    </div>
+    <div class="hidden" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+    </div>
+  </div>
+  <!-- #### END MOBILE DRAWER #### -->
+
+  <!-- #### PAYMENT PAGE #### -->
+  <div class="payment-page">
+    <div class="payment-wrap" id="payment-wrap">
+      <div style="grid-column:1/-1;text-align:center;padding:3rem" id="page-loading">
+        <div class="spinner" style="margin:0 auto 1rem"></div>
+        <p style="color:var(--gray)">Loading payment details...</p>
+      </div>
+    </div>
+  </div>
+  <!-- #### END PAYMENT PAGE #### -->
+
+  <!-- #### PAYMENT SCRIPTS #### -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, addDoc, collection, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const params=new URLSearchParams(window.location.search);
+    const courseId=params.get("course");
+    if(!courseId) window.location.href="courses.html";
+
+    let currentUser=null,courseData=null;
+
+    // #### AUTH GUARD ####
+    onAuthStateChanged(auth,async(user)=>{
+      if(!user){window.location.href=`login.html?redirect=payment&course=${courseId}`;return;}
+      currentUser=user;
+      document.getElementById("nav-guest").classList.add("hidden");
+      document.getElementById("nav-user").classList.remove("hidden");
+      const name=user.displayName||"User";
+      document.getElementById("nav-user-name").textContent=name;
+      document.getElementById("nav-avatar-initials").textContent=name.charAt(0).toUpperCase();
+      document.getElementById("dropdown-name").textContent=name;
+      document.getElementById("dropdown-email").textContent=user.email;
+      await loadPage();
+    });
+    // #### END AUTH GUARD ####
+
+    // #### LOAD PAGE ####
+    async function loadPage(){
+      try{
+        const courseSnap=await getDoc(doc(db,"courses",courseId));
+        if(!courseSnap.exists()){window.location.href="courses.html";return;}
+        courseData={id:courseSnap.id,...courseSnap.data()};
+        const enrollId=`${currentUser.uid}_${courseId}`;
+        const enrollSnap=await getDoc(doc(db,"enrollments",enrollId));
+        if(enrollSnap.exists()){renderEnrolled();return;}
+        const payQ=query(collection(db,"payments"),where("userId","==",currentUser.uid),where("courseId","==",courseId));
+        const paySnap=await getDocs(payQ);
+        if(!paySnap.empty){renderStatusTracker({id:paySnap.docs[0].id,...paySnap.docs[0].data()});}
+        else{renderPaymentPage();}
+      }catch(err){console.error("Load page error:",err);}
+    }
+    // #### END LOAD PAGE ####
+
+    // #### RENDER PAYMENT PAGE ####
+    function renderPaymentPage(){
+      const price=parseFloat(courseData.price||0).toFixed(2);
+      const emoji=courseData.thumbnailEmoji||"📚";
+      document.getElementById("payment-wrap").innerHTML=`
+        <div>
+          <div class="course-summary">
+            <div class="course-summary-header"><div class="course-summary-emoji">${emoji}</div><div class="course-summary-info"><h3>${courseData.title}</h3><span>${courseData.category||"Course"} · One-time payment</span></div></div>
+            <div class="course-summary-body"><div><div class="course-summary-label">Amount to pay</div><div class="course-summary-price">RM ${price}</div></div><div style="text-align:right"><div class="course-summary-label">Payment method</div><div style="font-weight:700;font-size:0.9rem">QR / DuitNow</div></div></div>
+          </div>
+          <div class="qr-card">
+            <h3>Scan to Pay</h3>
+            <p>Use any banking app or e-wallet</p>
+            <div class="qr-image-wrap">
+              <div class="qr-corner qr-tl"></div><div class="qr-corner qr-tr"></div>
+              <div class="qr-corner qr-bl"></div><div class="qr-corner qr-br"></div>
+              <!-- #### QR CODE IMAGE ####
+                   Replace with: <img src="assets/qr-code.png" alt="Payment QR Code"/>
+                   #### END QR CODE IMAGE #### -->
+              <div class="qr-placeholder">▦</div>
+            </div>
+            <div class="qr-amount">Pay exactly: <strong>RM ${price}</strong></div>
+            <div class="payment-methods"><span class="payment-method-badge">DuitNow</span><span class="payment-method-badge">Touch 'n Go</span><span class="payment-method-badge">Maybank</span><span class="payment-method-badge">CIMB</span><span class="payment-method-badge">All Banks</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="payment-steps-card">
+            <h3>HOW TO PAY</h3>
+            <div class="pay-step"><div class="pay-step-num">1</div><div class="pay-step-text"><strong>Scan the QR code</strong><span>Open your banking app or e-wallet and scan the QR code.</span></div></div>
+            <div class="pay-step"><div class="pay-step-num">2</div><div class="pay-step-text"><strong>Pay exactly RM ${price}</strong><span>Take a screenshot of your payment confirmation.</span></div></div>
+            <div class="pay-step"><div class="pay-step-num">3</div><div class="pay-step-text"><strong>Submit your receipt below</strong><span>Enter your reference number and upload screenshot to <a href="https://drive.google.com" target="_blank">Google Drive</a> or <a href="https://imgur.com" target="_blank">Imgur</a>, paste the link.</span></div></div>
+            <div class="pay-step"><div class="pay-step-num">4</div><div class="pay-step-text"><strong>Wait for approval</strong><span>We'll approve within 24 hours.</span></div></div>
+          </div>
+          <div class="payment-form-card">
+            <h3>SUBMIT YOUR RECEIPT</h3>
+            <div class="alert" id="form-alert" style="display:none"></div>
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-control" value="${currentUser.displayName||""}" readonly style="background:var(--off-white);cursor:not-allowed"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pay-ref">Payment Reference Number *</label>
+              <input type="text" id="pay-ref" class="form-control" placeholder="e.g. TXN123456789"/>
+              <span class="form-error" id="err-ref" style="display:none">Please enter your payment reference number.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pay-receipt">Receipt Screenshot Link *</label>
+              <input type="url" id="pay-receipt" class="form-control" placeholder="https://drive.google.com/... or any image link"/>
+              <div style="font-size:0.75rem;color:var(--gray);margin-top:0.35rem">📎 Upload to Google Drive or Imgur and paste the link here.</div>
+              <span class="form-error" id="err-receipt" style="display:none">Please provide a link to your receipt.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pay-notes">Additional Notes (optional)</label>
+              <textarea id="pay-notes" class="form-control" rows="2" placeholder="Any notes for admin..."></textarea>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" id="btn-submit-payment" onclick="submitPayment()">📤 Submit Payment Receipt</button>
+          </div>
+        </div>`;
+    }
+    // #### END RENDER PAYMENT PAGE ####
+
+    // #### SUBMIT PAYMENT ####
+    window.submitPayment=async function(){
+      document.getElementById("err-ref").style.display="none";
+      document.getElementById("err-receipt").style.display="none";
+      document.getElementById("form-alert").style.display="none";
+      const ref=document.getElementById("pay-ref").value.trim();
+      const receipt=document.getElementById("pay-receipt").value.trim();
+      const notes=document.getElementById("pay-notes")?.value.trim()||"";
+      let valid=true;
+      if(!ref){document.getElementById("err-ref").style.display="block";valid=false;}
+      if(!receipt){document.getElementById("err-receipt").style.display="block";valid=false;}
+      if(!valid)return;
+      const btn=document.getElementById("btn-submit-payment");
+      btn.disabled=true;btn.textContent="Submitting...";
+      try{
+        await addDoc(collection(db,"payments"),{
+          userId:currentUser.uid,courseId,userName:currentUser.displayName||"Student",
+          userEmail:currentUser.email,courseName:courseData.title,
+          amount:parseFloat(courseData.price||0),referenceNumber:ref,
+          receiptURL:receipt,notes,status:"pending",
+          submittedAt:serverTimestamp(),reviewedAt:null,rejectionReason:""
+        });
+        renderStatusTracker({status:"pending",referenceNumber:ref});
+      }catch(err){
+        const alert=document.getElementById("form-alert");
+        alert.className="alert alert-error";alert.textContent="Submission failed. Please try again.";alert.style.display="flex";
+        btn.disabled=false;btn.textContent="📤 Submit Payment Receipt";
+      }
+    };
+    // #### END SUBMIT PAYMENT ####
+
+    // #### RENDER STATUS TRACKER ####
+    function renderStatusTracker(payment){
+      const isApproved=payment.status==="approved";
+      const isRejected=payment.status==="rejected";
+      const isPending=payment.status==="pending";
+      document.getElementById("payment-wrap").innerHTML=`
+        <div style="grid-column:1/-1;max-width:560px;margin:0 auto;width:100%">
+          <div style="text-align:center;margin-bottom:2rem">
+            <div style="font-size:3rem;margin-bottom:0.75rem">${isApproved?"🎉":isRejected?"❌":"⏳"}</div>
+            <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px">${isApproved?"PAYMENT APPROVED!":isRejected?"PAYMENT REJECTED":"RECEIPT SUBMITTED"}</h2>
+            <p style="color:var(--gray);font-size:0.9rem">${isApproved?"Your course access has been unlocked.":isRejected?"Please resubmit with a valid receipt.":"We'll review and approve within 24 hours."}</p>
+          </div>
+          <div class="payment-form-card">
+            <h3>PAYMENT STATUS</h3>
+            <div class="status-steps">
+              <div class="status-step"><div class="status-dot done">✓</div><div class="status-step-text"><strong>Receipt Submitted</strong><span>Reference: ${payment.referenceNumber||"—"}</span></div></div>
+              <div class="status-step"><div class="status-dot ${isPending?"active":isApproved?"done":"failed"}">${isPending?"⏳":isApproved?"✓":"✗"}</div><div class="status-step-text"><strong>Admin Review</strong><span>${isPending?"Reviewing your receipt...":isApproved?"Approved!":"Rejected"}</span></div></div>
+              <div class="status-step"><div class="status-dot ${isApproved?"success":"waiting"}">${isApproved?"✓":"🔒"}</div><div class="status-step-text"><strong>Course Access Unlocked</strong><span>${isApproved?"You can now access the course!":"Waiting for approval"}</span></div></div>
+            </div>
+            ${isRejected&&payment.rejectionReason?`<div style="background:var(--red-light);border:1px solid var(--red-mid);border-radius:var(--radius);padding:1rem;margin-top:1rem;font-size:0.85rem;color:#8B0000"><strong>Reason:</strong> ${payment.rejectionReason}</div>`:""}
+            <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+              ${isApproved?`<a href="player.html?id=${courseId}" class="btn btn-success">Start Learning →</a>`:""}
+              <a href="dashboard.html" class="btn btn-secondary">My Dashboard</a>
+              ${isRejected?`<button class="btn btn-primary" onclick="location.reload()">Resubmit Receipt</button>`:""}
+            </div>
+          </div>
+        </div>`;
+    }
+    // #### END RENDER STATUS TRACKER ####
+
+    // #### RENDER ENROLLED ####
+    function renderEnrolled(){
+      document.getElementById("payment-wrap").innerHTML=`
+        <div style="grid-column:1/-1;max-width:480px;margin:0 auto;width:100%">
+          <div class="enrolled-box"><div class="enrolled-icon">✅</div><h3>You're already enrolled!</h3><p>You already have access to <strong>${courseData?.title||"this course"}</strong>.</p><a href="player.html?id=${courseId}" class="btn btn-success btn-lg">Continue Learning →</a></div>
+        </div>`;
+    }
+    // #### END RENDER ENROLLED ####
+
+    // #### LOGOUT ####
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    // #### END LOGOUT ####
+  </script>
+  <script src="js/nav.js"></script>
+  <!-- #### END PAYMENT SCRIPTS #### -->
+</body>
+</html>
