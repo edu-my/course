@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ========================================================
+     FILE: course.html
+     PURPOSE: Individual course detail page — description,
+              modules, price, enroll button
+              Loaded via ?id=COURSE_ID
+     ======================================================== -->
+<head>
+  <!-- Disable Cloudflare email obfuscation -->
+  <meta name="cf-skip-obfuscation" content="true"/>
+  <!-- #### HEAD META #### -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course — iCraftCourse</title>
+  <!-- #### END HEAD META #### -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <!-- #### PAGE STYLES #### -->
+  <style>
+    .course-hero{background:var(--dark);padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
+    .breadcrumb{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:1rem;}
+    .breadcrumb a{color:rgba(255,255,255,0.4);text-decoration:none;}
+    .breadcrumb a:hover{color:var(--red);}
+    .breadcrumb span{margin:0 0.4rem;}
+    .course-hero-category{display:inline-block;background:rgba(215,43,43,0.3);color:#FF9090;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:20px;margin-bottom:1rem;}
+    .course-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:1.5px;color:var(--white);line-height:1.05;margin-bottom:1rem;}
+    .course-hero-desc{color:rgba(255,255,255,0.65);font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:1.5rem;}
+    .course-stats{display:flex;gap:1.5rem;flex-wrap:wrap;}
+    .course-stat{display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:rgba(255,255,255,0.6);}
+    .course-stat strong{color:white;}
+    .enroll-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);position:sticky;top:calc(var(--nav-height) + 1rem);}
+    .enroll-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
+    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
+    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
+    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
+    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
+    .enroll-body{padding:1.5rem;}
+    .enroll-price{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--dark);letter-spacing:1px;margin-bottom:0.25rem;}
+    .enroll-price.free{color:var(--green);}
+    .enroll-price-sub{font-size:0.8rem;color:var(--gray);margin-bottom:1.25rem;}
+    .enroll-perks{display:flex;flex-direction:column;gap:0.6rem;margin:1.25rem 0;}
+    .enroll-perk{display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;color:var(--gray);}
+    .enroll-status{padding:0.75rem 1rem;border-radius:var(--radius);font-size:0.85rem;font-weight:600;text-align:center;margin-bottom:0.75rem;}
+    .status-pending{background:var(--orange-light);color:var(--orange);}
+    .status-enrolled{background:var(--green-light);color:var(--green);}
+    .course-body-wrap{padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
+    .modules-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;margin:2rem 0 1rem;}
+    .module-item{border:1px solid var(--gray-light);border-radius:var(--radius);margin-bottom:0.5rem;overflow:hidden;}
+    .module-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--off-white);cursor:pointer;transition:background 0.15s;user-select:none;}
+    .module-header:hover{background:var(--gray-light);}
+    .module-num{width:28px;height:28px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;}
+    .module-name{font-weight:700;font-size:0.92rem;flex:1;}
+    .module-lesson-count{font-size:0.78rem;color:var(--gray);}
+    .module-chevron{color:var(--gray);font-size:0.75rem;transition:transform 0.2s;}
+    .module-item.open .module-chevron{transform:rotate(180deg);}
+    .lesson-list{display:none;flex-direction:column;}
+    .module-item.open .lesson-list{display:flex;}
+    .lesson-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1.25rem 0.75rem 3.5rem;border-top:1px solid var(--gray-light);font-size:0.85rem;color:var(--gray);}
+    .lesson-icon{font-size:0.9rem;flex-shrink:0;}
+    .lesson-name{flex:1;}
+    .lesson-duration{font-size:0.75rem;color:var(--gray-mid);}
+    .no-modules{background:var(--off-white);border:1px solid var(--gray-light);border-radius:var(--radius);padding:1.5rem;text-align:center;color:var(--gray);font-size:0.88rem;}
+    .page-loading{min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:var(--gray);}
+    @media(max-width:900px){.course-hero{grid-template-columns:1fr;}.course-body-wrap{grid-template-columns:1fr;}.enroll-card{position:static;}}
+  </style>
+  <!-- #### END PAGE STYLES #### -->
+</head>
+<body>
+
+  <!-- #### NAVBAR #### -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html"   class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link active">Courses</a>
+    </div>
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html"    class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar-initials">U</div>
+      <div class="nav-user-name" id="nav-user-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name"  id="dropdown-name">User</div>
+          <div class="nav-dropdown-email" id="dropdown-email">user@email.com</div>
+        </div>
+        <a href="dashboard.html"    class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <!-- #### END NAVBAR #### -->
+
+  <!-- #### MOBILE DRAWER #### -->
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html"   class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html"    class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">📊 My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">🚪 Log Out</button>
+    </div>
+  </div>
+  <!-- #### END MOBILE DRAWER #### -->
+
+  <!-- #### COURSE CONTENT #### -->
+  <div id="course-content">
+    <div class="page-loading"><div class="spinner"></div><p>Loading course...</p></div>
+  </div>
+  <!-- #### END COURSE CONTENT #### -->
+
+  <!-- #### COURSE SCRIPTS #### -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const params   = new URLSearchParams(window.location.search);
+    const courseId = params.get("id");
+    if (!courseId) window.location.href="courses.html";
+
+    let currentUser=null, courseData=null, enrollmentDoc=null;
+
+    // #### AUTH STATE ####
+    onAuthStateChanged(auth, async (user) => {
+      currentUser=user;
+      const navGuest=document.getElementById("nav-guest"),navUser=document.getElementById("nav-user");
+      const navMobileGuest=document.getElementById("nav-mobile-guest"),navMobileUser=document.getElementById("nav-mobile-user");
+      if(user){
+        navGuest?.classList.add("hidden");navUser?.classList.remove("hidden");
+        navMobileGuest?.classList.add("hidden");navMobileUser?.classList.remove("hidden");
+        const name=user.displayName||"User";
+        document.getElementById("nav-user-name").textContent=name;
+        document.getElementById("nav-avatar-initials").textContent=name.charAt(0).toUpperCase();
+        document.getElementById("dropdown-name").textContent=name;
+        document.getElementById("dropdown-email").textContent=user.email;
+      } else {
+        navGuest?.classList.remove("hidden");navUser?.classList.add("hidden");
+        navMobileGuest?.classList.remove("hidden");navMobileUser?.classList.add("hidden");
+      }
+      await loadPage(user);
+    });
+    // #### END AUTH STATE ####
+
+    // #### LOAD PAGE ####
+    async function loadPage(user) {
+      const courseSnap=await getDoc(doc(db,"courses",courseId));
+      if(!courseSnap.exists()){document.getElementById("course-content").innerHTML=`<div class="page-loading"><p>Course not found. <a href="courses.html">Browse all courses</a></p></div>`;return;}
+      courseData={id:courseSnap.id,...courseSnap.data()};
+      document.title=`${courseData.title} — iCraftCourse`;
+      if(user){
+        const enrollId=`${user.uid}_${courseId}`;
+        const enrollSnap=await getDoc(doc(db,"enrollments",enrollId));
+        enrollmentDoc=enrollSnap.exists()?enrollSnap.data():null;
+        if(!enrollmentDoc){
+          const payQ=query(collection(db,"payments"),where("userId","==",user.uid),where("courseId","==",courseId));
+          const paySnap=await getDocs(payQ);
+          if(!paySnap.empty) enrollmentDoc={status:paySnap.docs[0].data().status};
+        }
+      }
+      renderPage();
+    }
+    // #### END LOAD PAGE ####
+
+    // #### RENDER PAGE ####
+    function renderPage() {
+      const c=courseData;
+      const isFree=c.isFree===true;
+      const price=isFree?"FREE":`RM ${parseFloat(c.price||0).toFixed(2)}`;
+      const bgCls={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"}[c.category]||"thumb-default";
+      const emoji=c.thumbnailEmoji||"📚";
+      const modules=c.modules||[];
+      const totalLessons=modules.reduce((sum,m)=>sum+(m.lessons?m.lessons.length:0),0);
+      let enrollSection="";
+      if(enrollmentDoc&&(enrollmentDoc.status==="approved"||isFree&&enrollmentDoc)){
+        enrollSection=`<div class="enroll-status status-enrolled">✅ You are enrolled!</div><a href="player.html?id=${c.id}" class="btn btn-success btn-block btn-lg">Continue Learning →</a>`;
+      } else if(enrollmentDoc&&enrollmentDoc.status==="pending"){
+        enrollSection=`<div class="enroll-status status-pending">⏳ Payment pending approval</div><p style="font-size:0.8rem;color:var(--gray);text-align:center">We'll notify you once approved.</p>`;
+      } else if(isFree){
+        enrollSection=`<button class="btn btn-success btn-block btn-lg" id="btn-enroll-free">🆓 Start Free Now</button>`;
+      } else {
+        enrollSection=`<button class="btn btn-primary btn-block btn-lg" id="btn-enroll-paid">Enroll — ${price}</button>`;
+      }
+      let modulesHtml="";
+      if(modules.length===0){modulesHtml=`<div class="no-modules">📋 Course content coming soon.</div>`;}
+      else{modulesHtml=modules.map((mod,i)=>{
+        const lessons=mod.lessons||[];
+        const lessonItems=lessons.map(les=>`<div class="lesson-item"><span class="lesson-icon">${les.type==="video"?"▶️":"📄"}</span><span class="lesson-name">${les.title}</span><span class="lesson-duration">${les.duration||""}</span></div>`).join("");
+        return `<div class="module-item ${i===0?"open":""}" onclick="toggleModule(this)"><div class="module-header"><div class="module-num">${i+1}</div><div class="module-name">${mod.title}</div><div class="module-lesson-count">${lessons.length} lesson${lessons.length!==1?"s":""}</div><div class="module-chevron">▼</div></div><div class="lesson-list">${lessonItems}</div></div>`;
+      }).join("");}
+      document.getElementById("course-content").innerHTML=`
+        <div class="course-hero">
+          <div>
+            <div class="breadcrumb"><a href="courses.html">Courses</a><span>›</span><span>${c.category||"General"}</span><span>›</span><span>${c.title}</span></div>
+            <div class="course-hero-category">${c.category||"General"}</div>
+            <h1>${c.title}</h1>
+            <p class="course-hero-desc">${c.description||""}</p>
+            <div class="course-stats">
+              ${c.totalDuration?`<div class="course-stat">⏱ <strong>${c.totalDuration}</strong></div>`:""}
+              ${modules.length?`<div class="course-stat">📦 <strong>${modules.length} modules</strong></div>`:""}
+              ${totalLessons?`<div class="course-stat">📖 <strong>${totalLessons} lessons</strong></div>`:""}
+              <div class="course-stat">🏆 <strong>Certificate included</strong></div>
+              <div class="course-stat">👥 <strong>${c.enrollmentCount||0} enrolled</strong></div>
+            </div>
+          </div>
+          <div class="enroll-card">
+            <div class="enroll-thumb ${bgCls}">${emoji}</div>
+            <div class="enroll-body">
+              <div class="enroll-price ${isFree?"free":""}">${price}</div>
+              <div class="enroll-price-sub">${isFree?"No payment required":"One-time payment"}</div>
+              ${enrollSection}
+              <div class="enroll-perks">
+                ${c.totalDuration?`<div class="enroll-perk"><span>⏱</span> ${c.totalDuration} of content</div>`:""}
+                <div class="enroll-perk"><span>📱</span> Access on any device</div>
+                <div class="enroll-perk"><span>🏆</span> Certificate on completion</div>
+                <div class="enroll-perk"><span>♾️</span> Lifetime access</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="course-body-wrap">
+          <div>
+            <h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;margin-bottom:1rem;">COURSE CURRICULUM</h2>
+            ${modulesHtml}
+          </div>
+          <div></div>
+        </div>`;
+      document.getElementById("btn-enroll-free")?.addEventListener("click",enrollFree);
+      document.getElementById("btn-enroll-paid")?.addEventListener("click",enrollPaid);
+    }
+    // #### END RENDER PAGE ####
+
+    // #### ENROLL FREE ####
+    async function enrollFree() {
+      if(!currentUser){window.location.href=`login.html?redirect=course&id=${courseId}`;return;}
+      const btn=document.getElementById("btn-enroll-free");
+      btn.disabled=true;btn.textContent="Enrolling...";
+      try{
+        const enrollId=`${currentUser.uid}_${courseId}`;
+        await setDoc(doc(db,"enrollments",enrollId),{
+          enrollmentId:enrollId,userId:currentUser.uid,courseId,courseName:courseData.title,
+          enrolledAt:serverTimestamp(),completedLessons:[],progressPercent:0,
+          isCompleted:false,completedAt:null,lastLessonId:null,certificateIssued:false
+        });
+        window.location.href=`player.html?id=${courseId}`;
+      }catch(err){btn.disabled=false;btn.textContent="🆓 Start Free Now";alert("Enrollment failed. Please try again.");}
+    }
+    // #### END ENROLL FREE ####
+
+    // #### ENROLL PAID ####
+    function enrollPaid(){if(!currentUser){window.location.href=`login.html?redirect=course&id=${courseId}`;return;}window.location.href=`payment.html?course=${courseId}`;}
+    // #### END ENROLL PAID ####
+
+    // #### MODULE TOGGLE ####
+    window.toggleModule=function(el){el.classList.toggle("open");};
