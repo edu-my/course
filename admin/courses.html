@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ========================================================
+     FILE: admin/courses.html
+     PURPOSE: Admin course manager — create, edit, delete
+              courses. Add/edit modules and lessons.
+              Toggle published/unpublished.
+     ACCESS:  Admin only
+     ======================================================== -->
+<head>
+  <!-- #### HEAD META #### -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Manager — Admin</title>
+  <!-- #### END HEAD META #### -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/nav.css"/>
+  <!-- #### ADMIN STYLES #### -->
+  <style>
+    body{background:#F0F2F5;}
+    .navbar{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-logo span{color:rgba(255,255,255,0.6);}
+    .nav-link{color:rgba(255,255,255,0.6);}
+    .nav-link:hover,.nav-link.active{background:rgba(255,255,255,0.08);color:white;}
+    .nav-user-name{color:rgba(255,255,255,0.8);}
+    .nav-avatar{background:var(--orange);}
+    .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
+    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,0.06);}
+    .admin-sidebar-title{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0.5rem 1.25rem 0.25rem;margin-top:0.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.25rem;color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(255,255,255,0.04);color:white;}
+    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,0.1);color:white;}
+    .admin-nav-item .nav-icon{font-size:1rem;width:20px;text-align:center;}
+    .admin-main{padding:2rem;overflow-y:auto;}
+    .admin-page-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+
+    /* Course list */
+    .courses-list{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;}
+    .course-admin-card{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);overflow:hidden;}
+    .course-admin-header{padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid var(--gray-light);}
+    .course-admin-emoji{font-size:2rem;flex-shrink:0;}
+    .course-admin-info{flex:1;min-width:0;}
+    .course-admin-title{font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:0.2rem;}
+    .course-admin-meta{font-size:0.78rem;color:var(--gray);display:flex;gap:1rem;flex-wrap:wrap;}
+    .course-admin-actions{display:flex;gap:0.5rem;flex-shrink:0;flex-wrap:wrap;}
+    .published-toggle{display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;font-weight:600;cursor:pointer;}
+    .toggle-switch{width:40px;height:22px;background:var(--gray-light);border-radius:11px;position:relative;transition:background 0.2s;flex-shrink:0;}
+    .toggle-switch.on{background:var(--green);}
+    .toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+    .toggle-switch.on::after{transform:translateX(18px);}
+
+    /* Modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:2rem 1rem;overflow-y:auto;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:white;border-radius:var(--radius-lg);width:100%;max-width:700px;box-shadow:var(--shadow-lg);margin:auto;}
+    .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:10;}
+    .modal-header h3{font-size:1.1rem;font-weight:700;}
+    .modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--gray);}
+    .modal-body{padding:1.5rem;}
+    .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--gray-light);display:flex;gap:0.75rem;flex-wrap:wrap;position:sticky;bottom:0;background:white;}
+
+    /* Module builder */
+    .module-builder{border:1px solid var(--gray-light);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;}
+    .module-builder-header{background:var(--off-white);padding:0.85rem 1rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid var(--gray-light);}
+    .module-builder-header strong{flex:1;font-size:0.9rem;}
+    .module-builder-body{padding:1rem;}
+    .lesson-row{display:grid;grid-template-columns:1fr 80px 120px auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;}
+    .lesson-row input,.lesson-row select{padding:0.4rem 0.75rem;border:1px solid var(--gray-light);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;}
+    .lesson-row input:focus,.lesson-row select:focus{border-color:var(--red);}
+
+    .panel{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;}
+    .panel-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;background:var(--off-white);}
+    .panel-header h3{font-size:0.92rem;font-weight:700;}
+    .table-empty{padding:2rem;text-align:center;color:var(--gray);font-size:0.85rem;}
+
+    @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}.lesson-row{grid-template-columns:1fr auto;}.lesson-row .type-sel,.lesson-row .dur-inp{display:none;}}
+  </style>
+  <!-- #### END ADMIN STYLES #### -->
+</head>
+<body>
+
+  <!-- #### NAVBAR #### -->
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link">Admin</a>
+      <a href="../index.html" class="nav-link">← View Site</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="margin-left:auto">
+      <div class="nav-avatar" id="nav-avatar-initials">A</div>
+      <div class="nav-user-name" id="nav-user-name">Admin</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name"  id="dropdown-name">Admin</div>
+          <div class="nav-dropdown-email" id="dropdown-email">admin@email.com</div>
+        </div>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+  </nav>
+  <!-- #### END NAVBAR #### -->
+
+  <div class="admin-wrap">
+    <!-- #### ADMIN SIDEBAR #### -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-title">Main</div>
+      <a href="index.html"    class="admin-nav-item"><span class="nav-icon">📊</span> Overview</a>
+      <div class="admin-sidebar-title">Manage</div>
+      <a href="courses.html"  class="admin-nav-item active"><span class="nav-icon">📚</span> Courses</a>
+      <a href="payments.html" class="admin-nav-item"><span class="nav-icon">💳</span> Payments</a>
+      <a href="users.html"    class="admin-nav-item"><span class="nav-icon">👥</span> Users</a>
+      <a href="stats.html"    class="admin-nav-item"><span class="nav-icon">📈</span> Stats</a>
+      <div class="admin-sidebar-title">Site</div>
+      <a href="../index.html" class="admin-nav-item"><span class="nav-icon">🌐</span> View Site</a>
+    </aside>
+    <!-- #### END ADMIN SIDEBAR #### -->
+
+    <!-- #### ADMIN MAIN #### -->
+    <main class="admin-main">
+      <div class="admin-page-title">
+        📚 Course Manager
+        <button class="btn btn-primary" onclick="openCreateCourse()">+ New Course</button>
+      </div>
+
+      <!-- Courses list -->
+      <div class="courses-list" id="courses-list">
+        <div class="panel">
+          <div class="table-empty"><div class="spinner spinner-sm" style="margin:0 auto 0.5rem"></div>Loading courses...</div>
+        </div>
+      </div>
+    </main>
+    <!-- #### END ADMIN MAIN #### -->
+  </div>
+
+
+  <!-- #### COURSE MODAL #### -->
+  <div class="modal-overlay" id="course-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title">New Course</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="alert" id="modal-alert" style="display:none;margin-bottom:1rem"></div>
+
+        <!-- Course basic info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label">Course Title *</label>
+            <input type="text" id="c-title" class="form-control" placeholder="e.g. Working with AI"/>
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label">Description *</label>
+            <textarea id="c-desc" class="form-control" rows="3" placeholder="What will students learn?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="c-category" class="form-control">
+              <option value="AI">🤖 AI & Technology</option>
+              <option value="Soft Skills">💬 Soft Skills</option>
+              <option value="Personal Development">🌱 Personal Development</option>
+              <option value="Education">📚 Education</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Thumbnail Emoji</label>
+            <input type="text" id="c-emoji" class="form-control" placeholder="e.g. 🤖" maxlength="4"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price Type</label>
+            <select id="c-free" class="form-control" onchange="togglePrice()">
+              <option value="false">💳 Paid</option>
+              <option value="true">🆓 Free</option>
+            </select>
+          </div>
+          <div class="form-group" id="price-group">
+            <label class="form-label">Price (RM)</label>
+            <input type="number" id="c-price" class="form-control" placeholder="e.g. 9.90" min="0" step="0.10"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Duration</label>
+            <input type="text" id="c-duration" class="form-control" placeholder="e.g. 6 hours"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Published</label>
+            <select id="c-published" class="form-control">
+              <option value="true">✅ Yes — visible to students</option>
+              <option value="false">🚫 No — hidden (draft)</option>
+            </select>
+          </div>
+        </div>
+
+        <hr style="margin:1.25rem 0;border:none;border-top:1px solid var(--gray-light)"/>
+
+        <!-- Module builder -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+          <h4 style="font-size:0.92rem;font-weight:700">📦 Modules & Lessons</h4>
+          <button class="btn btn-secondary btn-sm" onclick="addModule()">+ Add Module</button>
+        </div>
+        <div id="modules-builder"></div>
+        <p style="font-size:0.78rem;color:var(--gray);margin-top:0.5rem">
+          💡 For YouTube videos, paste the full URL (e.g. https://youtube.com/watch?v=xxx)
+        </p>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-save-course" onclick="saveCourse()">Save Course</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger hidden" id="btn-delete-course" onclick="deleteCourse()">Delete Course</button>
+      </div>
+    </div>
+  </div>
+  <!-- #### END COURSE MODAL #### -->
+
+
+  <!-- #### COURSES SCRIPTS #### -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    // #### FIREBASE SETUP ####
+    const firebaseConfig = {
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    // #### END FIREBASE SETUP ####
+
+    let allCourses    = [];
+    let editingCourse = null; // null = creating new, object = editing existing
+    let moduleCount   = 0;
+
+    // #### ADMIN AUTH GUARD ####
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href="../login.html"; return; }
+      const userDoc = await getDoc(doc(db,"users",user.uid));
+      if (!userDoc.exists() || userDoc.data().role !== "admin") { window.location.href="../index.html"; return; }
+      const name = user.displayName||"Admin";
+      document.getElementById("nav-user-name").textContent       = name;
+      document.getElementById("nav-avatar-initials").textContent = name.charAt(0).toUpperCase();
+      document.getElementById("dropdown-name").textContent       = name;
+      document.getElementById("dropdown-email").textContent      = user.email;
+      await loadCourses();
+    });
+    // #### END ADMIN AUTH GUARD ####
+
+    // #### LOAD COURSES ####
+    async function loadCourses() {
+      try {
+        const snap = await getDocs(collection(db,"courses"));
+        allCourses = [];
+        snap.forEach(d => allCourses.push({id:d.id,...d.data()}));
+        allCourses.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+        renderCourses();
+      } catch(err) {
+        document.getElementById("courses-list").innerHTML=`<div class="panel"><div class="table-empty">Error: ${err.message}</div></div>`;
+      }
+    }
+    // #### END LOAD COURSES ####
+
+    // #### RENDER COURSES ####
+    function renderCourses() {
+      const list = document.getElementById("courses-list");
+      if (allCourses.length === 0) {
+        list.innerHTML = `<div class="panel"><div class="table-empty">No courses yet. Click "+ New Course" to create one.</div></div>`;
+        return;
+      }
+      list.innerHTML = allCourses.map(c => {
+        const isFree      = c.isFree === true;
+        const isPublished = c.isPublished === true;
+        const modules     = c.modules||[];
+        const lessons     = modules.reduce((sum,m)=>sum+(m.lessons?m.lessons.length:0),0);
+        return `
+          <div class="course-admin-card">
+            <div class="course-admin-header">
+              <div class="course-admin-emoji">${c.thumbnailEmoji||"📚"}</div>
+              <div class="course-admin-info">
+                <div class="course-admin-title">${c.title}</div>
+                <div class="course-admin-meta">
+                  <span>${c.category||"General"}</span>
+                  <span>${isFree?"Free":`RM ${parseFloat(c.price||0).toFixed(2)}`}</span>
+                  <span>${modules.length} modules · ${lessons} lessons</span>
+                  <span>${c.totalDuration||""}</span>
+                </div>
+              </div>
+              <div class="course-admin-actions">
+                <div class="published-toggle" onclick="togglePublish('${c.id}', ${isPublished})">
+                  <div class="toggle-switch ${isPublished?"on":""}"></div>
+                  <span style="font-size:0.78rem;color:${isPublished?"var(--green)":"var(--gray)"}">${isPublished?"Live":"Draft"}</span>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="openEditCourse('${c.id}')">✏️ Edit</button>
+                <a href="../course.html?id=${c.id}" target="_blank" class="btn btn-secondary btn-sm">👁️ View</a>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+    // #### END RENDER COURSES ####
+
+    // #### TOGGLE PUBLISH ####
+    window.togglePublish = async function(courseId, currentlyPublished) {
+      try {
+        await updateDoc(doc(db,"courses",courseId), { isPublished: !currentlyPublished });
+        const course = allCourses.find(c => c.id === courseId);
+        if (course) course.isPublished = !currentlyPublished;
+        renderCourses();
+      } catch(err) { alert("Error: " + err.message); }
+    };
+    // #### END TOGGLE PUBLISH ####
+
+    // #### OPEN CREATE COURSE ####
+    window.openCreateCourse = function() {
+      editingCourse = null;
+      moduleCount   = 0;
+      document.getElementById("modal-title").textContent = "New Course";
+      document.getElementById("btn-delete-course").classList.add("hidden");
+      document.getElementById("modal-alert").style.display = "none";
+      // Reset form
+      ["c-title","c-desc","c-emoji","c-price","c-duration"].forEach(id => {
+        const el = document.getElementById(id); if(el) el.value="";
+      });
+      document.getElementById("c-category").value  = "AI";
+      document.getElementById("c-free").value      = "false";
+      document.getElementById("c-published").value = "false";
+      document.getElementById("price-group").style.display = "block";
+      document.getElementById("modules-builder").innerHTML = "";
+      document.getElementById("course-modal").classList.add("open");
+    };
+    // #### END OPEN CREATE COURSE ####
+
+    // #### OPEN EDIT COURSE ####
+    window.openEditCourse = function(courseId) {
+      editingCourse = allCourses.find(c => c.id === courseId);
+      if (!editingCourse) return;
+      moduleCount = 0;
+      document.getElementById("modal-title").textContent = "Edit Course";
+      document.getElementById("btn-delete-course").classList.remove("hidden");
+      document.getElementById("modal-alert").style.display = "none";
+
+      // Fill form
+      document.getElementById("c-title").value     = editingCourse.title||"";
+      document.getElementById("c-desc").value      = editingCourse.description||"";
+      document.getElementById("c-emoji").value     = editingCourse.thumbnailEmoji||"";
+      document.getElementById("c-price").value     = editingCourse.price||"";
+      document.getElementById("c-duration").value  = editingCourse.totalDuration||"";
+      document.getElementById("c-category").value  = editingCourse.category||"AI";
+      document.getElementById("c-free").value      = editingCourse.isFree?"true":"false";
+      document.getElementById("c-published").value = editingCourse.isPublished?"true":"false";
+      document.getElementById("price-group").style.display = editingCourse.isFree?"none":"block";
+
+      // Build modules
+      const builder = document.getElementById("modules-builder");
+      builder.innerHTML = "";
+      (editingCourse.modules||[]).forEach(mod => addModule(mod));
+
+      document.getElementById("course-modal").classList.add("open");
+    };
+    // #### END OPEN EDIT COURSE ####
+
+    // #### ADD MODULE ####
+    window.addModule = function(existingMod = null) {
+      moduleCount++;
+      const mi  = moduleCount;
+      const div = document.createElement("div");
+      div.className = "module-builder";
+      div.id = `module-${mi}`;
+
+      const lessons = existingMod?.lessons || [];
+      let lessonHtml = lessons.map((les,li) => buildLessonRow(mi, li+1, les)).join("");
+
+      div.innerHTML = `
+        <div class="module-builder-header">
+          <strong>Module ${mi}</strong>
+          <input type="text" placeholder="Module title e.g. Introduction to AI"
+            value="${existingMod?.title||""}"
+            id="mod-title-${mi}"
+            style="flex:1;border:1px solid var(--gray-light);border-radius:var(--radius);padding:0.35rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;margin:0 0.5rem"/>
+          <button class="btn btn-danger btn-sm" onclick="removeModule(${mi})">Remove</button>
+        </div>
+        <div class="module-builder-body">
+          <div id="lessons-${mi}">${lessonHtml}</div>
+          <button class="btn btn-secondary btn-sm" onclick="addLesson(${mi})" style="margin-top:0.5rem">+ Add Lesson</button>
+        </div>`;
+
+      document.getElementById("modules-builder").appendChild(div);
+    };
+    // #### END ADD MODULE ####
+
+    // #### BUILD LESSON ROW ####
+    function buildLessonRow(mi, li, existing = null) {
+      return `
+        <div class="lesson-row" id="lesson-${mi}-${li}">
+          <input type="text" placeholder="Lesson title"
+            value="${existing?.title||""}"
+            id="les-title-${mi}-${li}"/>
+          <select class="type-sel" id="les-type-${mi}-${li}">
+            <option value="video" ${existing?.type==="video"?"selected":""}>Video</option>
+            <option value="pdf"   ${existing?.type==="pdf"?"selected":""}>PDF</option>
+          </select>
+          <input type="text" class="dur-inp" placeholder="Duration e.g. 10:00"
+            value="${existing?.duration||""}"
+            id="les-dur-${mi}-${li}"/>
+          <button class="btn btn-danger btn-sm" onclick="removeLesson(${mi},${li})">×</button>
+          <input type="text" placeholder="YouTube URL or PDF link"
+            value="${existing?.contentURL||""}"
+            id="les-url-${mi}-${li}"
+            style="grid-column:1/-1;border:1px solid var(--gray-light);border-radius:var(--radius);padding:0.4rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none"/>
+        </div>`;
+    }
+    // #### END BUILD LESSON ROW ####
+
+    // #### ADD LESSON ####
+    window.addLesson = function(mi) {
+      const container = document.getElementById(`lessons-${mi}`);
+      const li = container.children.length + 1;
+      const div = document.createElement("div");
+      div.innerHTML = buildLessonRow(mi, li);
+      container.appendChild(div.firstElementChild);
+    };
+    // #### END ADD LESSON ####
+
+    // #### REMOVE MODULE ####
+    window.removeModule = function(mi) {
+      const el = document.getElementById(`module-${mi}`);
+      if (el) el.remove();
+    };
+    // #### END REMOVE MODULE ####
+
+    // #### REMOVE LESSON ####
+    window.removeLesson = function(mi, li) {
+      const el = document.getElementById(`lesson-${mi}-${li}`);
+      if (el) el.remove();
+    };
+    // #### END REMOVE LESSON ####
+
+    // #### TOGGLE PRICE ####
+    window.togglePrice = function() {
+      const isFree = document.getElementById("c-free").value === "true";
+      document.getElementById("price-group").style.display = isFree ? "none" : "block";
+    };
+    // #### END TOGGLE PRICE ####
+
+    // #### COLLECT MODULES FROM FORM ####
+    function collectModules() {
+      const modules = [];
+      const modEls  = document.getElementById("modules-builder").querySelectorAll(".module-builder");
+      modEls.forEach((modEl, mi) => {
+        const modIdx    = mi + 1;
+        const titleEl   = document.getElementById(`mod-title-${modEl.id.replace("module-","")}`);
+        const modTitle  = titleEl ? titleEl.value.trim() : `Module ${modIdx}`;
+        const lessonEls = modEl.querySelectorAll(".lesson-row");
+        const lessons   = [];
+        lessonEls.forEach((lesEl, li) => {
+          const idParts  = lesEl.id.split("-");
+          const mIdx     = idParts[1];
+          const lIdx     = idParts[2];
+          const title    = document.getElementById(`les-title-${mIdx}-${lIdx}`)?.value.trim()||"";
+          const type     = document.getElementById(`les-type-${mIdx}-${lIdx}`)?.value||"video";
+          const duration = document.getElementById(`les-dur-${mIdx}-${lIdx}`)?.value.trim()||"";
+          const url      = document.getElementById(`les-url-${mIdx}-${lIdx}`)?.value.trim()||"";
+          if (title) {
+            lessons.push({
+              lessonId:   `les_${String(modIdx).padStart(2,"0")}_${String(li+1).padStart(2,"0")}`,
+              title, type, contentURL: url, duration, order: li+1
+            });
+          }
+        });
+        if (modTitle) {
+          modules.push({
+            moduleId: `mod_${String(modIdx).padStart(2,"0")}`,
+            title: modTitle, order: modIdx, lessons
+          });
+        }
+      });
+      return modules;
+    }
+    // #### END COLLECT MODULES FROM FORM ####
+
+    // #### SAVE COURSE ####
+    window.saveCourse = async function() {
+      const title     = document.getElementById("c-title").value.trim();
+      const desc      = document.getElementById("c-desc").value.trim();
+      const category  = document.getElementById("c-category").value;
+      const emoji     = document.getElementById("c-emoji").value.trim()||"📚";
+      const isFree    = document.getElementById("c-free").value === "true";
+      const price     = parseFloat(document.getElementById("c-price").value||0);
+      const duration  = document.getElementById("c-duration").value.trim();
+      const published = document.getElementById("c-published").value === "true";
+      const modules   = collectModules();
+
+      if (!title) { showAlert("Please enter a course title.","error"); return; }
+      if (!desc)  { showAlert("Please enter a description.","error"); return; }
+
+      const btn = document.getElementById("btn-save-course");
+      btn.disabled = true; btn.textContent = "Saving...";
+
+      try {
+        const data = {
+          title, description:desc, category,
+          thumbnailEmoji: emoji,
+          isFree, price: isFree ? 0 : price,
+          totalDuration: duration,
+          isPublished: published,
+          modules,
+          enrollmentCount: editingCourse?.enrollmentCount || 0
+        };
+
+        if (editingCourse) {
+          // Update existing
+          await updateDoc(doc(db,"courses",editingCourse.id), data);
+          const idx = allCourses.findIndex(c=>c.id===editingCourse.id);
+          if (idx>=0) allCourses[idx] = {...allCourses[idx],...data};
+          showAlert("✅ Course updated successfully!","success");
+        } else {
+          // Create new
+          data.createdAt = serverTimestamp();
+          const ref = await addDoc(collection(db,"courses"), data);
+          allCourses.unshift({id:ref.id,...data});
+          showAlert("✅ Course created successfully!","success");
+          editingCourse = {id:ref.id,...data};
+          document.getElementById("modal-title").textContent = "Edit Course";
+          document.getElementById("btn-delete-course").classList.remove("hidden");
+        }
+
+        renderCourses();
+      } catch(err) {
+        showAlert("Error: " + err.message,"error");
+      }
+
+      btn.disabled = false; btn.textContent = "Save Course";
+    };
+    // #### END SAVE COURSE ####
+
+    // #### DELETE COURSE ####
+    window.deleteCourse = async function() {
+      if (!editingCourse) return;
+      if (!confirm(`Delete "${editingCourse.title}"? This cannot be undone.`)) return;
+      try {
+        await deleteDoc(doc(db,"courses",editingCourse.id));
+        allCourses = allCourses.filter(c=>c.id!==editingCourse.id);
+        renderCourses();
+        closeModal();
+      } catch(err) { showAlert("Error: " + err.message,"error"); }
+    };
+    // #### END DELETE COURSE ####
+
+    // #### HELPERS ####
+    function showAlert(msg, type="error") {
+      const el = document.getElementById("modal-alert");
+      el.className = `alert alert-${type}`;
+      el.textContent = msg;
+      el.style.display = "flex";
+    }
+    window.closeModal = function() {
+      document.getElementById("course-modal").classList.remove("open");
+      editingCourse = null;
+    };
+    document.getElementById("course-modal").addEventListener("click",(e)=>{
+      if(e.target===document.getElementById("course-modal")) closeModal();
+    });
+    // #### END HELPERS ####
+
+    // #### LOGOUT ####
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="../login.html"));
+    // #### END LOGOUT ####
+  </script>
+  <script src="../js/nav.js"></script>
+  <!-- #### END COURSES SCRIPTS #### -->
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ========================================================
+     FILE: admin/index.html
+     PURPOSE: Admin dashboard overview — KPIs, quick stats,
+              pending approvals, recent activity
+     ACCESS:  Admin only — redirects non-admins to homepage
+     ======================================================== -->
+<head>
+  <!-- #### HEAD META #### -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — iCraftCourse</title>
+  <!-- #### END HEAD META #### -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/nav.css"/>
+  <!-- #### ADMIN STYLES #### -->
+  <style>
+    body { background: #F0F2F5; }
+
+    /* Admin navbar override */
+    .navbar { background: var(--dark); border-bottom-color: var(--red); }
+    .nav-logo span { color: rgba(255,255,255,0.6); }
+    .nav-link { color: rgba(255,255,255,0.6); }
+    .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.08); color: white; }
+    .nav-user-name { color: rgba(255,255,255,0.8); }
+    .nav-avatar { background: var(--orange); }
+
+    /* Admin layout */
+    .admin-wrap { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - var(--nav-height)); }
+
+    /* Sidebar */
+    .admin-sidebar {
+      background: var(--dark);
+      padding: 1.5rem 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .admin-sidebar-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      padding: 0.5rem 1.25rem 0.25rem;
+      margin-top: 0.75rem;
+    }
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.65rem 1.25rem;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .admin-nav-item:hover { background: rgba(255,255,255,0.04); color: white; }
+    .admin-nav-item.active { border-left-color: var(--red); background: rgba(215,43,43,0.1); color: white; }
+    .admin-nav-item .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .admin-badge { margin-left: auto; background: var(--red); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; }
+
+    /* Main content */
+    .admin-main { padding: 2rem; overflow-y: auto; }
+
+    /* Page title */
+    .admin-page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 1.5px;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* KPI cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .kpi-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--red);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card.green  { border-top-color: var(--green); }
+    .kpi-card.blue   { border-top-color: var(--blue); }
+    .kpi-card.orange { border-top-color: var(--orange); }
+    .kpi-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .kpi-num  { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--dark); letter-spacing: 1px; line-height: 1; }
+    .kpi-label{ font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.25rem; }
+
+    /* Content grid */
+    .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    /* Panel card */
+    .panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--off-white);
+    }
+    .panel-header h3 { font-size: 0.92rem; font-weight: 700; }
+    .panel-body { padding: 0; }
+
+    /* Table */
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .admin-table th { padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); border-bottom: 1px solid var(--gray-light); }
+    .admin-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--gray-light); color: var(--gray); vertical-align: middle; }
+    .admin-table td:first-child { color: var(--dark); font-weight: 600; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--off-white); }
+
+    /* Status badges */
+    .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+    .status-pending  { background: var(--orange-light); color: var(--orange); }
+    .status-approved { background: var(--green-light);  color: var(--green);  }
+    .status-rejected { background: var(--red-light);    color: var(--red);    }
+
+    /* Empty state */
+    .table-empty { padding: 2rem; text-align: center; color: var(--gray); font-size: 0.85rem; }
+
+    @media (max-width: 1024px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 768px)  { .admin-wrap { grid-template-columns: 1fr; } .admin-sidebar { display: none; } .content-grid { grid-template-columns: 1fr; } }
+  </style>
+  <!-- #### END ADMIN STYLES #### -->
+</head>
+<body>
+
+  <!-- #### NAVBAR #### -->
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link active">Admin</a>
+      <a href="../index.html" class="nav-link">← View Site</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="margin-left:auto">
+      <div class="nav-avatar" id="nav-avatar-initials">A</div>
+      <div class="nav-user-name" id="nav-user-name">Admin</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name"  id="dropdown-name">Admin</div>
+          <div class="nav-dropdown-email" id="dropdown-email">admin@email.com</div>
+        </div>
+        <a href="../profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <a href="../index.html"   class="nav-dropdown-item"><span class="item-icon">🌐</span> View Site</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+  </nav>
+  <!-- #### END NAVBAR #### -->
+
+  <!-- #### ADMIN LAYOUT #### -->
+  <div class="admin-wrap">
+
+    <!-- #### ADMIN SIDEBAR #### -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-title">Main</div>
+      <a href="index.html"    class="admin-nav-item active"><span class="nav-icon">📊</span> Overview</a>
+
+      <div class="admin-sidebar-title">Manage</div>
+      <a href="courses.html"  class="admin-nav-item"><span class="nav-icon">📚</span> Courses</a>
+      <a href="payments.html" class="admin-nav-item"><span class="nav-icon">💳</span> Payments <span class="admin-badge" id="pending-badge">0</span></a>
+      <a href="users.html"    class="admin-nav-item"><span class="nav-icon">👥</span> Users</a>
+      <a href="stats.html"    class="admin-nav-item"><span class="nav-icon">📈</span> Stats</a>
+
+      <div class="admin-sidebar-title">Site</div>
+      <a href="../index.html" class="admin-nav-item"><span class="nav-icon">🌐</span> View Site</a>
+      <a href="../courses.html" class="admin-nav-item"><span class="nav-icon">🔍</span> View Courses</a>
+    </aside>
+    <!-- #### END ADMIN SIDEBAR #### -->
+
+    <!-- #### ADMIN MAIN #### -->
+    <main class="admin-main">
+
+      <div class="admin-page-title">📊 Dashboard Overview</div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-num" id="kpi-users">—</div>
+          <div class="kpi-label">Total Students</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-icon">📚</div>
+          <div class="kpi-num" id="kpi-courses">—</div>
+          <div class="kpi-label">Published Courses</div>
+        </div>
+        <div class="kpi-card orange">
+          <div class="kpi-icon">⏳</div>
+          <div class="kpi-num" id="kpi-pending">—</div>
+          <div class="kpi-label">Pending Approvals</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-num" id="kpi-revenue">—</div>
+          <div class="kpi-label">Total Revenue (RM)</div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="content-grid">
+
+        <!-- Pending Payments -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>⏳ Pending Payments</h3>
+            <a href="payments.html" class="btn btn-primary btn-sm">View All</a>
+          </div>
+          <div class="panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Action</th></tr></thead>
+              <tbody id="pending-payments-table">
+                <tr><td colspan="4" class="table-empty"><div class="spinner spinner-sm" style="margin:0 auto"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Registrations -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>👥 Recent Students</h3>
+            <a href="users.html" class="btn btn-secondary btn-sm">View All</a>
+          </div>
+          <div class="panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Joined</th></tr></thead>
+              <tbody id="recent-users-table">
+                <tr><td colspan="3" class="table-empty"><div class="spinner spinner-sm" style="margin:0 auto"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+    <!-- #### END ADMIN MAIN #### -->
+
+  </div>
+  <!-- #### END ADMIN LAYOUT #### -->
+
+  <!-- #### ADMIN SCRIPTS #### -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy, limit }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    // #### FIREBASE SETUP ####
+    const firebaseConfig = {
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    // #### END FIREBASE SETUP ####
+
+    // #### ADMIN AUTH GUARD ####
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href="../login.html"; return; }
+
+      // Check admin role
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+      const userDoc = await getDoc(doc(db,"users",user.uid));
+      if (!userDoc.exists() || userDoc.data().role !== "admin") {
+        window.location.href="../index.html";
+        return;
+      }
+
+      // Fill navbar
+      const name = user.displayName || "Admin";
+      document.getElementById("nav-user-name").textContent       = name;
+      document.getElementById("nav-avatar-initials").textContent = name.charAt(0).toUpperCase();
+      document.getElementById("dropdown-name").textContent       = name;
+      document.getElementById("dropdown-email").textContent      = user.email;
+
+      // Load dashboard data
+      await loadDashboard();
+    });
+    // #### END ADMIN AUTH GUARD ####
+
+    // #### LOAD DASHBOARD ####
+    async function loadDashboard() {
+      try {
+        // Load all collections in parallel
+        const [usersSnap, coursesSnap, paymentsSnap, certsSnap] = await Promise.all([
+          getDocs(query(collection(db,"users"), where("role","==","student"))),
+          getDocs(query(collection(db,"courses"), where("isPublished","==",true))),
+          getDocs(collection(db,"payments")),
+          getDocs(collection(db,"certificates"))
+        ]);
+
+        const payments = [];
+        paymentsSnap.forEach(d => payments.push({id:d.id,...d.data()}));
+
+        const pending  = payments.filter(p => p.status === "pending");
+        const approved = payments.filter(p => p.status === "approved");
+        const revenue  = approved.reduce((sum,p) => sum + (p.amount||0), 0);
+
+        // Update KPIs
+        document.getElementById("kpi-users").textContent   = usersSnap.size;
+        document.getElementById("kpi-courses").textContent = coursesSnap.size;
+        document.getElementById("kpi-pending").textContent = pending.length;
+        document.getElementById("kpi-revenue").textContent = revenue.toFixed(2);
+
+        // Update pending badge in sidebar
+        const badge = document.getElementById("pending-badge");
+        if (badge) badge.textContent = pending.length;
+
+        // Render pending payments table
+        renderPendingPayments(pending.slice(0,5));
+
+        // Render recent users
+        const users = [];
+        usersSnap.forEach(d => users.push({id:d.id,...d.data()}));
+        renderRecentUsers(users.slice(0,5));
+
+      } catch(err) {
+        console.error("Dashboard load error:", err);
+      }
+    }
+    // #### END LOAD DASHBOARD ####
+
+    // #### RENDER PENDING PAYMENTS ####
+    function renderPendingPayments(payments) {
+      const tbody = document.getElementById("pending-payments-table");
+      if (payments.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="table-empty">✅ No pending payments</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = payments.map(p => `
+        <tr>
+          <td>${p.userName||"—"}</td>
+          <td>${p.courseName||"—"}</td>
+          <td>RM ${parseFloat(p.amount||0).toFixed(2)}</td>
+          <td><a href="payments.html" class="btn btn-primary btn-sm">Review</a></td>
+        </tr>`).join("");
+    }
+    // #### END RENDER PENDING PAYMENTS ####
+
+    // #### RENDER RECENT USERS ####
+    function renderRecentUsers(users) {
+      const tbody = document.getElementById("recent-users-table");
+      if (users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="table-empty">No students yet</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = users.map(u => {
+        const date = u.createdAt?.toDate
+          ? u.createdAt.toDate().toLocaleDateString("en-MY")
+          : "—";
+        return `<tr><td>${u.displayName||"—"}</td><td style="font-size:0.78rem">${u.email||"—"}</td><td>${date}</td></tr>`;
+      }).join("");
+    }
+    // #### END RENDER RECENT USERS ####
+
+    // #### LOGOUT ####
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="../login.html"));
+    // #### END LOGOUT ####
+  </script>
+  <script src="../js/nav.js"></script>
+  <!-- #### END ADMIN SCRIPTS #### -->
+</body>
+</html>

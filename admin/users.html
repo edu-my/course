@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ========================================================
+     FILE: admin/users.html
+     PURPOSE: Admin user management — search users,
+              view progress, ban/unban, grant access
+     ACCESS:  Admin only
+     ======================================================== -->
+<head>
+  <!-- #### HEAD META #### -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Management — Admin</title>
+  <!-- #### END HEAD META #### -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/nav.css"/>
+  <!-- #### ADMIN STYLES #### -->
+  <style>
+    body{background:#F0F2F5;}
+    .navbar{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-logo span{color:rgba(255,255,255,0.6);}
+    .nav-link{color:rgba(255,255,255,0.6);}
+    .nav-link:hover,.nav-link.active{background:rgba(255,255,255,0.08);color:white;}
+    .nav-user-name{color:rgba(255,255,255,0.8);}
+    .nav-avatar{background:var(--orange);}
+    .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
+    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,0.06);}
+    .admin-sidebar-title{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0.5rem 1.25rem 0.25rem;margin-top:0.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 1.25rem;color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(255,255,255,0.04);color:white;}
+    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,0.1);color:white;}
+    .admin-nav-item .nav-icon{font-size:1rem;width:20px;text-align:center;}
+    .admin-main{padding:2rem;overflow-y:auto;}
+    .admin-page-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;}
+    .search-bar{background:white;border-radius:var(--radius-lg);padding:1rem 1.25rem;box-shadow:var(--shadow-sm);display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;}
+    .search-bar input{flex:1;border:2px solid var(--gray-light);border-radius:var(--radius);padding:0.6rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;}
+    .search-bar input:focus{border-color:var(--red);}
+    .panel{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;}
+    .panel-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;background:var(--off-white);}
+    .panel-header h3{font-size:0.92rem;font-weight:700;}
+    .admin-table{width:100%;border-collapse:collapse;font-size:0.83rem;}
+    .admin-table th{padding:0.75rem 1rem;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);border-bottom:1px solid var(--gray-light);}
+    .admin-table td{padding:0.85rem 1rem;border-bottom:1px solid var(--gray-light);color:var(--gray);vertical-align:middle;}
+    .admin-table td:first-child{color:var(--dark);font-weight:600;}
+    .admin-table tr:last-child td{border-bottom:none;}
+    .admin-table tr:hover td{background:var(--off-white);}
+    .user-avatar{width:32px;height:32px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;}
+    .user-info{display:flex;align-items:center;gap:0.75rem;}
+    .role-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;}
+    .role-admin{background:var(--orange-light);color:var(--orange);}
+    .role-student{background:var(--blue-light);color:var(--blue);}
+    .banned-badge{background:var(--red-light);color:var(--red);display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;}
+    .table-empty{padding:2rem;text-align:center;color:var(--gray);font-size:0.85rem;}
+    .action-btns{display:flex;gap:0.5rem;}
+    @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}}
+  </style>
+  <!-- #### END ADMIN STYLES #### -->
+</head>
+<body>
+
+  <!-- #### NAVBAR #### -->
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link">Admin</a>
+      <a href="../index.html" class="nav-link">← View Site</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="margin-left:auto">
+      <div class="nav-avatar" id="nav-avatar-initials">A</div>
+      <div class="nav-user-name" id="nav-user-name">Admin</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name"  id="dropdown-name">Admin</div>
+          <div class="nav-dropdown-email" id="dropdown-email">admin@email.com</div>
+        </div>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+  </nav>
+  <!-- #### END NAVBAR #### -->
+
+  <div class="admin-wrap">
+    <!-- #### ADMIN SIDEBAR #### -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-title">Main</div>
+      <a href="index.html"    class="admin-nav-item"><span class="nav-icon">📊</span> Overview</a>
+      <div class="admin-sidebar-title">Manage</div>
+      <a href="courses.html"  class="admin-nav-item"><span class="nav-icon">📚</span> Courses</a>
+      <a href="payments.html" class="admin-nav-item"><span class="nav-icon">💳</span> Payments</a>
+      <a href="users.html"    class="admin-nav-item active"><span class="nav-icon">👥</span> Users</a>
+      <a href="stats.html"    class="admin-nav-item"><span class="nav-icon">📈</span> Stats</a>
+      <div class="admin-sidebar-title">Site</div>
+      <a href="../index.html" class="admin-nav-item"><span class="nav-icon">🌐</span> View Site</a>
+    </aside>
+    <!-- #### END ADMIN SIDEBAR #### -->
+
+    <!-- #### ADMIN MAIN #### -->
+    <main class="admin-main">
+      <div class="admin-page-title">👥 User Management</div>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <input type="text" id="user-search" placeholder="🔍 Search by name or email..." oninput="filterUsers()"/>
+        <span id="user-count" style="font-size:0.82rem;color:var(--gray);white-space:nowrap"></span>
+      </div>
+
+      <!-- Users table -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3>All Users</h3>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Enrolled</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table">
+            <tr><td colspan="6" class="table-empty"><div class="spinner spinner-sm" style="margin:0 auto"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <!-- #### END ADMIN MAIN #### -->
+  </div>
+
+  <!-- #### USERS SCRIPTS #### -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query, where }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    // #### FIREBASE SETUP ####
+    const firebaseConfig = {
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    // #### END FIREBASE SETUP ####
+
+    let allUsers = [];
+    let currentAdminUid = null;
+
+    // #### ADMIN AUTH GUARD ####
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href="../login.html"; return; }
+      const userDoc = await getDoc(doc(db,"users",user.uid));
+      if (!userDoc.exists() || userDoc.data().role !== "admin") { window.location.href="../index.html"; return; }
+      currentAdminUid = user.uid;
+      const name = user.displayName||"Admin";
+      document.getElementById("nav-user-name").textContent       = name;
+      document.getElementById("nav-avatar-initials").textContent = name.charAt(0).toUpperCase();
+      document.getElementById("dropdown-name").textContent       = name;
+      document.getElementById("dropdown-email").textContent      = user.email;
+      await loadUsers();
+    });
+    // #### END ADMIN AUTH GUARD ####
+
+    // #### LOAD USERS ####
+    async function loadUsers() {
+      try {
+        const snap = await getDocs(collection(db,"users"));
+        allUsers = [];
+        snap.forEach(d => allUsers.push({id:d.id,...d.data()}));
+
+        // For each user, get their enrollment count
+        await Promise.all(allUsers.map(async u => {
+          const enrollSnap = await getDocs(query(collection(db,"enrollments"), where("userId","==",u.uid)));
+          u.enrollCount = enrollSnap.size;
+        }));
+
+        allUsers.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+        document.getElementById("user-count").textContent = `${allUsers.length} users`;
+        renderUsers(allUsers);
+      } catch(err) {
+        document.getElementById("users-table").innerHTML=`<tr><td colspan="6" class="table-empty">Error: ${err.message}</td></tr>`;
+      }
+    }
+    // #### END LOAD USERS ####
+
+    // #### RENDER USERS ####
+    function renderUsers(users) {
+      const tbody = document.getElementById("users-table");
+      if (users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="table-empty">No users found.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = users.map(u => {
+        const initials = (u.displayName||"U").charAt(0).toUpperCase();
+        const date = u.createdAt?.toDate
+          ? u.createdAt.toDate().toLocaleDateString("en-MY")
+          : "—";
+        const isBanned   = u.isBanned === true;
+        const isAdmin    = u.role === "admin";
+        const isMe       = u.uid === currentAdminUid;
+        const banBtn = isMe ? "" : `
+          <button class="btn ${isBanned?"btn-success":"btn-danger"} btn-sm"
+            onclick="toggleBan('${u.uid}', ${isBanned})">
+            ${isBanned?"Unban":"Ban"}
+          </button>`;
+        return `
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">${initials}</div>
+                <div>
+                  <div>${u.displayName||"—"}</div>
+                  ${isBanned?`<span class="banned-badge">BANNED</span>`:""}
+                </div>
+              </div>
+            </td>
+            <td style="font-size:0.78rem">${u.email||"—"}</td>
+            <td><span class="role-badge ${isAdmin?"role-admin":"role-student"}">${u.role||"student"}</span></td>
+            <td>${u.enrollCount||0} courses</td>
+            <td>${date}</td>
+            <td><div class="action-btns">${banBtn}</div></td>
+          </tr>`;
+      }).join("");
+    }
+    // #### END RENDER USERS ####
+
+    // #### FILTER USERS ####
+    window.filterUsers = function() {
+      const term = document.getElementById("user-search").value.toLowerCase().trim();
+      const filtered = term === ""
+        ? allUsers
+        : allUsers.filter(u =>
+            (u.displayName||"").toLowerCase().includes(term) ||
+            (u.email||"").toLowerCase().includes(term)
+          );
+      document.getElementById("user-count").textContent = `${filtered.length} of ${allUsers.length} users`;
+      renderUsers(filtered);
+    };
+    // #### END FILTER USERS ####
+
+    // #### TOGGLE BAN ####
+    window.toggleBan = async function(uid, currentlyBanned) {
+      const action = currentlyBanned ? "unban" : "ban";
+      if (!confirm(`Are you sure you want to ${action} this user?`)) return;
+      try {
+        await updateDoc(doc(db,"users",uid), { isBanned: !currentlyBanned });
+        const user = allUsers.find(u => u.uid === uid);
+        if (user) user.isBanned = !currentlyBanned;
+        renderUsers(allUsers);
+      } catch(err) {
+        alert("Error: " + err.message);
+      }
+    };
+    // #### END TOGGLE BAN ####
+
+    // #### LOGOUT ####
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="../login.html"));
+    // #### END LOGOUT ####
+  </script>
+  <script src="../js/nav.js"></script>
+  <!-- #### END USERS SCRIPTS #### -->
+</body>
+</html>
