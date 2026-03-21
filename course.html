@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course — iCraftCourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <style>
+    .course-hero{background:var(--dark);padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
+    .breadcrumb{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1rem;}
+    .breadcrumb a{color:rgba(255,255,255,.4);text-decoration:none;}
+    .course-hero-cat{display:inline-block;background:rgba(215,43,43,.3);color:#FF9090;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.3rem .8rem;border-radius:20px;margin-bottom:1rem;}
+    .course-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:1.5px;color:var(--white);line-height:1.05;margin-bottom:1rem;}
+    .course-hero-desc{color:rgba(255,255,255,.65);font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:1.5rem;}
+    .course-stats{display:flex;gap:1.5rem;flex-wrap:wrap;}
+    .course-stat{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,255,.6);}
+    .course-stat strong{color:white;}
+    .enroll-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);position:sticky;top:calc(var(--nav-height) + 1rem);}
+    .enroll-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
+    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
+    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
+    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
+    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
+    .enroll-body{padding:1.5rem;}
+    .enroll-price{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--dark);letter-spacing:1px;margin-bottom:.25rem;}
+    .enroll-price.free{color:var(--green);}
+    .enroll-sub{font-size:.8rem;color:var(--gray);margin-bottom:1.25rem;}
+    .enroll-perks{display:flex;flex-direction:column;gap:.6rem;margin:1.25rem 0;}
+    .enroll-perk{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--gray);}
+    .enroll-status{padding:.75rem 1rem;border-radius:var(--radius);font-size:.85rem;font-weight:600;text-align:center;margin-bottom:.75rem;}
+    .status-pending{background:var(--orange-light);color:var(--orange);}
+    .status-enrolled{background:var(--green-light);color:var(--green);}
+    .course-body-wrap{padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;}
+    .module-item{border:1px solid var(--gray-light);border-radius:var(--radius);margin-bottom:.5rem;overflow:hidden;}
+    .module-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--off-white);cursor:pointer;}
+    .module-num{width:28px;height:28px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;}
+    .module-name{font-weight:700;font-size:.92rem;flex:1;}
+    .module-item.open .module-chevron{transform:rotate(180deg);}
+    .module-chevron{color:var(--gray);font-size:.75rem;transition:transform .2s;}
+    .lesson-list{display:none;flex-direction:column;}
+    .module-item.open .lesson-list{display:flex;}
+    .lesson-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem .75rem 3.5rem;border-top:1px solid var(--gray-light);font-size:.85rem;color:var(--gray);}
+    .lesson-name{flex:1;} .lesson-dur{font-size:.75rem;color:var(--gray-mid);}
+    .page-loading{min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:var(--gray);}
+    @media(max-width:900px){.course-hero{grid-template-columns:1fr;}.course-body-wrap{grid-template-columns:1fr;}.enroll-card{position:static;}}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+    </div>
+  </div>
+  <div id="course-content"><div class="page-loading"><div class="spinner"></div><p>Loading course...</p></div></div>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+    const courseId=new URLSearchParams(location.search).get("id");
+    if(!courseId)location.href="courses.html";
+    let currentUser=null,courseData=null,enrollDoc=null;
+    onAuthStateChanged(auth,async(user)=>{
+      currentUser=user;
+      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+      if(user){g?.classList.add("hidden");u?.classList.remove("hidden");mg?.classList.add("hidden");mu?.classList.remove("hidden");
+        const n=user.displayName||"User",el=id=>document.getElementById(id);
+        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+        if(el("nav-name"))el("nav-name").textContent=n;
+        if(el("dd-name"))el("dd-name").textContent=n;
+        if(el("dd-email"))el("dd-email").textContent=user.email||"";
+      }else{g?.classList.remove("hidden");u?.classList.add("hidden");mg?.classList.remove("hidden");mu?.classList.add("hidden");}
+      await loadPage(user);
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    async function loadPage(user){
+      const cs=await getDoc(doc(db,"courses",courseId));
+      if(!cs.exists()){document.getElementById("course-content").innerHTML='<div class="page-loading"><p>Course not found. <a href="courses.html">Back</a></p></div>';return;}
+      courseData={id:cs.id,...cs.data()};
+      document.title=courseData.title+" — iCraftCourse";
+      if(user){
+        const es=await getDoc(doc(db,"enrollments",user.uid+"_"+courseId));
+        enrollDoc=es.exists()?es.data():null;
+        if(!enrollDoc){
+          const ps=await getDocs(query(collection(db,"payments"),where("userId","==",user.uid),where("courseId","==",courseId)));
+          if(!ps.empty)enrollDoc={status:ps.docs[0].data().status};
+        }
+      }
+      renderPage();
+    }
+    function renderPage(){
+      const c=courseData,isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+      const bg=bgMap[c.category]||"thumb-default",mods=c.modules||[];
+      const totalLessons=mods.reduce((s,m)=>s+(m.lessons?m.lessons.length:0),0);
+      let enrollSection="";
+      if(enrollDoc&&(enrollDoc.status==="approved"||(isFree&&enrollDoc.enrollmentId))){
+        enrollSection='<div class="enroll-status status-enrolled">&#9989; You are enrolled!</div><a href="player.html?id='+c.id+'" class="btn btn-success btn-block btn-lg">Continue Learning &#8594;</a>';
+      }else if(enrollDoc&&enrollDoc.status==="pending"){
+        enrollSection='<div class="enroll-status status-pending">&#9203; Payment pending approval</div>';
+      }else if(isFree){
+        enrollSection='<button class="btn btn-success btn-block btn-lg" id="btn-enroll-free">&#x1F193; Start Free Now</button>';
+      }else{
+        enrollSection='<button class="btn btn-primary btn-block btn-lg" id="btn-enroll-paid">Enroll &mdash; '+price+'</button>';
+      }
+      const modHtml=mods.length?mods.map((m,i)=>{
+        const ll=(m.lessons||[]).map(l=>'<div class="lesson-item"><span>'+(l.type==="video"?"&#9654;&#65039;":"&#x1F4C4;")+'</span><span class="lesson-name">'+l.title+'</span><span class="lesson-dur">'+(l.duration||"")+'</span></div>').join("");
+        return '<div class="module-item'+(i===0?" open":"")+'" onclick="this.classList.toggle(\'open\')"><div class="module-header"><div class="module-num">'+(i+1)+'</div><div class="module-name">'+m.title+'</div><span style="font-size:.78rem;color:var(--gray)">'+(m.lessons||[]).length+' lessons</span><span class="module-chevron">&#9660;</span></div><div class="lesson-list">'+ll+'</div></div>';
+      }).join(""):'<p style="color:var(--gray);font-size:.88rem;padding:1rem;background:var(--off-white);border-radius:var(--radius)">Course content coming soon.</p>';
+      document.getElementById("course-content").innerHTML=
+        '<div class="course-hero"><div>'
+        +'<div class="breadcrumb"><a href="courses.html">Courses</a> &#8250; '+( c.category||"General")+' &#8250; '+c.title+'</div>'
+        +'<div class="course-hero-cat">'+(c.category||"General")+'</div>'
+        +'<h1>'+c.title+'</h1>'
+        +'<p class="course-hero-desc">'+(c.description||"")+'</p>'
+        +'<div class="course-stats">'
+        +(c.totalDuration?'<div class="course-stat">&#9201; <strong>'+c.totalDuration+'</strong></div>':"")
+        +(mods.length?'<div class="course-stat">&#128230; <strong>'+mods.length+' modules</strong></div>':"")
+        +(totalLessons?'<div class="course-stat">&#128214; <strong>'+totalLessons+' lessons</strong></div>':"")
+        +'<div class="course-stat">&#127942; <strong>Certificate included</strong></div>'
+        +'</div></div>'
+        +'<div class="enroll-card"><div class="enroll-thumb '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
+        +'<div class="enroll-body"><div class="enroll-price'+(isFree?" free":"")+'">'+price+'</div>'
+        +'<div class="enroll-sub">'+(isFree?"No payment required":"One-time payment")+'</div>'
+        +enrollSection
+        +'<div class="enroll-perks"><div class="enroll-perk">&#128241; Access on any device</div><div class="enroll-perk">&#127942; Certificate on completion</div><div class="enroll-perk">&#9854; Lifetime access</div></div>'
+        +'</div></div></div>'
+        +'<div class="course-body-wrap"><div><h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;margin-bottom:1rem">COURSE CURRICULUM</h2>'+modHtml+'</div><div></div></div>';
+      document.getElementById("btn-enroll-free")?.addEventListener("click",enrollFree);
+      document.getElementById("btn-enroll-paid")?.addEventListener("click",()=>{if(!currentUser){location.href="login.html";return;}location.href="payment.html?course="+courseId;});
+    }
+    async function enrollFree(){
+      if(!currentUser){location.href="login.html";return;}
+      const btn=document.getElementById("btn-enroll-free");btn.disabled=true;btn.textContent="Enrolling...";
+      try{
+        await setDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId),{enrollmentId:currentUser.uid+"_"+courseId,userId:currentUser.uid,courseId,courseName:courseData.title,enrolledAt:serverTimestamp(),completedLessons:[],progressPercent:0,isCompleted:false,completedAt:null,lastLessonId:null,certificateIssued:false});
+        // Wait for auth to persist before redirecting to player
+        await auth.currentUser?.getIdToken(true);
+        location.href="player.html?id="+courseId;
+      }catch(e){btn.disabled=false;btn.textContent="&#x1F193; Start Free Now";alert("Enrollment failed: "+e.message);}
+    }
+  </script>
+  <script src="js/nav.js"></script>
+</body>
+</html>
