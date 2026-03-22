@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Approvals — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/nav.css"/>
+  <style>
+    body{background:#F0F2F5;}
+    .navbar{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-logo span{color:rgba(255,255,255,.6);}
+    .nav-link{color:rgba(255,255,255,.6);}
+    .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.08);color:white;}
+    .nav-user-name{color:rgba(255,255,255,.8);}
+    .nav-avatar{background:var(--orange);}
+    .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
+    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,.06);}
+    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(255,255,255,.04);color:white;}
+    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);color:white;}
+    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;}
+    .admin-badge{margin-left:auto;background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;}
+    .admin-main{padding:2rem;overflow-y:auto;}
+    .page-title{font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem;}
+    .kpi-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);border-top:3px solid var(--red);}
+    .kpi-card.green{border-top-color:var(--green);} .kpi-card.blue{border-top-color:var(--blue);} .kpi-card.orange{border-top-color:var(--orange);}
+    .kpi-icon{font-size:2rem;margin-bottom:.75rem;}
+    .kpi-num{font-family:Bebas Neue,sans-serif;font-size:2.5rem;color:var(--dark);letter-spacing:1px;line-height:1;}
+    .kpi-label{font-size:.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:.25rem;}
+    .panel{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;}
+    .panel-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;background:var(--off-white);}
+    .panel-header h3{font-size:.92rem;font-weight:700;}
+    .admin-table{width:100%;border-collapse:collapse;font-size:.83rem;}
+    .admin-table th{padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);border-bottom:1px solid var(--gray-light);}
+    .admin-table td{padding:.85rem 1rem;border-bottom:1px solid var(--gray-light);color:var(--gray);vertical-align:middle;}
+    .admin-table td:first-child{color:var(--dark);font-weight:600;}
+    .admin-table tr:last-child td{border-bottom:none;}
+    .admin-table tr:hover td{background:var(--off-white);}
+    .status-badge{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;}
+    .s-pending{background:var(--orange-light);color:var(--orange);}
+    .s-approved{background:var(--green-light);color:var(--green);}
+    .s-rejected{background:var(--red-light);color:var(--red);}
+    .table-empty{padding:2rem;text-align:center;color:var(--gray);font-size:.85rem;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:2rem 1rem;overflow-y:auto;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:white;border-radius:var(--radius-lg);width:100%;max-width:640px;box-shadow:var(--shadow-lg);margin:auto;}
+    .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:10;}
+    .modal-header h3{font-size:1.1rem;font-weight:700;}
+    .modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--gray);line-height:1;}
+    .modal-body{padding:1.5rem;}
+    .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--gray-light);display:flex;gap:.75rem;flex-wrap:wrap;}
+    .info-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--gray-light);font-size:.85rem;}
+    .info-row:last-child{border-bottom:none;}
+    .info-row span:first-child{color:var(--gray);}
+    .info-row span:last-child{color:var(--dark);font-weight:600;}
+    .receipt-link{display:block;margin:1rem 0;padding:.75rem 1rem;background:var(--blue-light);border-radius:var(--radius);color:var(--blue);font-size:.85rem;text-decoration:none;word-break:break-all;}
+    .filter-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+    .filter-tab{padding:.45rem 1.1rem;border-radius:20px;border:2px solid var(--gray-light);background:white;color:var(--gray);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
+    .filter-tab:hover{border-color:var(--red);color:var(--red);}
+    .filter-tab.active{border-color:var(--red);background:var(--red);color:white;}
+    .toggle-wrap{display:flex;align-items:center;gap:.5rem;cursor:pointer;}
+    .toggle{width:40px;height:22px;background:var(--gray-light);border-radius:11px;position:relative;transition:background .2s;flex-shrink:0;}
+    .toggle.on{background:var(--green);}
+    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle.on::after{transform:translateX(18px);}
+    .lesson-row{display:grid;grid-template-columns:1fr 80px 110px auto;gap:.5rem;align-items:center;margin-bottom:.5rem;}
+    .lesson-row input,.lesson-row select{padding:.4rem .75rem;border:1px solid var(--gray-light);border-radius:var(--radius);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;}
+    .lesson-row input:focus,.lesson-row select:focus{border-color:var(--red);}
+    .module-builder{border:1px solid var(--gray-light);border-radius:var(--radius);overflow:hidden;margin-bottom:.75rem;}
+    .module-builder-header{background:var(--off-white);padding:.85rem 1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--gray-light);}
+    .module-builder-header strong{flex:1;font-size:.9rem;}
+    .module-builder-body{padding:1rem;}
+    .user-avatar{width:32px;height:32px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;}
+    .user-info{display:flex;align-items:center;gap:.75rem;}
+    .role-badge{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;}
+    .role-admin{background:var(--orange-light);color:var(--orange);}
+    .role-student{background:var(--blue-light);color:var(--blue);}
+    @media(max-width:1024px){.kpi-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Admin</a>
+      <a href="../index.html" class="nav-link">&#8592; View Site</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="margin-left:auto">
+      <div class="nav-avatar" id="nav-avatar">A</div>
+      <div class="nav-user-name" id="nav-name">Admin</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">Admin</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="../profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
+        <a href="../index.html" class="nav-dropdown-item"><span class="item-icon">&#127760;</span> View Site</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="admin-wrap">    <aside class="admin-sidebar"><div class="sidebar-section">Main</div><a href="index.html" class="admin-nav-item"><span class="ni">&#128202;</span> Overview</a><div class="sidebar-section">Manage</div><a href="courses.html" class="admin-nav-item"><span class="ni">&#128218;</span> Courses</a><a href="payments.html" class="admin-nav-item  active"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a><a href="users.html" class="admin-nav-item"><span class="ni">&#128101;</span> Users</a><a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a><div class="sidebar-section">Site</div><a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a><a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a></aside>
+    <main class="admin-main">
+      <div class="page-title">&#128179; Payment Approvals</div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="pending">&#9203; Pending</button>
+        <button class="filter-tab" data-filter="approved">&#9989; Approved</button>
+        <button class="filter-tab" data-filter="rejected">&#10060; Rejected</button>
+        <button class="filter-tab" data-filter="all">All</button>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h3 id="table-title">Pending Payments</h3><span id="table-count" style="font-size:.82rem;color:var(--gray)"></span></div>
+        <table class="admin-table">
+          <thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="payments-table"><tr><td colspan="6" class="table-empty"><div class="spinner spinner-sm" style="margin:0 auto"></div></td></tr></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <div class="modal-overlay" id="review-modal">
+    <div class="modal-box">
+      <div class="modal-header"><h3>Review Payment</h3><button class="modal-close" onclick="closeModal()">&#215;</button></div>
+      <div class="modal-body">
+        <div class="info-row"><span>Student</span><span id="m-student">&#8212;</span></div>
+        <div class="info-row"><span>Course</span><span id="m-course">&#8212;</span></div>
+        <div class="info-row"><span>Amount</span><span id="m-amount">&#8212;</span></div>
+        <div class="info-row"><span>Reference #</span><span id="m-ref">&#8212;</span></div>
+        <div class="info-row"><span>Notes</span><span id="m-notes">&#8212;</span></div>
+        <div class="info-row"><span>Submitted</span><span id="m-date">&#8212;</span></div>
+        <a href="#" id="m-receipt" class="receipt-link" target="_blank">&#128206; View Receipt Screenshot</a>
+        <div id="reject-form" style="display:none;margin-top:1rem">
+          <div class="form-group">
+            <label class="form-label" for="reject-reason">Reason for Rejection *</label>
+            <textarea id="reject-reason" class="form-control" rows="3" placeholder="e.g. Receipt image unclear, wrong amount..."></textarea>
+          </div>
+        </div>
+        <div class="alert" id="m-alert" style="display:none"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="btn-approve" onclick="approvePayment()">&#9989; Approve</button>
+        <button class="btn btn-secondary" id="btn-reject-toggle" onclick="toggleReject()">&#10060; Reject</button>
+        <button class="btn btn-danger hidden" id="btn-reject-confirm" onclick="rejectPayment()">Confirm Rejection</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,updateDoc,setDoc,deleteDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    function navUpdate(user){
+      const n=user.displayName||"Admin",el=id=>document.getElementById(id);
+      if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+      if(el("nav-name"))el("nav-name").textContent=n;
+      if(el("dd-name"))el("dd-name").textContent=n;
+      if(el("dd-email"))el("dd-email").textContent=user.email||"";
+    }
+    async function adminGuard(){
+      return new Promise((resolve,reject)=>{
+        onAuthStateChanged(auth,async(user)=>{
+          if(!user){location.href="../login.html";reject();return;}
+          const ud=await getDoc(doc(db,"users",user.uid));
+          if(!ud.exists()||ud.data().role!=="admin"){location.href="../index.html";reject();return;}
+          navUpdate(user);resolve(user);
+        });
+      });
+    }
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="../login.html"));
+    let allPayments=[],activeFilter="pending",currentPayment=null;
+    adminGuard().then(async()=>{
+      const snap=await getDocs(collection(db,"payments"));
+      allPayments=[];snap.forEach(d=>allPayments.push({id:d.id,...d.data()}));
+      allPayments.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
+      renderPayments();
+    }).catch(()=>{});
+    function renderPayments(){
+      const filtered=activeFilter==="all"?allPayments:allPayments.filter(p=>p.status===activeFilter);
+      const titles={pending:"Pending Payments",approved:"Approved",rejected:"Rejected",all:"All Payments"};
+      document.getElementById("table-title").textContent=titles[activeFilter];
+      document.getElementById("table-count").textContent=filtered.length+" record"+(filtered.length!==1?"s":"");
+      const tbody=document.getElementById("payments-table");
+      if(!filtered.length){tbody.innerHTML='<tr><td colspan="6" class="table-empty">No '+activeFilter+' payments.</td></tr>';return;}
+      tbody.innerHTML=filtered.map(p=>{
+        const date=p.submittedAt?.toDate?p.submittedAt.toDate().toLocaleDateString("en-MY"):"&#8212;";
+        return '<tr><td>'+p.userName+'</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem">'+p.courseName+'</td>'
+          +'<td>RM '+parseFloat(p.amount||0).toFixed(2)+'</td><td>'+date+'</td>'
+          +'<td><span class="status-badge s-'+p.status+'">'+p.status+'</span></td>'
+          +'<td><button class="btn btn-primary btn-sm" onclick="openReview(\''+p.id+'\')">'+( p.status==="pending"?"Review":"View")+'</button></td></tr>';
+      }).join("");
+    }
+    document.querySelectorAll(".filter-tab").forEach(t=>t.addEventListener("click",()=>{
+      document.querySelectorAll(".filter-tab").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");activeFilter=t.dataset.filter;renderPayments();
+    }));
+    window.openReview=function(pid){
+      currentPayment=allPayments.find(p=>p.id===pid);if(!currentPayment)return;
+      const p=currentPayment,date=p.submittedAt?.toDate?p.submittedAt.toDate().toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"}):"&#8212;";
+      document.getElementById("m-student").textContent=p.userName||"&#8212;";
+      document.getElementById("m-course").textContent=p.courseName||"&#8212;";
+      document.getElementById("m-amount").textContent="RM "+parseFloat(p.amount||0).toFixed(2);
+      document.getElementById("m-ref").textContent=p.referenceNumber||"&#8212;";
+      document.getElementById("m-notes").textContent=p.notes||"None";
+      document.getElementById("m-date").textContent=date;
+      document.getElementById("m-receipt").href=p.receiptURL||"#";
+      document.getElementById("m-alert").style.display="none";
+      document.getElementById("reject-form").style.display="none";
+      document.getElementById("btn-reject-confirm").classList.add("hidden");
+      document.getElementById("reject-reason").value="";
+      const isPending=p.status==="pending";
+      document.getElementById("btn-approve").style.display=isPending?"flex":"none";
+      document.getElementById("btn-reject-toggle").style.display=isPending?"flex":"none";
+      document.getElementById("review-modal").classList.add("open");
+    };
+    window.closeModal=function(){document.getElementById("review-modal").classList.remove("open");currentPayment=null;};
+    document.getElementById("review-modal").addEventListener("click",e=>{if(e.target===document.getElementById("review-modal"))closeModal();});
+    window.toggleReject=function(){
+      const f=document.getElementById("reject-form"),b=document.getElementById("btn-reject-confirm");
+      f.style.display=f.style.display==="none"?"block":"none";
+      b.classList.toggle("hidden");
+    };
+    window.approvePayment=async function(){
+      if(!currentPayment)return;
+      const btn=document.getElementById("btn-approve");btn.disabled=true;btn.textContent="Approving...";
+      try{
+        await updateDoc(doc(db,"payments",currentPayment.id),{status:"approved",reviewedAt:serverTimestamp()});
+        const enrollId=currentPayment.userId+"_"+currentPayment.courseId;
+        await setDoc(doc(db,"enrollments",enrollId),{enrollmentId:enrollId,userId:currentPayment.userId,courseId:currentPayment.courseId,courseName:currentPayment.courseName,enrolledAt:serverTimestamp(),completedLessons:[],progressPercent:0,isCompleted:false,completedAt:null,lastLessonId:null,certificateIssued:false});
+        currentPayment.status="approved";
+        allPayments.find(p=>p.id===currentPayment.id).status="approved";
+        const a=document.getElementById("m-alert");a.className="alert alert-success";a.textContent="&#9989; Approved! Student now has course access.";a.style.display="flex";
+        document.getElementById("btn-approve").style.display="none";
+        document.getElementById("btn-reject-toggle").style.display="none";
+        renderPayments();
+      }catch(e){
+        const a=document.getElementById("m-alert");a.className="alert alert-error";a.textContent="Error: "+e.message;a.style.display="flex";
+      }
+      btn.disabled=false;btn.textContent="&#9989; Approve";
+    };
+    window.rejectPayment=async function(){
+      if(!currentPayment)return;
+      const reason=document.getElementById("reject-reason").value.trim();
+      if(!reason){alert("Please enter a rejection reason.");return;}
+      const btn=document.getElementById("btn-reject-confirm");btn.disabled=true;btn.textContent="Rejecting...";
+      try{
+        await updateDoc(doc(db,"payments",currentPayment.id),{status:"rejected",rejectionReason:reason,reviewedAt:serverTimestamp()});
+        currentPayment.status="rejected";
+        allPayments.find(p=>p.id===currentPayment.id).status="rejected";
+        const a=document.getElementById("m-alert");a.className="alert alert-warning";a.textContent="Payment rejected.";a.style.display="flex";
+        document.getElementById("btn-approve").style.display="none";
+        document.getElementById("btn-reject-toggle").style.display="none";
+        btn.classList.add("hidden");
+        renderPayments();
+      }catch(e){
+        const a=document.getElementById("m-alert");a.className="alert alert-error";a.textContent="Error: "+e.message;a.style.display="flex";
+      }
+      btn.disabled=false;btn.textContent="Confirm Rejection";
+    };
+  </script>
+  <script src="../js/nav.js"></script>
+</body>
+</html>
