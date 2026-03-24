@@ -187,12 +187,12 @@
         mg?.classList.remove("hidden"); mu?.classList.add("hidden");
       }
       if(user){
-        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin")window.setAdminNav?.(true);}catch(e){}
+        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
       }
     });
     
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
     async function loadFeatured(){
       const grid=document.getElementById("featured-courses");
       const stat=document.getElementById("stat-courses");

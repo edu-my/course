@@ -145,6 +145,7 @@
         if(el("nav-name"))el("nav-name").textContent=n;
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
+        window.cacheAuthUser?.(user, false);
       }else{
         g?.classList.remove("hidden");u?.classList.add("hidden");
         mg?.classList.remove("hidden");mu?.classList.add("hidden");
@@ -156,8 +157,8 @@
       document.getElementById("p-name").value=name;
       document.getElementById("p-email").value=user.email||"";
     });
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
     document.getElementById("btn-save-profile").addEventListener("click",async()=>{
       const name=document.getElementById("p-name").value.trim();
       const err=document.getElementById("profile-error"),suc=document.getElementById("profile-success");
@@ -198,7 +199,7 @@
       }
       btn.disabled=false;btn.textContent="Update Password";
     });
-    document.getElementById("btn-signout").addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
+    document.getElementById("btn-signout").addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
   </script>
   <script src="js/nav.js"></script>
 </body>

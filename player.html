@@ -185,6 +185,7 @@
       if(el("nav-name"))   el("nav-name").textContent   = user.displayName||"User";
       if(el("dd-name"))    el("dd-name").textContent    = user.displayName||"User";
       if(el("dd-email"))   el("dd-email").textContent   = user.email||"";
+      window.cacheAuthUser?.(user, false);
 
       // Now load the player
       await loadPlayer();

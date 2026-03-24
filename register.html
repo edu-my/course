@@ -147,6 +147,7 @@
         await updateProfile(cred.user,{displayName:name});
         await setDoc(doc(db,"users",cred.user.uid),{uid:cred.user.uid,displayName:name,email,photoURL:"",role:"student",isBanned:false,enrolledCourses:[],createdAt:serverTimestamp()});
         showAlert("Account created! Redirecting...","success");
+        window.cacheAuthUser?.(cred.user,false);
         setTimeout(()=>location.href="dashboard.html",1500);
       }catch(err){showAlert(errMsg(err.code));btn.disabled=false;btn.textContent="Create Account";}
     });
@@ -156,7 +157,7 @@
         const p=new GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
         const r=await signInWithPopup(auth,p);
         await setDoc(doc(db,"users",r.user.uid),{uid:r.user.uid,displayName:r.user.displayName||"User",email:r.user.email,photoURL:r.user.photoURL||"",role:"student",isBanned:false,enrolledCourses:[],createdAt:serverTimestamp()},{merge:true});
-        location.href="dashboard.html";
+        window.cacheAuthUser?.(r.user,false);location.href="dashboard.html";
       }catch(err){if(err.code!=="auth/popup-closed-by-user")showAlert("Google sign-in failed.");}
     });
   </script>
