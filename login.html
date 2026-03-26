@@ -114,7 +114,11 @@
       appId:"1:16403132310:web:464c4ad2d19812f95077b7"
     }); const auth=getAuth(app); const db=getFirestore(app);
     function showAlert(msg,t="error"){const el=document.getElementById("login-alert");el.className="alert alert-"+t;el.textContent=msg;el.style.display="flex";}
-    function errMsg(code){return {"auth/user-not-found":"No account found.","auth/wrong-password":"Incorrect password.","auth/invalid-credential":"Incorrect email or password.","auth/too-many-requests":"Too many attempts. Wait and try again."}[code]||"Error: "+code;}
+    function errMsg(code){
+      const msgs={"auth/user-not-found":"No account found with this email.","auth/wrong-password":"Incorrect password. Please try again.","auth/invalid-credential":"Incorrect email or password. Please try again.","auth/too-many-requests":"Too many attempts. Please wait a few minutes.","auth/network-request-failed":"Network error. Please check your connection.","auth/popup-blocked":"Popup was blocked. Please allow popups for this site.","auth/unauthorized-domain":"Sign-in blocked by browser. Try allowing third-party cookies."};
+      if(!code)return"Sign-in failed. Please check your connection and try again.";
+      return msgs[code]||"Sign-in error ("+code+"). Please try again.";
+    }
     document.getElementById("login-form").addEventListener("submit",async e=>{
       e.preventDefault();
       document.getElementById("login-alert").style.display="none";
@@ -125,7 +129,7 @@
       if(!pass){document.getElementById("e-pass").classList.add("show");return;}
       const btn=document.getElementById("btn-login");
       btn.disabled=true;btn.textContent="Logging in...";
-      try{await signInWithEmailAndPassword(auth,email,pass);window.cacheAuthUser?.(r.user||null,false);location.href="dashboard.html";}
+      try{const __cred=await signInWithEmailAndPassword(auth,email,pass);window.cacheAuthUser?.(__cred.user,false);location.href="dashboard.html";}
       catch(err){showAlert(errMsg(err.code));btn.disabled=false;btn.textContent="Log In";}
     });
     document.getElementById("btn-google-login").addEventListener("click",async()=>{
@@ -134,8 +138,8 @@
         const p=new GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
         const r=await signInWithPopup(auth,p);
         await setDoc(doc(db,"users",r.user.uid),{uid:r.user.uid,displayName:r.user.displayName||"User",email:r.user.email,photoURL:r.user.photoURL||"",role:"student",isBanned:false,enrolledCourses:[],createdAt:serverTimestamp()},{merge:true});
-        location.href="dashboard.html";
-      }catch(err){if(err.code!=="auth/popup-closed-by-user")showAlert("Google sign-in failed.");}
+        window.cacheAuthUser?.(r.user,false);location.href="dashboard.html";
+      }catch(err){if(err.code!=="auth/popup-closed-by-user"&&err.code!=="auth/cancelled-popup-request"){if(!err.code)showAlert("Sign-in failed. Try allowing third-party cookies if using Brave/Firefox.");else showAlert(errMsg(err.code));}}
     });
     const modal=document.getElementById("reset-modal");
     document.getElementById("btn-forgot").addEventListener("click",e=>{e.preventDefault();modal.classList.add("open");const em=document.getElementById("l-email").value.trim();if(em)document.getElementById("r-email").value=em;});
