@@ -35,7 +35,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo">edu - <span>web</span></a>
+    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
       <a href="courses.html" class="nav-link">Courses</a>
@@ -147,7 +147,7 @@
       const price=parseFloat(courseData.price||0).toFixed(2);
       document.getElementById("payment-wrap").innerHTML=
         '<div><div class="course-summary-header"><div style="font-size:2rem">'+(courseData.thumbnailEmoji||"&#128218;")+'</div><div><h3>'+courseData.title+'</h3><span>'+(courseData.category||"Course")+' &middot; One-time</span></div></div>'
-        +'<div class="pay-card" style="text-align:center"><h3>SCAN TO PAY</h3><p style="font-size:.82rem;color:var(--gray);margin-bottom:1rem">Use any banking app or e-wallet</p>'
+        +'<div class="pay-card" style="text-align:center;max-width:340px;margin:0 auto 1.5rem"><h3>SCAN TO PAY</h3><p style="font-size:.82rem;color:var(--gray);margin-bottom:1rem">Use any banking app or e-wallet</p>'
         +'<div class="qr-box" id="qr-placeholder" style="display:flex;flex-direction:column;gap:.5rem">'
         +'<div style="font-size:3rem">&#128247;</div>'
         +'<div style="font-size:.75rem;color:var(--gray);text-align:center;padding:0 .5rem">Upload your DuitNow QR image in Admin Panel</div>'
@@ -171,10 +171,6 @@
         +'<div style="background:var(--green-light);border:1px solid #A8DFC0;border-radius:var(--radius);padding:1rem;margin-bottom:1.25rem;font-size:.85rem;color:#0f5c30">'
         +'<strong>&#128242; Simple steps:</strong><br/>1. Pay via QR above<br/>2. Screenshot your payment confirmation<br/>3. Click the WhatsApp button below<br/>4. Send us your screenshot in the chat'
         +'</div>'
-        +'<div class="form-group"><label class="form-label" for="pay-ref">Payment Reference Number *</label>'
-        +'<input type="text" id="pay-ref" class="form-control" placeholder="e.g. TXN123456789"/>'
-        +'<div style="font-size:.75rem;color:var(--gray);margin-top:.25rem">Found in your banking app transaction history.</div>'
-        +'<span class="form-error" id="e-ref">Please enter your reference number.</span></div>'
         +'<button class="btn btn-success btn-block btn-lg" id="btn-whatsapp" style="background:#25D366;border-color:#25D366;font-size:1rem;padding:1rem">'
         +'<svg width="22" height="22" viewBox="0 0 24 24" fill="white" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'
         +'&nbsp;Send Receipt via WhatsApp'
@@ -184,10 +180,8 @@
       document.getElementById("btn-whatsapp").addEventListener("click", window.sendWhatsApp);
     }
     window.sendWhatsApp = async function sendWhatsApp(){
-      document.getElementById("e-ref").classList.remove("show");
       document.getElementById("form-alert").style.display="none";
-      const ref=document.getElementById("pay-ref").value.trim();
-      if(!ref){document.getElementById("e-ref").classList.add("show");return;}
+      const ref="via-whatsapp-"+Date.now();
       const btn=document.getElementById("btn-whatsapp");
       btn.disabled=true;btn.textContent="Opening WhatsApp...";
 
@@ -199,7 +193,7 @@
           userEmail:currentUser.email,
           courseName:courseData.title,
           amount:parseFloat(courseData.price||0),
-          referenceNumber:ref,
+          referenceNumber:"WhatsApp",
           receiptURL:"via-whatsapp",
           notes:"Receipt sent via WhatsApp",
           status:"pending",
@@ -219,10 +213,9 @@
 
       // Build WhatsApp message
       const price="RM "+parseFloat(courseData.price||0).toFixed(2);
-      const msg="Hello iCraftCourse! I have made payment for the following course:%0A%0A"
+      const msg="Hello edu-web! I have made payment for the following course:%0A%0A"
         +"*Course:* "+encodeURIComponent(courseData.title)+"%0A"
         +"*Amount:* "+encodeURIComponent(price)+"%0A"
-        +"*Reference:* "+encodeURIComponent(ref)+"%0A"
         +"*Name:* "+encodeURIComponent(currentUser.displayName||"Student")+"%0A%0A"
         +"Please find my payment screenshot attached. Thank you!";
 
