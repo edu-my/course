@@ -17,7 +17,7 @@
     .course-summary-header{background:var(--dark);padding:1.25rem;border-radius:var(--radius);display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
     .course-summary-header h3{color:white;font-size:1rem;margin-bottom:.2rem;}
     .course-summary-header span{font-size:.8rem;color:rgba(255,255,255,.45);}
-    .qr-box{width:180px;height:180px;margin:0 auto 1rem;border:3px solid var(--dark);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--off-white);}
+    .qr-box{width:280px;height:280px;margin:0 auto 1rem;border:3px solid var(--dark);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--off-white);}
     .pay-step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem;}
     .pay-step-num{width:28px;height:28px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;}
     .pay-step strong{display:block;font-size:.9rem;margin-bottom:.15rem;}
@@ -105,7 +105,7 @@
           const qrImg=document.getElementById("qr-img");
           const qrPh=document.getElementById("qr-placeholder");
           const qrWrap=document.getElementById("qr-img-wrap");
-          if(qrImg){qrImg.src=snap.data().qrImageURL;if(qrPh)qrPh.style.display="none";if(qrWrap)qrWrap.style.display="block";}
+          if(qrImg){qrImg.src=snap.data().qrImageURL;qrImg.style.width="280px";qrImg.style.height="280px";if(qrPh)qrPh.style.display="none";if(qrWrap)qrWrap.style.display="block";}
         }
       }catch(e){}
     }
@@ -128,12 +128,11 @@
         if(el("nav-name"))el("nav-name").textContent=n;
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        window.cacheAuthUser?.(user, false);
       }else{g?.classList.remove("hidden");u?.classList.add("hidden");mg?.classList.remove("hidden");mu?.classList.add("hidden");}
       await loadPage();
       loadQRCode();
     });
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>location.href="index.html"));
     async function loadPage(){
       const cs=await getDoc(doc(db,"courses",courseId));
       if(!cs.exists()){location.href="courses.html";return;}
@@ -153,7 +152,7 @@
         +'<div style="font-size:3rem">&#128247;</div>'
         +'<div style="font-size:.75rem;color:var(--gray);text-align:center;padding:0 .5rem">Upload your DuitNow QR image in Admin Panel</div>'
         +'</div>'
-        +'<div id="qr-img-wrap" style="display:none"><img id="qr-img" src="" alt="DuitNow QR" style="width:180px;height:180px;object-fit:contain;border-radius:var(--radius)"/></div>'
+        +'<div id="qr-img-wrap" style="display:none"><img id="qr-img" src="" alt="DuitNow QR" style="width:280px;height:280px;object-fit:contain;border-radius:var(--radius)"/></div>'
         +''
         +'<div style="font-size:.88rem;color:var(--gray)">Pay exactly: <strong style="color:var(--red);font-size:1.1rem">RM '+price+'</strong></div>'
         +'<div style="display:flex;justify-content:center;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">'
@@ -182,9 +181,9 @@
         +'</button>'
         +'<p style="font-size:.75rem;color:var(--gray);text-align:center;margin-top:.75rem">WhatsApp will open with your course details pre-filled. Just attach your payment screenshot.</p>'
         +'</div></div>';
-      document.getElementById("btn-whatsapp").addEventListener("click", sendWhatsApp);
+      document.getElementById("btn-whatsapp").addEventListener("click", window.sendWhatsApp);
     }
-    async function sendWhatsApp(){
+    window.sendWhatsApp = async function sendWhatsApp(){
       document.getElementById("e-ref").classList.remove("show");
       document.getElementById("form-alert").style.display="none";
       const ref=document.getElementById("pay-ref").value.trim();
