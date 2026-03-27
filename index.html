@@ -10,48 +10,50 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    /* ── HERO ── */
-    .hero{background:#FAFAFA;padding:5rem var(--page-padding);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
-    .hero-tag{display:inline-block;background:#FFF0F0;color:#D72B2B;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.3rem .85rem;border-radius:4px;margin-bottom:1.25rem;}
-    .hero-title{font-family:Bebas Neue,sans-serif;font-size:clamp(3rem,5vw,5rem);color:#1A1A1A;line-height:1;letter-spacing:1px;margin-bottom:1rem;}
-    .hero-sub{font-size:1rem;color:#6B6B6B;line-height:1.75;max-width:400px;margin-bottom:2rem;}
-    .hero-ctas{display:flex;gap:1rem;align-items:center;margin-bottom:1.75rem;}
-    .hero-cta-main{padding:.75rem 1.75rem;background:#D72B2B;color:white;border:none;border-radius:8px;font-family:DM Sans,sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
-    .hero-cta-link{font-size:.88rem;color:#6B6B6B;text-decoration:underline;cursor:pointer;}
-    .hero-trust{display:flex;align-items:center;gap:.75rem;}
-    .trust-avatars{display:flex;}
-    .trust-avatar{width:28px;height:28px;border-radius:50%;border:2px solid white;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:white;}
-    .trust-avatar:first-child{margin-left:0;}
-    .trust-text{font-size:.8rem;color:#6B6B6B;}
-    .trust-text strong{color:#1A1A1A;}
-    /* ── COURSE MOCKUP ── */
-    .hero-mockup{background:white;border-radius:16px;border:1px solid #EEEBEB;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.07);}
-    .mockup-header{background:#D72B2B;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;}
-    .mockup-header h4{color:white;font-size:.85rem;font-weight:700;}
-    .mockup-header span{background:rgba(255,255,255,.2);color:white;font-size:.68rem;padding:.2rem .6rem;border-radius:20px;}
-    .mockup-body{padding:.5rem 0;}
-    .mockup-row{display:flex;align-items:center;gap:.85rem;padding:.75rem 1.25rem;border-bottom:1px solid #F5F5F5;transition:background .15s;cursor:pointer;}
-    .mockup-row:last-child{border-bottom:none;}
-    .mockup-row:hover{background:#FAFAFA;}
-    .mockup-thumb{width:42px;height:42px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-    .mockup-info{flex:1;min-width:0;}
-    .mockup-title{font-size:.85rem;font-weight:600;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .mockup-meta{font-size:.72rem;color:#9B9B9B;margin-top:.1rem;}
-    .mockup-price{font-size:.82rem;font-weight:700;}
-    .price-free{color:#1E8A4C;}
-    .price-paid{color:#D72B2B;}
-    /* ── STATS STRIP ── */
-    .stats-strip{background:white;border-top:1px solid #EEEBEB;border-bottom:1px solid #EEEBEB;padding:1.75rem var(--page-padding);display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center;}
-    .stat-num{font-family:Bebas Neue,sans-serif;font-size:2.2rem;color:#D72B2B;letter-spacing:1px;}
-    .stat-label{font-size:.72rem;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.5px;margin-top:.15rem;}
+    /* ── NAV ── */
+    .navbar{border-bottom:1px solid #EEEBEB;}
+    .cc-logo-mark{width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;margin-right:.4rem;vertical-align:middle;}
+    .cc-logo-mark span{color:white;font-size:.65rem;font-weight:800;font-family:DM Sans,sans-serif;}
+    /* ── HERO SPLIT ── */
+    .hero-split{display:grid;grid-template-columns:1fr 1fr;min-height:480px;}
+    .hero-left{background:#D72B2B;padding:4rem var(--page-padding) 4rem 5%;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+    .hero-left::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(0,0,0,.07);bottom:-200px;right:-150px;pointer-events:none;}
+    .hero-left::after{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);top:-80px;left:-60px;pointer-events:none;}
+    .hero-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1rem;}
+    .hero-title{font-family:Bebas Neue,sans-serif;font-size:clamp(3rem,4.5vw,5rem);color:white;line-height:1;letter-spacing:1px;margin-bottom:1.25rem;position:relative;z-index:2;}
+    .hero-sub{font-size:.92rem;color:rgba(255,255,255,.7);line-height:1.75;max-width:380px;margin-bottom:2.5rem;position:relative;z-index:2;}
+    .hero-btns{display:flex;gap:.85rem;position:relative;z-index:2;flex-wrap:wrap;}
+    .btn-white{padding:.7rem 1.6rem;background:white;color:#D72B2B;border:none;border-radius:8px;font-family:DM Sans,sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+    .btn-ghost-white{padding:.7rem 1.6rem;background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.3);border-radius:8px;font-family:DM Sans,sans-serif;font-size:.88rem;cursor:pointer;text-decoration:none;display:inline-block;}
+    .btn-ghost-white:hover{background:rgba(255,255,255,.2);}
+    /* ── HERO RIGHT — course pills ── */
+    .hero-right{background:#FAF8F7;padding:3rem 5% 3rem var(--page-padding);display:flex;flex-direction:column;justify-content:center;}
+    .pills-label{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9B9B9B;margin-bottom:1rem;}
+    .pill-list{display:flex;flex-direction:column;gap:.65rem;}
+    .course-pill{display:flex;align-items:center;gap:.9rem;background:white;border:1px solid #EEEBEB;border-radius:12px;padding:.85rem 1rem;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;}
+    .course-pill:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-2px);}
+    .pill-icon{width:40px;height:40px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .pill-info{flex:1;min-width:0;}
+    .pill-title{font-size:.85rem;font-weight:700;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .pill-meta{font-size:.72rem;color:#9B9B9B;margin-top:.1rem;}
+    .pill-tag{font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+    .tag-free{background:#E6F7EE;color:#1E8A4C;}
+    .tag-paid{background:#FFF0F0;color:#D72B2B;}
+    .tag-hot{background:#FFF3E0;color:#C96A00;}
+    .tag-new{background:#EAF0FF;color:#1A5FAB;}
+    /* ── MINI STATS inside hero-right ── */
+    .hero-stats{display:flex;gap:1.75rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid #EEEBEB;}
+    .hero-stat-num{font-family:Bebas Neue,sans-serif;font-size:1.6rem;color:#1A1A1A;letter-spacing:.5px;}
+    .hero-stat-num.red{color:#D72B2B;}
+    .hero-stat-label{font-size:.65rem;color:#9B9B9B;text-transform:uppercase;letter-spacing:1.5px;margin-top:.1rem;}
     /* ── COURSES SECTION ── */
-    .courses-section{padding:5rem var(--page-padding);background:#FAFAFA;}
+    .courses-section{padding:5rem var(--page-padding);background:white;}
     .section-eyebrow{display:inline-block;background:#FFF0F0;color:#D72B2B;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.3rem .85rem;border-radius:4px;margin-bottom:1rem;}
     .section-title{font-family:Bebas Neue,sans-serif;font-size:2.5rem;color:#1A1A1A;letter-spacing:1px;margin-bottom:.5rem;}
     .section-sub{font-size:.9rem;color:#6B6B6B;margin-bottom:2.5rem;}
     .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
     .course-card{background:white;border-radius:12px;border:1px solid #EEEBEB;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;}
-    .course-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(215,43,43,.12);}
+    .course-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(215,43,43,.1);}
     .course-thumb{height:150px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;}
     .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
     .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
@@ -68,7 +70,7 @@
     .course-price-label{font-weight:700;font-size:1rem;color:#1A1A1A;}
     .course-price-label.free{color:#1E8A4C;}
     /* ── HOW IT WORKS ── */
-    .hiw{padding:5rem var(--page-padding);background:white;}
+    .hiw{padding:5rem var(--page-padding);background:#FAF8F7;}
     .hiw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:2.5rem;}
     .hiw-step{text-align:center;}
     .hiw-num{width:52px;height:52px;background:#D72B2B;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:1.4rem;margin:0 auto 1rem;}
@@ -83,13 +85,15 @@
     .footer-col ul li a{font-size:.82rem;color:rgba(255,255,255,.5);text-decoration:none;}
     .footer-col ul li a:hover{color:white;}
     .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:1.25rem;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.25);}
-    @media(max-width:900px){.hero{grid-template-columns:1fr;}.hero-mockup{display:none;}.course-grid{grid-template-columns:1fr 1fr;}.stats-strip{grid-template-columns:1fr 1fr;}.hiw-grid{grid-template-columns:1fr 1fr;}.footer-grid{grid-template-columns:1fr 1fr;}}
-    @media(max-width:600px){.course-grid{grid-template-columns:1fr;}.stats-strip{grid-template-columns:1fr 1fr;}}
+    @media(max-width:900px){.hero-split{grid-template-columns:1fr;}.hero-right{display:none;}.course-grid{grid-template-columns:1fr 1fr;}.hiw-grid{grid-template-columns:1fr 1fr;}.footer-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){.course-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo">iCraft<span>Course</span></a>
+    <a href="index.html" class="nav-logo">
+      <span class="cc-logo-mark"><span>iC</span></span>iCraft<span>Course</span>
+    </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">Home</a>
       <a href="courses.html" class="nav-link">Courses</a>
@@ -129,46 +133,34 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div>
-      <div class="hero-tag">CPD General Courses</div>
+  <!-- HERO SPLIT -->
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="hero-eyebrow">CPD General Courses</div>
       <h1 class="hero-title">Craft Your Skills,<br/>Shape Your Future.</h1>
       <p class="hero-sub">Continuous Professional Development in soft skills, personal development, and AI — built for Malaysian educators and professionals.</p>
-      <div class="hero-ctas">
-        <a href="courses.html" class="hero-cta-main">Browse Courses</a>
-        <a href="courses.html?filter=free" class="hero-cta-link">View free courses →</a>
+      <div class="hero-btns">
+        <a href="courses.html" class="btn-white">Browse Courses</a>
+        <a href="courses.html?filter=free" class="btn-ghost-white">Free Courses →</a>
       </div>
-      <div class="hero-trust">
-        <div class="trust-avatars">
-          <div class="trust-avatar" style="background:#D72B2B">K</div>
-          <div class="trust-avatar" style="background:#1E8A4C">A</div>
-          <div class="trust-avatar" style="background:#1A5FAB">R</div>
-          <div class="trust-avatar" style="background:#C96A00">N</div>
+    </div>
+    <div class="hero-right">
+      <div class="pills-label">Available Now</div>
+      <div class="pill-list" id="pill-list">
+        <div class="course-pill" style="pointer-events:none">
+          <div class="pill-icon" style="background:#FFEAEA">&#128218;</div>
+          <div class="pill-info"><div class="pill-title">Loading courses...</div></div>
         </div>
-        <div class="trust-text">Trusted by <strong>100+ Malaysian educators</strong></div>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">100+</div><div class="hero-stat-label">Students</div></div>
+        <div><div class="hero-stat-num" id="stat-courses-hero">&#8212;</div><div class="hero-stat-label">Courses</div></div>
+        <div><div class="hero-stat-num red">CPD</div><div class="hero-stat-label">Accredited</div></div>
       </div>
     </div>
-    <div class="hero-mockup">
-      <div class="mockup-header">
-        <h4>Latest Courses</h4>
-        <span id="mockup-count">Loading...</span>
-      </div>
-      <div class="mockup-body" id="mockup-body">
-        <div class="mockup-row"><div class="mockup-thumb" style="background:#FFEAEA">&#128218;</div><div class="mockup-info"><div class="mockup-title">Loading courses...</div><div class="mockup-meta">&nbsp;</div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats-strip">
-    <div><div class="stat-num">100+</div><div class="stat-label">Students Enrolled</div></div>
-    <div><div class="stat-num" id="stat-courses">&#8212;</div><div class="stat-label">Courses Available</div></div>
-    <div><div class="stat-num">4.9&#9733;</div><div class="stat-label">Average Rating</div></div>
-    <div><div class="stat-num">CPD</div><div class="stat-label">Accredited Content</div></div>
   </div>
 
-  <!-- COURSES -->
+  <!-- COURSES SECTION -->
   <section class="courses-section">
     <div class="container">
       <div class="section-eyebrow">Latest Courses</div>
@@ -189,10 +181,10 @@
         <h2 class="section-title">SIMPLE. FAST. YOURS.</h2>
       </div>
       <div class="hiw-grid">
-        <div class="hiw-step"><div class="hiw-num">1</div><h4>Browse &amp; Choose</h4><p>Explore free and paid CPD courses at your own pace.</p></div>
-        <div class="hiw-step"><div class="hiw-num">2</div><h4>Register &amp; Enroll</h4><p>Create a free account and enroll instantly.</p></div>
-        <div class="hiw-step"><div class="hiw-num">3</div><h4>Pay via DuitNow</h4><p>Scan QR, pay, send receipt via WhatsApp.</p></div>
-        <div class="hiw-step"><div class="hiw-num">4</div><h4>Learn &amp; Certify</h4><p>Complete the course and download your certificate.</p></div>
+        <div class="hiw-step"><div class="hiw-num">1</div><h4>Browse &amp; Choose</h4><p>Explore free and paid CPD courses.</p></div>
+        <div class="hiw-step"><div class="hiw-num">2</div><h4>Register &amp; Enroll</h4><p>Create a free account instantly.</p></div>
+        <div class="hiw-step"><div class="hiw-num">3</div><h4>Pay via DuitNow</h4><p>Scan QR, send receipt via WhatsApp.</p></div>
+        <div class="hiw-step"><div class="hiw-num">4</div><h4>Learn &amp; Certify</h4><p>Complete and download your certificate.</p></div>
       </div>
     </div>
   </section>
@@ -248,28 +240,33 @@
 
     async function loadFeatured(){
       const grid=document.getElementById("featured-courses");
-      const stat=document.getElementById("stat-courses");
-      const mockupBody=document.getElementById("mockup-body");
-      const mockupCount=document.getElementById("mockup-count");
+      const pills=document.getElementById("pill-list");
+      const statHero=document.getElementById("stat-courses-hero");
       try{
         const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
         const courses=[];snap.forEach(d=>courses.push({id:d.id,...d.data()}));
-        if(stat)stat.textContent=courses.length;
-        if(mockupCount)mockupCount.textContent=courses.length+" courses";
-        // Populate mockup sidebar
-        if(mockupBody){
-          mockupBody.innerHTML=courses.slice(0,4).map(c=>{
-            const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+        if(statHero)statHero.textContent=courses.length;
+        // Course pills in hero
+        if(pills){
+          pills.innerHTML=courses.slice(0,4).map((c,i)=>{
+            const isFree=c.isFree===true;
+            const price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
             const bg=bgMap[c.category]||"thumb-default";
-            return '<div class="mockup-row" onclick="location.href=\'course.html?id='+c.id+'\'">'
-              +'<div class="mockup-thumb '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
-              +'<div class="mockup-info"><div class="mockup-title">'+c.title+'</div>'
-              +'<div class="mockup-meta">'+(c.category||"Course")+' &middot; '+(c.totalDuration||"")+'</div></div>'
-              +'<div class="mockup-price '+(isFree?"price-free":"price-paid")+'">'+price+'</div>'
-              +'</div>';
+            const tags=[
+              i===0&&!isFree?"tag-hot":"",
+              isFree?"tag-free":"tag-paid",
+              i===courses.length-1?"tag-new":""
+            ].filter(Boolean);
+            const tagClass=isFree?"tag-free":i===0?"tag-hot":"tag-paid";
+            const tagLabel=isFree?"FREE":i===0?"HOT":"RM "+parseFloat(c.price||0).toFixed(2);
+            return '<a class="course-pill" href="course.html?id='+c.id+'">'
+              +'<div class="pill-icon '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
+              +'<div class="pill-info"><div class="pill-title">'+c.title+'</div>'
+              +'<div class="pill-meta">'+(c.category||"Course")+(c.totalDuration?" &middot; "+c.totalDuration:"")+'</div></div>'
+              +'<span class="pill-tag '+tagClass+'">'+tagLabel+'</span></a>';
           }).join("");
         }
-        // Main course grid
+        // Main grid
         if(!courses.length){grid.innerHTML='<p style="color:var(--gray)">No courses yet.</p>';return;}
         grid.innerHTML=courses.slice(0,3).map(c=>{
           const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
