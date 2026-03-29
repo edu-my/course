@@ -149,7 +149,7 @@
         <button class="btn btn-success" id="btn-approve" onclick="approvePayment()">&#9989; Approve</button>
         <button class="btn btn-secondary" id="btn-reject-toggle" onclick="toggleReject()">&#10060; Reject</button>
         <button class="btn btn-danger hidden" id="btn-reject-confirm" onclick="rejectPayment()">Confirm Rejection</button>
-        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Close</button>
       </div>
     </div>
   </div>
@@ -245,14 +245,14 @@
         await setDoc(doc(db,"enrollments",enrollId),{enrollmentId:enrollId,userId:currentPayment.userId,courseId:currentPayment.courseId,courseName:currentPayment.courseName,enrolledAt:serverTimestamp(),completedLessons:[],progressPercent:0,isCompleted:false,completedAt:null,lastLessonId:null,certificateIssued:false});
         currentPayment.status="approved";
         allPayments.find(p=>p.id===currentPayment.id).status="approved";
-        const a=document.getElementById("m-alert");a.className="alert alert-success";a.textContent="&#9989; Approved! Student now has course access.";a.style.display="flex";
+        const a=document.getElementById("m-alert");a.className="alert alert-success";a.textContent="✅ Approved! Student now has course access.";a.style.display="flex";
         document.getElementById("btn-approve").style.display="none";
         document.getElementById("btn-reject-toggle").style.display="none";
         renderPayments();
       }catch(e){
         const a=document.getElementById("m-alert");a.className="alert alert-error";a.textContent="Error: "+e.message;a.style.display="flex";
       }
-      btn.disabled=false;btn.textContent="&#9989; Approve";
+      btn.disabled=false;btn.textContent="✅ Approve";
     };
     window.rejectPayment=async function(){
       if(!currentPayment)return;
