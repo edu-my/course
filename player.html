@@ -100,7 +100,7 @@
       </div>
       <div class="sidebar-modules" id="sidebar-modules"></div>
       <div class="sidebar-actions">
-        <button class="btn-complete" id="btn-complete" onclick="markComplete()">&#10003; Mark as Complete</button>
+        <button class="btn-complete" id="btn-complete" onclick="markComplete()">Mark as Complete</button>
         <button class="btn-next" id="btn-next" onclick="nextLesson()">Next Lesson &#8594;</button>
       </div>
     </div>
@@ -311,7 +311,7 @@
 
       const done = (enrollData.completedLessons||[]).includes(l.lessonId);
       const cb   = document.getElementById("btn-complete");
-      cb.textContent = done ? "&#9989; Completed" : "&#10003; Mark as Complete";
+      cb.textContent = done ? "Completed ✓" : "Mark as Complete";
       cb.className   = "btn-complete" + (done?" done":"");
 
       const fi = allLessons.findIndex(x => x.lessonId===l.lessonId);
@@ -343,13 +343,13 @@
         enrollData.isCompleted      = isComp;
 
         const lb = document.getElementById("lb-"+id);
-        if (lb) { lb.classList.add("completed"); const chk=lb.querySelector(".les-btn-check"); if(chk) chk.textContent="&#9989;"; }
+        if (lb) { lb.classList.add("completed"); const chk=lb.querySelector(".les-btn-check"); if(chk) chk.textContent="✅"; }
 
         document.getElementById("prog-fill").style.width = prog+"%";
         document.getElementById("prog-label").textContent = prog+"% complete \u2014 "+nd.length+" of "+total+" lessons";
 
         const cb = document.getElementById("btn-complete");
-        cb.textContent = "&#9989; Completed";
+        cb.textContent = "Completed ✓";
         cb.className   = "btn-complete done";
 
         if (isComp) { await issueCert(); document.getElementById("cert-banner").classList.add("show"); }
