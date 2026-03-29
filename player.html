@@ -36,10 +36,11 @@
     .mod-group.open .mod-chevron{transform:rotate(180deg);}
     .les-list{display:none;flex-direction:column;}
     .mod-group.open .les-list{display:flex;}
-    .les-btn{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem .65rem 3rem;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:DM Sans,sans-serif;}
-    .les-btn:hover{background:rgba(255,255,255,.04);}
-    .les-btn.active{background:rgba(215,43,43,.15);border-left:3px solid var(--red);padding-left:calc(3rem - 3px);}
-    .les-btn-name{flex:1;font-size:.8rem;color:rgba(255,255,255,.65);}
+    .les-btn{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem .65rem 3rem;cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:DM Sans,sans-serif;border-left:3px solid transparent;}
+    .les-btn:hover{background:rgba(255,255,255,.06);}
+    .les-btn.active{background:rgba(215,43,43,.25);border-left:3px solid #D72B2B;padding-left:calc(3rem - 3px);}
+    .les-btn.active .les-btn-name{color:white;font-weight:700;}
+    .les-btn-name{flex:1;font-size:.8rem;color:rgba(255,255,255,.55);}
     .les-btn-dur{font-size:.68rem;color:rgba(255,255,255,.25);}
     .les-btn-check{font-size:.75rem;flex-shrink:0;}
     .player-main{display:flex;flex-direction:column;overflow:hidden;background:#111;}
