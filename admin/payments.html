@@ -146,9 +146,10 @@
         <div class="alert" id="m-alert" style="display:none"></div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" id="btn-approve" onclick="approvePayment()">&#9989; Approve</button>
-        <button class="btn btn-secondary" id="btn-reject-toggle" onclick="toggleReject()">&#10060; Reject</button>
+        <button class="btn btn-success" id="btn-approve" onclick="approvePayment()">✅ Approve</button>
+        <button class="btn btn-secondary" id="btn-reject-toggle" onclick="toggleReject()">❌ Reject</button>
         <button class="btn btn-danger hidden" id="btn-reject-confirm" onclick="rejectPayment()">Confirm Rejection</button>
+        <button class="btn btn-danger hidden" id="btn-revoke" onclick="revokePayment()">Revoke Access</button>
         <button class="btn btn-secondary" onclick="closeModal()">Close</button>
       </div>
     </div>
@@ -227,6 +228,8 @@
       const isPending=p.status==="pending";
       document.getElementById("btn-approve").style.display=isPending?"flex":"none";
       document.getElementById("btn-reject-toggle").style.display=isPending?"flex":"none";
+      const rBtn=document.getElementById("btn-revoke");
+      if(p.status==="approved"){rBtn.classList.remove("hidden");}else{rBtn.classList.add("hidden");}
       document.getElementById("review-modal").classList.add("open");
     };
     window.closeModal=function(){document.getElementById("review-modal").classList.remove("open");currentPayment=null;};
@@ -253,6 +256,27 @@
         const a=document.getElementById("m-alert");a.className="alert alert-error";a.textContent="Error: "+e.message;a.style.display="flex";
       }
       btn.disabled=false;btn.textContent="✅ Approve";
+    };
+
+    window.revokePayment=async function(){
+      if(!currentPayment)return;
+      if(!confirm("Revoke access for "+currentPayment.userName+"? This will remove their course enrollment."))return;
+      const btn=document.getElementById("btn-revoke");btn.disabled=true;btn.textContent="Revoking...";
+      try{
+        const {deleteDoc,doc:firestoreDoc}=await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+        const enrollId=currentPayment.userId+"_"+currentPayment.courseId;
+        await updateDoc(doc(db,"payments",currentPayment.id),{status:"rejected",rejectionReason:"Access revoked by admin",reviewedAt:serverTimestamp()});
+        try{ await deleteDoc(doc(db,"enrollments",enrollId)); }catch(e){}
+        currentPayment.status="rejected";
+        allPayments.find(p=>p.id===currentPayment.id).status="rejected";
+        const a=document.getElementById("m-alert");
+        a.className="alert alert-warning";a.textContent="Access revoked. Enrollment removed.";a.style.display="flex";
+        document.getElementById("btn-approve").style.display="none";
+        document.getElementById("btn-reject-toggle").style.display="none";
+        document.getElementById("btn-revoke").classList.add("hidden");
+        renderPayments();
+      }catch(e){alert("Error: "+e.message);}
+      btn.disabled=false;btn.textContent="Revoke Access";
     };
     window.rejectPayment=async function(){
       if(!currentPayment)return;
