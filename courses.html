@@ -35,9 +35,10 @@
     .course-cat{font-size:.72rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;}
     .course-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.4rem;line-height:1.4;}
     .course-desc{font-size:.82rem;color:var(--gray);line-height:1.5;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gray-light);padding-top:.85rem;}
+    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gray-light);padding-top:.85rem;min-height:52px;}
     .course-price{font-weight:700;font-size:1.1rem;color:var(--dark);}
     .course-price.free{color:var(--green);}
+    .course-action-btn{min-width:110px;text-align:center;white-space:nowrap;}
     .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
     @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
@@ -177,7 +178,7 @@
           +'<div class="course-title">'+c.title+'</div>'
           +'<div class="course-desc">'+(c.description||'')+'</div>'
           +'<div class="course-footer"><div class="course-price '+(isFree?'free':'')+'">'+price+'</div>'
-          +'<button class="btn '+btn.cls+' btn-sm" onclick="event.stopPropagation();location.href=\''+btn.href+'\'">' +btn.label+'</button>'
+          +'<button class="btn '+btn.cls+' btn-sm course-action-btn" onclick="event.stopPropagation();location.href=\''+btn.href+'\'">' +btn.label+'</button>'
           +'</div></div></div>';
       }).join("");
     }
