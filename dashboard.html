@@ -3,43 +3,106 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Dashboard — iCraftCourse</title>
+  <title>My Dashboard — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    .welcome-bar{background:var(--dark);padding:2.5rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .welcome-bar h1{font-family:Bebas Neue,sans-serif;font-size:2.5rem;letter-spacing:1.5px;color:white;margin-bottom:.25rem;}
-    .welcome-bar p{color:rgba(255,255,255,.5);font-size:.9rem;}
-    .dashboard-wrap{padding:3rem var(--page-padding);max-width:1100px;margin:0 auto;}
-    .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem;}
-    .dash-stat{background:white;border-radius:var(--radius-lg);padding:1.5rem;border-top:3px solid var(--red);box-shadow:var(--shadow-sm);}
-    .dash-stat-num{font-family:Bebas Neue,sans-serif;font-size:2.5rem;color:var(--red);letter-spacing:1px;}
-    .dash-stat-label{font-size:.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
-    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
-    .section-head h2{font-family:Bebas Neue,sans-serif;font-size:1.8rem;letter-spacing:1px;}
-    .enrolled-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
-    .enrolled-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;box-shadow:var(--shadow-sm);}
-    .enrolled-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
-    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
-    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
-    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
-    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
-    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    .enrolled-body{padding:1rem;}
-    .enrolled-cat{font-size:.7rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.3rem;}
-    .enrolled-title{font-weight:700;font-size:.92rem;margin-bottom:.75rem;color:var(--dark);}
-    .enrolled-footer{padding:.85rem 1rem;border-top:1px solid var(--gray-light);display:flex;justify-content:space-between;align-items:center;}
-    .empty-dash{grid-column:1/-1;text-align:center;padding:3rem;background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);}
-    @media(max-width:768px){.dash-grid{grid-template-columns:1fr 1fr;}.enrolled-grid{grid-template-columns:1fr;}}
+    body{background:#F0F2F5;}
+
+    /* ── STICKY WELCOME HEADER ── */
+    .dash-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:sticky;top:var(--nav-height);z-index:100;}
+    .dash-header-left h1{font-family:Bebas Neue,sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;}
+    .dash-header-left p{color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.2rem;}
+    .dash-enroll-btn{padding:.55rem 1.25rem;background:#D72B2B;color:white;border:none;border-radius:8px;font-family:DM Sans,sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .2s;}
+    .dash-enroll-btn:hover{background:#A81F1F;}
+
+    /* ── MAIN CONTENT ── */
+    .dash-body{padding:1.75rem var(--page-padding);max-width:1100px;margin:0 auto;}
+
+    /* ── KPI ROW ── */
+    .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem;}
+    .kpi-card{background:white;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;border:1px solid var(--gray-light);display:flex;align-items:center;gap:1rem;}
+    .kpi-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .kpi-num{font-family:Bebas Neue,sans-serif;font-size:2rem;color:var(--dark);line-height:1;letter-spacing:.5px;}
+    .kpi-label{font-size:.7rem;color:var(--gray);text-transform:uppercase;letter-spacing:1.5px;margin-top:.2rem;}
+
+    /* ── SECTION HEADER ── */
+    .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+    .section-hd h2{font-family:Bebas Neue,sans-serif;font-size:1.4rem;letter-spacing:1px;color:var(--dark);}
+    .section-enroll{padding:.4rem 1rem;background:white;border:1.5px solid var(--red);color:var(--red);border-radius:7px;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;}
+    .section-enroll:hover{background:var(--red);color:white;}
+
+    /* ── COURSE TABLE ── */
+    .course-table{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;margin-bottom:1.75rem;}
+    .ct-head{display:grid;grid-template-columns:minmax(0,3fr) 100px minmax(0,2fr) 110px;padding:.65rem 1.5rem;background:var(--off-white);border-bottom:1px solid var(--gray-light);}
+    .ct-head span{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray);}
+    .ct-row{display:grid;grid-template-columns:minmax(0,3fr) 100px minmax(0,2fr) 110px;padding:1rem 1.5rem;border-bottom:1px solid var(--gray-light);align-items:center;gap:.5rem;transition:background .15s;}
+    .ct-row:last-child{border-bottom:none;}
+    .ct-row:hover{background:var(--off-white);}
+    .course-cell{display:flex;align-items:center;gap:.85rem;min-width:0;}
+    .c-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .c-name{font-size:.88rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .c-cat{font-size:.7rem;color:var(--gray);margin-top:.1rem;}
+    .type-badge{display:inline-block;padding:.22rem .65rem;border-radius:5px;font-size:.68rem;font-weight:700;}
+    .tb-free{background:var(--green-light);color:#1E6B3A;}
+    .tb-paid{background:var(--red-light);color:#A81F1F;}
+    .prog-col{}
+    .prog-bar-wrap{height:5px;background:var(--gray-light);border-radius:10px;overflow:hidden;margin:.3rem 0;}
+    .prog-bar-fill{height:100%;border-radius:10px;transition:width .4s;}
+    .fill-red{background:var(--red);}
+    .fill-green{background:var(--green);}
+    .fill-gray{background:var(--gray-light);}
+    .prog-pct{font-size:.72rem;color:var(--gray);}
+    .status-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:600;margin-top:.25rem;}
+    .sp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+    .sp-green{background:var(--green);}
+    .sp-red{background:var(--red);}
+    .sp-gray{background:var(--gray);}
+    .sp-amber{background:#F59E0B;}
+
+    /* ── ACTION BUTTONS — fixed width ── */
+    .action-btn{width:110px;padding:.45rem 0;border:none;border-radius:7px;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-align:center;display:inline-block;text-decoration:none;transition:all .2s;}
+    .ab-start   {background:var(--green-light);color:#1E6B3A;}
+    .ab-start:hover{background:#C8F5D8;}
+    .ab-continue{background:var(--red-light);color:var(--red);}
+    .ab-continue:hover{background:#FFD0D0;}
+    .ab-done    {background:var(--gray-light);color:var(--gray);cursor:default;}
+    .ab-pending {background:#FEF3C7;color:#92400E;cursor:default;}
+    .ab-approved{background:var(--green);color:white;}
+    .ab-approved:hover{background:#166b39;}
+
+    /* ── EMPTY STATE ── */
+    .empty-row{padding:3rem;text-align:center;color:var(--gray);font-size:.88rem;}
+
+    /* ── CERTIFICATES ── */
+    .cert-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.75rem;}
+    .cert-item{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+    .cert-medal{width:44px;height:44px;background:var(--red-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .cert-info{flex:1;min-width:0;}
+    .cert-course{font-size:.88rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cert-meta{font-size:.72rem;color:var(--gray);margin-top:.2rem;}
+    .cert-dl-btn{padding:.45rem 1.1rem;background:var(--red);color:white;border:none;border-radius:7px;font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .2s;}
+    .cert-dl-btn:hover{background:var(--red-dark);}
+    .cert-empty{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);padding:2rem;text-align:center;color:var(--gray);font-size:.88rem;}
+
+    @media(max-width:768px){
+      .kpi-row{grid-template-columns:1fr 1fr;}
+      .ct-head,.ct-row{grid-template-columns:1fr 80px;}
+      .ct-head span:nth-child(2),.ct-head span:nth-child(3),.ct-row>*:nth-child(2),.ct-row>*:nth-child(3){display:none;}
+    }
   </style>
 </head>
 <body>
   <nav class="navbar">
     <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">iC</span>edu-my.<span>web</span></a>
-    <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link">Courses</a><a href="dashboard.html" class="nav-link  active">Dashboard</a></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
+    </div>
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -73,21 +136,59 @@
       <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
     </div>
   </div>
-  <div class="welcome-bar">
-    <div><h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1><p>Your learning progress at a glance.</p></div>
-    <a href="courses.html" class="btn btn-primary">Browse Courses</a>
-  </div>
-  <div class="dashboard-wrap">
-    <div class="dash-grid">
-      <div class="dash-stat"><div class="dash-stat-num" id="stat-enrolled">&#8212;</div><div class="dash-stat-label">Courses Enrolled</div></div>
-      <div class="dash-stat"><div class="dash-stat-num" id="stat-completed">&#8212;</div><div class="dash-stat-label">Completed</div></div>
-      <div class="dash-stat"><div class="dash-stat-num" id="stat-certs">&#8212;</div><div class="dash-stat-label">Certificates</div></div>
+
+  <!-- STICKY HEADER -->
+  <div class="dash-header">
+    <div class="dash-header-left">
+      <h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1>
+      <p>Your learning progress at a glance.</p>
     </div>
-    <div class="section-head"><h2>MY COURSES</h2><a href="courses.html" class="btn btn-secondary btn-sm">+ Enroll in More</a></div>
-    <div class="enrolled-grid" id="enrolled-grid">
-      <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;"><div class="spinner spinner-sm"></div>&nbsp;Loading...</div>
-    </div>
+    <a href="courses.html" class="dash-enroll-btn">+ Enroll in More Courses</a>
   </div>
+
+  <div class="dash-body">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--red-light)">&#128218;</div>
+        <div><div class="kpi-num" id="kpi-enrolled">&#8212;</div><div class="kpi-label">Enrolled</div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:var(--green-light)">&#9989;</div>
+        <div><div class="kpi-num" id="kpi-completed">&#8212;</div><div class="kpi-label">Completed</div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:#FFF8EA">&#127942;</div>
+        <div><div class="kpi-num" id="kpi-certs">&#8212;</div><div class="kpi-label">Certificates</div></div>
+      </div>
+    </div>
+
+    <!-- MY COURSES -->
+    <div class="section-hd">
+      <h2>MY COURSES</h2>
+      <a href="courses.html" class="section-enroll">+ Enroll in More</a>
+    </div>
+    <div class="course-table" id="course-table">
+      <div class="ct-head">
+        <span>Course</span>
+        <span>Type</span>
+        <span>Progress</span>
+        <span>Action</span>
+      </div>
+      <div class="empty-row"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</div>
+    </div>
+
+    <!-- MY CERTIFICATES -->
+    <div class="section-hd">
+      <h2>MY CERTIFICATES</h2>
+    </div>
+    <div id="cert-list" class="cert-list">
+      <div class="cert-empty"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</div>
+    </div>
+
+  </div>
+
   <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
@@ -100,62 +201,215 @@
       messagingSenderId:"16403132310",
       appId:"1:16403132310:web:464c4ad2d19812f95077b7"
     }); const auth=getAuth(app); const db=getFirestore(app);
-    const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
-    
-    // #### waitForAuth — resolves once Firebase confirms auth state ####
-    function waitForAuth() {
-      return new Promise((resolve) => {
-        const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
-      });
-    }
-    waitForAuth().then(async(user)=>{
-      if(!user){ location.href="login.html"; return; }
-      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
-      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
-      if(user){g?.classList.add("hidden");u?.classList.remove("hidden");mg?.classList.add("hidden");mu?.classList.remove("hidden");
-        const n=user.displayName||"User",el=id=>document.getElementById(id);
-        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
-        if(el("nav-name"))el("nav-name").textContent=n;
-        if(el("dd-name"))el("dd-name").textContent=n;
-        if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        window.cacheAuthUser?.(user, false);
-      }else{g?.classList.remove("hidden");u?.classList.add("hidden");mg?.classList.remove("hidden");mu?.classList.add("hidden");}
-      const n=user.displayName||"Student";
-      const wn=document.getElementById("welcome-name");if(wn)wn.textContent=n.toUpperCase();
+    const bgMap={"AI":"#FFEAEA","Soft Skills":"#EAF0FF","Personal Development":"#EAFFF2","Education":"#FFF8EA"};
+
+    function waitForAuth(){return new Promise(r=>{const u=onAuthStateChanged(auth,user=>{u();r(user);});});}
+
+    (async()=>{
+      const user=await waitForAuth();
+      if(!user){location.href="login.html";return;}
+
+      // Nav
+      const n=user.displayName||"User",el=id=>document.getElementById(id);
+      el("nav-guest")?.classList.add("hidden");el("nav-user")?.classList.remove("hidden");
+      el("nav-mobile-guest")?.classList.add("hidden");el("nav-mobile-user")?.classList.remove("hidden");
+      if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+      if(el("nav-name"))el("nav-name").textContent=n;
+      if(el("dd-name"))el("dd-name").textContent=n;
+      if(el("dd-email"))el("dd-email").textContent=user.email||"";
+      if(el("welcome-name"))el("welcome-name").textContent=n.toUpperCase();
+      window.cacheAuthUser?.(user,false);
       try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
+
       await loadDashboard(user);
-    });
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    })();
+
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
     async function loadDashboard(user){
       try{
-        const eq=query(collection(db,"enrollments"),where("userId","==",user.uid));
-        const es=await getDocs(eq); const enrolls=[]; es.forEach(d=>enrolls.push({id:d.id,...d.data()}));
-        const cs=await getDocs(query(collection(db,"certificates"),where("userId","==",user.uid)));
-        document.getElementById("stat-enrolled").textContent=enrolls.length;
-        document.getElementById("stat-completed").textContent=enrolls.filter(e=>e.isCompleted).length;
-        document.getElementById("stat-certs").textContent=cs.size;
-        await renderEnrolled(enrolls,user);
-      }catch(e){document.getElementById("enrolled-grid").innerHTML='<div class="empty-dash"><p>Could not load: '+e.message+'</p></div>';}
+        const [enrollSnap,certSnap,paySnap]=await Promise.all([
+          getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
+          getDocs(query(collection(db,"certificates"),where("userId","==",user.uid))),
+          getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))
+        ]);
+
+        const enrolls=[],certs=[],payments=[];
+        enrollSnap.forEach(d=>enrolls.push({id:d.id,...d.data()}));
+        certSnap.forEach(d=>certs.push({id:d.id,...d.data()}));
+        paySnap.forEach(d=>payments.push({id:d.id,...d.data()}));
+
+        const completed=enrolls.filter(e=>e.isCompleted).length;
+        document.getElementById("kpi-enrolled").textContent=enrolls.length;
+        document.getElementById("kpi-completed").textContent=completed;
+        document.getElementById("kpi-certs").textContent=certs.length;
+
+        await renderCourseTable(enrolls,payments);
+        renderCerts(certs);
+      }catch(e){
+        document.getElementById("course-table").innerHTML='<div class="empty-row">Could not load: '+e.message+'</div>';
+      }
     }
-    async function renderEnrolled(enrolls,user){
-      const grid=document.getElementById("enrolled-grid");
-      if(!enrolls.length){grid.innerHTML='<div class="empty-dash"><div style="font-size:3rem">&#128218;</div><h3>No courses yet</h3><p style="margin:.5rem 0 1rem">Enroll in a course to start learning!</p><a href="courses.html" class="btn btn-primary">Browse Courses</a></div>';return;}
-      const cards=await Promise.all(enrolls.map(async e=>{
-        try{
-          const cs=await getDoc(doc(db,"courses",e.courseId));if(!cs.exists())return"";
-          const c=cs.data(),prog=e.progressPercent||0,bg=bgMap[c.category]||"thumb-default";
-          const done=e.isCompleted,btnTxt=prog>0?"Continue &#8594;":"Start &#8594;";
-          return '<div class="enrolled-card"><div class="enrolled-thumb '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
-            +'<div class="enrolled-body"><div class="enrolled-cat">'+(c.category||"Course")+'</div>'
-            +'<div class="enrolled-title">'+c.title+'</div>'
-            +'<div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray);margin-bottom:.35rem"><span>Progress</span><span>'+prog+'%</span></div>'
-            +'<div class="progress-wrap"><div class="progress-fill'+(done?" green":"") +'" style="width:'+prog+'%"></div></div></div>'
-            +'<div class="enrolled-footer"><span style="font-size:.75rem;font-weight:600;color:'+(done?"var(--green)":"var(--blue")+');">'+(done?"&#9989; Completed":prog+"% complete")+'</span>'
-            +'<a href="player.html?id='+e.courseId+'" class="btn btn-primary btn-sm">'+btnTxt+'</a></div></div>';
-        }catch(e){return"";}
+
+    async function renderCourseTable(enrolls,payments){
+      const table=document.getElementById("course-table");
+
+      // Build payment map: courseId -> payment
+      const payMap={};
+      payments.forEach(p=>{
+        if(!payMap[p.courseId]||p.submittedAt?.seconds>(payMap[p.courseId].submittedAt?.seconds||0))
+          payMap[p.courseId]=p;
+      });
+
+      // Collect all courseIds from enrollments + pending payments
+      const courseIds=new Set([
+        ...enrolls.map(e=>e.courseId),
+        ...payments.filter(p=>p.status==="pending").map(p=>p.courseId)
+      ]);
+
+      if(!courseIds.size){
+        table.innerHTML='<div class="empty-row">&#128218; No courses yet. <a href="courses.html" style="color:var(--red)">Browse courses</a> to get started!</div>';
+        return;
+      }
+
+      // Fetch course details
+      const courseMap={};
+      await Promise.all([...courseIds].map(async cid=>{
+        try{const s=await getDoc(doc(db,"courses",cid));if(s.exists())courseMap[cid]={id:s.id,...s.data()};}catch(e){}
       }));
-      grid.innerHTML=cards.filter(Boolean).join("")||'<div class="empty-dash"><p>No courses found.</p></div>';
+
+      // Build rows — enrolled first, then pending-only
+      const rows=[];
+      enrolls.forEach(e=>{
+        const c=courseMap[e.courseId];if(!c)return;
+        rows.push({enroll:e,course:c,payment:payMap[e.courseId]||null});
+      });
+      payments.filter(p=>p.status==="pending"&&!enrolls.find(e=>e.courseId===p.courseId)).forEach(p=>{
+        const c=courseMap[p.courseId];if(!c)return;
+        rows.push({enroll:null,course:c,payment:p});
+      });
+
+      if(!rows.length){
+        table.innerHTML='<div class="empty-row">No courses found. <a href="courses.html" style="color:var(--red)">Browse courses</a>.</div>';
+        return;
+      }
+
+      const bg=c=>(bgMap[c?.category]||"#F0EDFF");
+
+      const html='<div class="ct-head"><span>Course</span><span>Type</span><span>Progress</span><span>Action</span></div>'
+        +rows.map(({enroll:e,course:c,payment:p})=>{
+          const isFree=c.isFree===true;
+          const price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+          const prog=e?Math.round(e.progressPercent||0):0;
+          const isDone=e?.isCompleted===true;
+          const isPending=(!e&&p?.status==="pending");
+
+          // Progress column
+          let progHtml="";
+          if(isDone){
+            progHtml='<div class="prog-bar-wrap"><div class="prog-bar-fill fill-green" style="width:100%"></div></div>'
+              +'<div class="status-pill"><span class="sp-dot sp-green"></span><span style="color:var(--green)">Completed</span></div>';
+          }else if(isPending){
+            progHtml='<div class="status-pill"><span class="sp-dot sp-amber"></span><span style="color:#92400E">Payment pending</span></div>';
+          }else if(e){
+            const fillClass=prog>0?"fill-red":"fill-gray";
+            const statusLabel=prog>0?"In progress":"Not started";
+            const dotClass=prog>0?"sp-red":"sp-gray";
+            const textColor=prog>0?"color:var(--red)":"color:var(--gray)";
+            progHtml='<div style="display:flex;justify-content:space-between"><span class="prog-pct">'+prog+'%</span></div>'
+              +'<div class="prog-bar-wrap"><div class="prog-bar-fill '+fillClass+'" style="width:'+prog+'%"></div></div>'
+              +'<div class="status-pill"><span class="sp-dot '+dotClass+'"></span><span style="'+textColor+'">'+statusLabel+'</span></div>';
+          }
+
+          // Action button
+          let actionBtn="";
+          if(isDone){
+            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-done">&#10003; Done</a>';
+          }else if(isPending){
+            actionBtn='<span class="action-btn ab-pending">&#9203; Pending</span>';
+          }else if(e&&prog>0){
+            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-continue">Continue &#8594;</a>';
+          }else if(e){
+            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-start">&#9654; Start</a>';
+          }else if(p?.status==="approved"){
+            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-approved">&#10003; Approved</a>';
+          }
+
+          return '<div class="ct-row">'
+            +'<div class="course-cell">'
+            +'<div class="c-icon" style="background:'+bg(c)+'">'+( c.thumbnailEmoji||"&#128218;")+'</div>'
+            +'<div><div class="c-name">'+c.title+'</div><div class="c-cat">'+(c.category||"Course")+'</div></div>'
+            +'</div>'
+            +'<div><span class="type-badge '+(isFree?"tb-free":"tb-paid")+'">'+price+'</span></div>'
+            +'<div class="prog-col">'+progHtml+'</div>'
+            +'<div>'+actionBtn+'</div>'
+            +'</div>';
+        }).join("");
+
+      table.innerHTML=html;
     }
+
+    function renderCerts(certs){
+      const list=document.getElementById("cert-list");
+      if(!certs.length){
+        list.innerHTML='<div class="cert-empty">&#127942; No certificates yet. Complete a course to earn your first CPD certificate!</div>';
+        return;
+      }
+      list.innerHTML=certs.map(c=>{
+        const date=c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"}):"&#8212;";
+        return '<div class="cert-item">'
+          +'<div class="cert-medal">&#127942;</div>'
+          +'<div class="cert-info">'
+          +'<div class="cert-course">'+(c.courseName||"Course")+'</div>'
+          +'<div class="cert-meta">Issued: '+date+' &nbsp;&middot;&nbsp; ID: '+(c.certId||c.id)+'</div>'
+          +'</div>'
+          +'<button class="cert-dl-btn" onclick="downloadCert(\''+c.id+'\',\''+( c.certId||c.id)+'\',\''+encodeURIComponent(c.userName||"")+'\',\''+encodeURIComponent(c.courseName||"")+'\',\''+date+'\',\''+encodeURIComponent(c.courseId||"")+'\')">&#x1F4C4; Download PDF</button>'
+          +'</div>';
+      }).join("");
+    }
+
+    window.downloadCert=async function(certId,certCode,nameEnc,courseEnc,date,courseIdEnc){
+      const btn=event.target;btn.textContent="Generating...";btn.disabled=true;
+      try{
+        await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+        const {jsPDF}=window.jspdf;
+        const d=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+        const W=297,H=210,name=decodeURIComponent(nameEnc),course=decodeURIComponent(courseEnc);
+        let creditHours="";
+        try{const cid=decodeURIComponent(courseIdEnc||"");if(cid){const cs=await getDoc(doc(db,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}}catch(e){}
+        d.setFillColor(255,255,255);d.rect(0,0,W,H,"F");
+        d.setDrawColor(215,43,43);d.setLineWidth(3);d.rect(10,10,W-20,H-20,"S");
+        d.setLineWidth(.5);d.rect(14,14,W-28,H-28,"S");
+        d.setFillColor(215,43,43);d.rect(10,10,W-20,35,"F");
+        d.setTextColor(255,255,255);d.setFontSize(26);d.setFont("helvetica","bold");
+        d.text("edu-my.web",W/2,30,{align:"center"});
+        d.setTextColor(26,26,26);d.setFontSize(34);
+        d.text("CERTIFICATE OF COMPLETION",W/2,72,{align:"center"});
+        d.setDrawColor(215,43,43);d.setLineWidth(1);d.line(50,79,W-50,79);
+        d.setFontSize(12);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
+        d.text("This is to certify that",W/2,92,{align:"center"});
+        d.setFontSize(30);d.setFont("helvetica","bold");d.setTextColor(26,26,26);
+        d.text(name,W/2,110,{align:"center"});
+        d.setFontSize(12);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
+        d.text("has successfully completed the course:",W/2,123,{align:"center"});
+        d.setFontSize(18);d.setFont("helvetica","bold");d.setTextColor(215,43,43);
+        d.text(course,W/2,138,{align:"center"});
+        d.setFontSize(11);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
+        d.text("Date of Completion: "+date,W/2,152,{align:"center"});
+        d.setDrawColor(215,43,43);d.setLineWidth(.5);d.line(50,159,W-50,159);
+        d.setFontSize(8);d.setTextColor(150,150,150);
+        d.text("Certificate ID: "+certCode,W/2,167,{align:"center"});
+        d.setFillColor(215,43,43);d.roundedRect(W/2-25,172,50,11,3,3,"F");
+        d.setTextColor(255,255,255);d.setFontSize(9);d.setFont("helvetica","bold");
+        d.text("CPD ACCREDITED",W/2,179,{align:"center"});
+        if(creditHours){d.setFontSize(11);d.setFont("helvetica","normal");d.setTextColor(26,26,26);d.text("Total Credit Hours: "+creditHours,W/2,194,{align:"center"});}
+        d.setFontSize(8);d.setTextColor(150,150,150);
+        d.text("This certificate was digitally issued by edu-my.web",W/2,205,{align:"center"});
+        d.save("edu-my-Certificate-"+certCode+".pdf");
+      }catch(e){alert("Could not generate PDF: "+e.message);}
+      btn.textContent="&#x1F4C4; Download PDF";btn.disabled=false;
+    };
   </script>
   <script src="js/nav.js"></script>
 
@@ -173,8 +427,8 @@
   </style>
   <div class="help-float">
     <span class="help-text" id="help-text">Let me know how I can help</span>
-    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
-      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
   </div>
   <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
