@@ -141,7 +141,7 @@
       const es=await getDoc(doc(db,"enrollments",currentUser.uid+"_"+courseId));
       if(es.exists()){renderEnrolled();return;}
       const ps=await getDocs(query(collection(db,"payments"),where("userId","==",currentUser.uid),where("courseId","==",courseId)));
-      if(!ps.empty){renderStatus({id:ps.docs[0].id,...ps.docs[0].data()});return;}
+      if(!ps.empty){renderStatus({id:ps.docs[0].id,...ps.docs[0].data()});setTimeout(wireResubmit,100);return;}
       renderPaymentPage();
     }
     function renderPaymentPage(){
@@ -225,7 +225,19 @@
 
       // Show status tracker
       renderStatus({status:"pending",referenceNumber:ref});
+      setTimeout(wireResubmit,100);
     }
+    // Called after renderStatus to wire up resubmit button
+    function wireResubmit(){
+      const btn=document.getElementById("btn-resubmit");
+      if(!btn)return;
+      btn.addEventListener("click",function(){
+        // Clear payment state and show fresh payment form
+        renderPaymentPage();
+        loadQRCode();
+      });
+    }
+
     function renderStatus(p){
       const approved=p.status==="approved",rejected=p.status==="rejected";
       document.getElementById("payment-wrap").innerHTML=
@@ -243,7 +255,7 @@
         +'<div style="margin-top:1.5rem;display:flex;gap:.75rem;flex-wrap:wrap">'
         +(approved?'<a href="player.html?id='+courseId+'" class="btn btn-success">Start Learning &#8594;</a>':"")
         +'<a href="dashboard.html" class="btn btn-secondary">My Dashboard</a>'
-        +(rejected?'<button class="btn btn-primary" onclick="location.reload()">Resubmit</button>':"")
+        +(rejected?'<button class="btn btn-primary" id="btn-resubmit">Resubmit</button>':"")
         +'</div></div></div>';
     }
     function renderEnrolled(){
