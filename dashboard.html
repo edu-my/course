@@ -240,8 +240,15 @@
         certSnap.forEach(d=>certs.push({id:d.id,...d.data()}));
         paySnap.forEach(d=>payments.push({id:d.id,...d.data()}));
 
-        const completed=enrolls.filter(e=>e.isCompleted).length;
-        document.getElementById("kpi-enrolled").textContent=enrolls.length;
+        // Only count active enrollments (cross-check with payments - exclude revoked)
+        const rejectedCourseIds=new Set(
+          payments.filter(p=>p.status==="rejected").map(p=>p.courseId)
+        );
+        // An enrollment is valid if it doesn't have a corresponding rejected payment
+        // (revoke removes enrollment but as safety net we also check here)
+        const activeEnrolls=enrolls.filter(e=>!rejectedCourseIds.has(e.courseId));
+        const completed=activeEnrolls.filter(e=>e.isCompleted).length;
+        document.getElementById("kpi-enrolled").textContent=activeEnrolls.length;
         document.getElementById("kpi-completed").textContent=completed;
         document.getElementById("kpi-certs").textContent=certs.length;
 
