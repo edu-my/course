@@ -150,6 +150,10 @@
     // Load page once auth is confirmed
     waitForAuth().then(async (user) => {
       currentUser = user;
+      // Check if admin
+      if(user){
+        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window._coursePageAdmin=true;window.setAdminNav?.(true);}}catch(e){}
+      }
       await loadPage(user);
     });
 
@@ -190,6 +194,8 @@
         enrollSection = '<div class="enroll-status status-enrolled">✅ You are enrolled!</div><a href="player.html?id='+c.id+'" class="btn btn-success btn-block btn-lg">▶️ Start Course →</a>';
       } else if (enrollDoc && enrollDoc.status==="pending") {
         enrollSection = '<div class="enroll-status status-pending">&#9203; Payment pending approval</div>';
+      } else if (window._coursePageAdmin) {
+        enrollSection = '<a href="player.html?id='+c.id+'" class="btn btn-secondary btn-block btn-lg">View Course &#8594;</a>';
       } else if (!currentUser) {
         enrollSection = '<a href="login.html" class="btn btn-primary btn-block btn-lg">'+(isFree?"&#x1F193; Start Free — Login First":"Login to Enroll")+'</a>';
       } else if (isFree) {

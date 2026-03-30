@@ -133,7 +133,7 @@
   <script type="module">
     import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, setDoc, arrayUnion, serverTimestamp }
+    import { getFirestore, doc, getDoc, collection, updateDoc, setDoc, arrayUnion, serverTimestamp }
       from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
     const app = initializeApp({
@@ -204,12 +204,16 @@
         const enrollId = currentUser.uid+"_"+courseId;
         const es = await getDoc(doc(db,"enrollments",enrollId));
 
-        if (!es.exists() && !courseData.isFree) {
+        // Check if admin — admins bypass all enrollment checks
+        let userIsAdmin=false;
+        try{const ud=await getDoc(doc(db,"users",currentUser.uid));userIsAdmin=ud.exists()&&ud.data().role==="admin";}catch(e){}
+
+        if (!es.exists() && !courseData.isFree && !userIsAdmin) {
           location.href = "course.html?id="+courseId;
           return;
         }
 
-        if (!es.exists() && courseData.isFree) {
+        if (!es.exists() && (courseData.isFree || userIsAdmin)) {
           await setDoc(doc(db,"enrollments",enrollId), {
             enrollmentId:enrollId, userId:currentUser.uid, courseId,
             courseName:courseData.title, enrolledAt:serverTimestamp(),

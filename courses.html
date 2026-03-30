@@ -99,7 +99,7 @@
   <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import {getFirestore,collection,getDocs,query,where} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
     const app=initializeApp({
       apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
       authDomain:"kolamdata.firebaseapp.com",
@@ -109,7 +109,7 @@
       appId:"1:16403132310:web:464c4ad2d19812f95077b7"
     }); const auth=getAuth(app); const db=getFirestore(app);
     const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
-    let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={};
+    let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
 
     onAuthStateChanged(auth,async(user)=>{
       currentUser=user;
@@ -124,6 +124,7 @@
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
         window.cacheAuthUser?.(user,false);
+        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){isAdmin=true;window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
         try{
           const [es,ps]=await Promise.all([
             getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
@@ -153,11 +154,12 @@
 
     function getCourseBtn(c){
       const isFree=c.isFree===true,st=userStatus[c.id];
-      if(st==="enrolled")              return {cls:"btn-success",  label:"▶️ Start Course", href:"player.html?id="+c.id};
-      if(st==="approved")              return {cls:"btn-success",  label:"✓ Approved",          href:"player.html?id="+c.id};
-      if(st==="pending")               return {cls:"btn-warning",  label:"⏳ Pending...",        href:"payment.html?course="+c.id};
-      if(isFree)                       return {cls:"btn-success",  label:"Start Free",               href:"course.html?id="+c.id};
-      return                                  {cls:"btn-primary",  label:"Enroll Now",               href:"course.html?id="+c.id};
+      if(isAdmin)                      return {cls:"btn-secondary", label:"View Course",             href:"player.html?id="+c.id};
+      if(st==="enrolled")              return {cls:"btn-success",   label:"▶️ View Course", href:"player.html?id="+c.id};
+      if(st==="approved")              return {cls:"btn-success",   label:"✓ Approved",          href:"player.html?id="+c.id};
+      if(st==="pending")               return {cls:"btn-warning",   label:"⏳ Pending...",        href:"payment.html?course="+c.id};
+      if(isFree)                       return {cls:"btn-success",   label:"Start Free",               href:"course.html?id="+c.id};
+      return                                  {cls:"btn-primary",   label:"Enroll Now",               href:"course.html?id="+c.id};
     }
 
     function renderCourses(){
