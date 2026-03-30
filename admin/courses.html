@@ -174,7 +174,7 @@
         </div>
         <div id="modules-builder"></div>
         <button class="btn btn-secondary btn-block" onclick="addModule()" style="margin-top:.75rem">+ Add Another Module</button>
-        <p style="font-size:.78rem;color:var(--gray);margin-top:.75rem">&#128161; For YouTube videos, paste the full URL (e.g. https://youtube.com/watch?v=xxx)</p>
+        <p style="font-size:.78rem;color:var(--gray);margin-top:.75rem">&#128161; Paste any YouTube or Google Drive share link — it will be auto-converted to an embed URL when you click away.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" id="btn-save" onclick="saveCourse()">Save Course</button>
@@ -329,7 +329,7 @@
         </select>
         <input type="text" placeholder="e.g. 5:00" value="${ex?.duration||""}" id="ld-${mi}-${li}"/>
         <button class="btn btn-danger btn-sm" onclick="document.getElementById('lr-${mi}-${li}').remove()">&#215;</button>
-        <input type="text" class="lesson-url" placeholder="YouTube URL or PDF link" value="${ex?.contentURL||""}" id="lu-${mi}-${li}"/>
+        <input type="text" class="lesson-url" placeholder="YouTube URL, Google Drive link, or PDF URL" value="${ex?.contentURL||""}" id="lu-${mi}-${li}" onblur="normalizeLessonUrl(this)"/>
       </div>`;
     }
 
@@ -340,6 +340,32 @@
       d.innerHTML = buildLessonRow(mi, li);
       c.appendChild(d.firstElementChild);
     };
+
+    // #### URL NORMALIZER — auto-converts Drive/YouTube links to embed URLs ####
+    window.normalizeLessonUrl = function(input) {
+      const raw = input.value.trim();
+      if (!raw) return;
+
+      // Google Drive: any share/view/open link → /preview
+      const driveMatch = raw.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch) {
+        input.value = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+        input.style.borderColor = "var(--green)";
+        setTimeout(() => input.style.borderColor = "", 1500);
+        return;
+      }
+
+      // YouTube full URL: watch?v= or youtu.be/ → embed
+      const ytMatch = raw.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+      if (ytMatch) {
+        input.value = `https://www.youtube.com/embed/${ytMatch[1]}`;
+        input.style.borderColor = "var(--green)";
+        setTimeout(() => input.style.borderColor = "", 1500);
+        return;
+      }
+      // Already an embed URL or unknown — leave as-is
+    };
+    // #### END URL NORMALIZER ####
 
     function collectModules() {
       const mods = [];
