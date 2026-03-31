@@ -83,6 +83,12 @@
     .role-student{background:var(--blue-light);color:var(--blue);}
     @media(max-width:1024px){.kpi-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}}
+    /* Admin mobile drawer — dark theme to match navbar */
+    .nav-mobile-drawer{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+    .nav-mobile-drawer .nav-link:hover,.nav-mobile-drawer .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    .nav-mobile-drawer .sidebar-section{color:rgba(255,255,255,.3);}
+    .nav-mobile-drawer .nav-actions{border-top-color:rgba(255,255,255,.08);}
   </style>
 </head>
 <body>
@@ -108,6 +114,22 @@
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
   </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <div class="sidebar-section" style="padding:.25rem 0 .5rem;font-size:.6rem;letter-spacing:2px;color:var(--gray);font-weight:700;text-transform:uppercase">Main</div>
+    <a href="index.html" class="nav-link">&#128202; Overview</a>
+    <div class="sidebar-section" style="padding:.75rem 0 .5rem;font-size:.6rem;letter-spacing:2px;color:var(--gray);font-weight:700;text-transform:uppercase">Manage</div>
+    <a href="courses.html" class="nav-link">&#128218; Courses</a>
+    <a href="payments.html" class="nav-link active">&#128179; Payments</a>
+    <a href="users.html" class="nav-link">&#128101; Users</a>
+    <a href="stats.html" class="nav-link">&#128200; Stats</a>
+    <div class="sidebar-section" style="padding:.75rem 0 .5rem;font-size:.6rem;letter-spacing:2px;color:var(--gray);font-weight:700;text-transform:uppercase">Site</div>
+    <a href="../index.html" class="nav-link">&#127760; View Site</a>
+    <a href="../courses.html" class="nav-link">&#128269; View Courses</a>
+    <div class="nav-actions" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;width:100%">
+      <a href="../profile.html" class="btn btn-secondary" style="width:100%">&#128100; My Profile</a>
+      <button class="btn btn-danger" id="btn-logout-mobile" style="width:100%">&#128682; Log Out</button>
+    </div>
+  </div>
   <div class="admin-wrap">    <aside class="admin-sidebar"><div class="sidebar-section">Main</div><a href="index.html" class="admin-nav-item"><span class="ni">&#128202;</span> Overview</a><div class="sidebar-section">Manage</div><a href="courses.html" class="admin-nav-item"><span class="ni">&#128218;</span> Courses</a><a href="payments.html" class="admin-nav-item  active"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a><a href="users.html" class="admin-nav-item"><span class="ni">&#128101;</span> Users</a><a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a><div class="sidebar-section">Site</div><a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a><a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a></aside>
     <main class="admin-main">
       <div class="page-title">&#128179; Payment Approvals</div>
@@ -299,5 +321,11 @@
     };
   </script>
   <script src="../js/nav.js"></script>
+  <script>
+    // Mobile drawer logout — delegate to desktop logout button which has Firebase auth
+    document.getElementById("btn-logout-mobile")?.addEventListener("click", function() {
+      document.getElementById("btn-logout")?.click();
+    });
+  </script>
 </body>
 </html>
