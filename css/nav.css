@@ -1,4 +1,4 @@
-/* nav.css - iCraftCourse navigation styles */
+/* nav.css - edu-my.web navigation styles */
 .navbar{position:sticky;top:0;z-index:200;height:var(--nav-height);background:var(--white);border-bottom:3px solid var(--red);box-shadow:0 2px 12px rgba(215,43,43,.07);display:flex;align-items:center;padding:0 var(--page-padding);gap:2rem;}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--red);letter-spacing:2px;text-decoration:none;flex-shrink:0;}
 .nav-logo span{color:var(--dark);}
@@ -28,8 +28,11 @@
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 .nav-mobile-drawer{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--white);border-bottom:3px solid var(--red);box-shadow:var(--shadow-lg);z-index:190;padding:1rem var(--page-padding) 1.5rem;flex-direction:column;gap:.25rem;}
 .nav-mobile-drawer .nav-link{padding:.75rem 1rem;font-size:1rem;}
-.nav-mobile-drawer .nav-actions{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;width:100%;}
+.nav-mobile-drawer .nav-actions{display:flex;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;gap:.5rem;width:100%;}
 .nav-mobile-drawer .nav-actions .btn{width:100%;}
+/* nav-mobile-user: logged-in state in drawer */
+#nav-mobile-user{display:flex;flex-direction:column;gap:.25rem;margin-top:.5rem;padding-top:1rem;border-top:1px solid var(--gray-light);width:100%;}
+#nav-mobile-user .btn{width:100%;margin-top:.5rem;}
 .footer{background:var(--dark);color:rgba(255,255,255,.5);padding:4rem var(--page-padding) 2rem;}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
 .footer-brand p{color:rgba(255,255,255,.45);font-size:.85rem;line-height:1.7;}
@@ -41,16 +44,11 @@
 @media(max-width:768px){
   .nav-links,.nav-actions{display:none;}
   .nav-hamburger{display:flex;}
-  /* Hide desktop avatar on mobile — hamburger drawer handles auth */
+  /* Hide desktop avatar — hamburger drawer handles auth */
   .nav-user{display:none !important;}
+  /* Re-show nav-actions INSIDE drawer (guest login/register buttons) */
+  .nav-mobile-drawer .nav-actions{display:flex !important;}
   .footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}
   .footer-brand{grid-column:1/-1;}
   .footer-bottom{flex-direction:column;gap:.5rem;text-align:center;}
 }
-
-/* #### FLOATING WHATSAPP — mobile fix #### */
-@media(max-width:768px){
-  .help-text{display:none !important;}
-  .help-wa{width:60px;height:60px;}
-}
-/* #### END FLOATING WHATSAPP #### */
