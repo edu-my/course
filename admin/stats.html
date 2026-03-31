@@ -93,7 +93,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="../index.html" class="nav-logo">edu-my.web</a>
+    <a href="../index.html" class="nav-logo">iCraft<span>Course</span></a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Admin</a>
       <a href="../index.html" class="nav-link">&#8592; View Site</a>
@@ -108,8 +108,7 @@
         </div>
         <a href="../profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
         <a href="../index.html" class="nav-dropdown-item"><span class="item-icon">&#127760;</span> View Site</a>
-        <a href="index.html" class="nav-dropdown-item" style="border-top:1px solid rgba(255,255,255,.1)"><span class="item-icon">&#128295;</span> Admin Panel</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+                <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
       </div>
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
@@ -123,6 +122,7 @@
     <a href="users.html" class="nav-link">&#128101; Users</a>
     <a href="stats.html" class="nav-link active">&#128200; Stats</a>
     <div class="sidebar-section" style="padding:.75rem 0 .5rem;font-size:.6rem;letter-spacing:2px;color:var(--gray);font-weight:700;text-transform:uppercase">Site</div>
+    <a href="../admin/stats.html" class="nav-link">&#128295; Admin Panel</a>
     <a href="../index.html" class="nav-link">&#127760; View Site</a>
     <a href="../courses.html" class="nav-link">&#128269; View Courses</a>
     <div class="nav-actions" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;width:100%">
@@ -232,7 +232,7 @@
         ...certs.map(c=>[c.certId||c.id,c.userName||"",c.courseName||"",c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString("en-MY"):""])];
       const csv=rows.map(r=>r.map(v=>'"'+v+'"').join(",")).join("\n");
       const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-      a.download="iCraftCourse-Stats-"+new Date().toISOString().slice(0,10)+".csv";a.click();
+      a.download="edu-my.web-Stats-"+new Date().toISOString().slice(0,10)+".csv";a.click();
     };
   </script>
   <script src="../js/nav.js"></script>
