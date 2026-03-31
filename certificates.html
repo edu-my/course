@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Certificates — iCraftCourse</title>
+  <title>My Certificates — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -156,7 +156,7 @@
         doc.setLineWidth(.5);doc.rect(14,14,W-28,H-28,"S");
         doc.setFillColor(215,43,43);doc.rect(10,10,W-20,35,"F");
         doc.setTextColor(255,255,255);doc.setFontSize(26);doc.setFont("helvetica","bold");
-        doc.text("iCraftCourse",W/2,30,{align:"center"});
+        doc.text("edu-my.web",W/2,30,{align:"center"});
         doc.setTextColor(26,26,26);doc.setFontSize(34);
         doc.text("CERTIFICATE OF COMPLETION",W/2,72,{align:"center"});
         doc.setDrawColor(215,43,43);doc.setLineWidth(1);doc.line(50,79,W-50,79);
@@ -183,9 +183,9 @@
 
         // Digital issue note (no signature needed)
         doc.setFontSize(8);doc.setTextColor(150,150,150);
-        doc.text("This certificate was digitally issued by iCraftCourse. Verify at: edu-my.github.io/course",W/2,205,{align:"center"});
+        doc.text("This certificate was digitally issued by edu-my.web. Verify at: edu-my.github.io/course",W/2,205,{align:"center"});
 
-        doc.save("iCraftCourse-Certificate-"+certCode+".pdf");
+        doc.save("edu-my.web-Certificate-"+certCode+".pdf");
       }catch(e){alert("Could not generate PDF: "+e.message);}
       btn.textContent="&#x1F4C4; Download PDF";btn.disabled=false;
     };
