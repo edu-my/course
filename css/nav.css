@@ -41,7 +41,16 @@
 @media(max-width:768px){
   .nav-links,.nav-actions{display:none;}
   .nav-hamburger{display:flex;}
+  /* Hide desktop avatar on mobile — hamburger drawer handles auth */
+  .nav-user{display:none !important;}
   .footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}
   .footer-brand{grid-column:1/-1;}
   .footer-bottom{flex-direction:column;gap:.5rem;text-align:center;}
 }
+
+/* #### FLOATING WHATSAPP — mobile fix #### */
+@media(max-width:768px){
+  .help-text{display:none !important;}
+  .help-wa{width:60px;height:60px;}
+}
+/* #### END FLOATING WHATSAPP #### */
