@@ -33,19 +33,23 @@
 .nav-dropdown-item.danger{color:var(--red);border-top:1px solid var(--gray-light);}
 .nav-dropdown-item .item-icon{font-size:1rem;width:20px;text-align:center;}
 
-/* ── HAMBURGER ── */
-.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.35rem;margin-left:.5rem;background:none;border:none;}
+/* ── HAMBURGER — margin-left:auto pushes it to far right ── */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem;margin-left:auto;background:none;border:none;}
 .nav-hamburger span{display:block;width:24px;height:2px;background:var(--dark);border-radius:2px;transition:all .3s;}
 .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
 .nav-hamburger.open span:nth-child(2){opacity:0;}
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
-/* ── MOBILE DRAWER — hidden by default, shown via .open class by nav.js ── */
-.nav-mobile-drawer{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--white);border-bottom:3px solid var(--red);box-shadow:var(--shadow-lg);z-index:190;padding:1rem var(--page-padding) 1.5rem;flex-direction:column;gap:.25rem;display:none;}
+/* ── MOBILE DRAWER ── */
+.nav-mobile-drawer{position:fixed;top:var(--nav-height);left:0;right:0;width:100%;box-sizing:border-box;background:var(--white);border-bottom:3px solid var(--red);box-shadow:var(--shadow-lg);z-index:190;padding:1rem 1.25rem 1.5rem;flex-direction:column;gap:.25rem;display:none;}
 .nav-mobile-drawer.open{display:flex;}
-.nav-mobile-drawer .nav-link{padding:.75rem 1rem;font-size:1rem;}
+.nav-mobile-drawer .nav-link{padding:.75rem 1rem;font-size:1rem;width:100%;box-sizing:border-box;}
 .nav-mobile-drawer .nav-actions{display:flex !important;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;gap:.5rem;width:100%;}
 .nav-mobile-drawer .nav-actions .btn{width:100%;}
+#nav-mobile-user{display:flex;flex-direction:column;gap:.5rem;width:100%;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);}
+#nav-mobile-user.hidden{display:none !important;}
+#nav-mobile-user .nav-link{width:100%;}
+#nav-mobile-user .btn{width:100%;}
 
 /* ── FOOTER ── */
 .footer{background:var(--dark);color:rgba(255,255,255,.5);padding:4rem var(--page-padding) 2rem;}
