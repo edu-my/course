@@ -1,14 +1,24 @@
 /* nav.css - edu-my.web navigation styles */
+
+/* ── NAVBAR ── */
 .navbar{position:sticky;top:0;z-index:200;height:var(--nav-height);background:var(--white);border-bottom:3px solid var(--red);box-shadow:0 2px 12px rgba(215,43,43,.07);display:flex;align-items:center;padding:0 var(--page-padding);gap:2rem;}
+
+/* ── LOGO ── */
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--red);letter-spacing:2px;text-decoration:none;flex-shrink:0;display:flex;align-items:center;gap:.5rem;}
-.nav-logo-badge{width:28px;height:28px;background:var(--red);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0;}
 .nav-logo span{color:var(--dark);}
 .nav-logo:hover{color:var(--red-dark);}
+.nav-logo-badge{width:28px;height:28px;background:var(--red);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0;}
+
+/* ── NAV LINKS ── */
 .nav-links{display:flex;align-items:center;gap:.25rem;flex:1;}
 .nav-link{padding:.45rem .85rem;border-radius:var(--radius);font-size:.88rem;font-weight:500;color:var(--dark);text-decoration:none;transition:all .2s;white-space:nowrap;}
 .nav-link:hover{background:var(--red-light);color:var(--red);}
 .nav-link.active{background:var(--red-light);color:var(--red);font-weight:600;}
+
+/* ── NAV ACTIONS (guest buttons) ── */
 .nav-actions{display:flex;align-items:center;gap:.65rem;flex-shrink:0;margin-left:auto;}
+
+/* ── USER AVATAR + DROPDOWN ── */
 .nav-user{position:relative;display:flex;align-items:center;gap:.5rem;cursor:pointer;}
 .nav-avatar{width:36px;height:36px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;}
 .nav-user-name{font-size:.85rem;font-weight:600;color:var(--dark);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -22,15 +32,22 @@
 .nav-dropdown-item:hover{background:var(--off-white);color:var(--red);}
 .nav-dropdown-item.danger{color:var(--red);border-top:1px solid var(--gray-light);}
 .nav-dropdown-item .item-icon{font-size:1rem;width:20px;text-align:center;}
-.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.35rem;margin-left:auto;background:none;border:none;}
+
+/* ── HAMBURGER ── */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.35rem;margin-left:.5rem;background:none;border:none;}
 .nav-hamburger span{display:block;width:24px;height:2px;background:var(--dark);border-radius:2px;transition:all .3s;}
 .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
 .nav-hamburger.open span:nth-child(2){opacity:0;}
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.nav-mobile-drawer{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--white);border-bottom:3px solid var(--red);box-shadow:var(--shadow-lg);z-index:190;padding:1rem var(--page-padding) 1.5rem;flex-direction:column;gap:.25rem;}
+
+/* ── MOBILE DRAWER — hidden by default, shown via .open class by nav.js ── */
+.nav-mobile-drawer{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--white);border-bottom:3px solid var(--red);box-shadow:var(--shadow-lg);z-index:190;padding:1rem var(--page-padding) 1.5rem;flex-direction:column;gap:.25rem;display:none;}
+.nav-mobile-drawer.open{display:flex;}
 .nav-mobile-drawer .nav-link{padding:.75rem 1rem;font-size:1rem;}
-.nav-mobile-drawer .nav-actions{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;width:100%;}
+.nav-mobile-drawer .nav-actions{display:flex !important;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);flex-direction:column;gap:.5rem;width:100%;}
 .nav-mobile-drawer .nav-actions .btn{width:100%;}
+
+/* ── FOOTER ── */
 .footer{background:var(--dark);color:rgba(255,255,255,.5);padding:4rem var(--page-padding) 2rem;}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
 .footer-brand p{color:rgba(255,255,255,.45);font-size:.85rem;line-height:1.7;}
@@ -39,9 +56,30 @@
 .footer-col ul li a{color:rgba(255,255,255,.4);font-size:.83rem;text-decoration:none;transition:color .2s;}
 .footer-col ul li a:hover{color:var(--red);}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:rgba(255,255,255,.3);}
+
+/* ── FLOATING WHATSAPP ── */
+.help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
+.help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
+.help-text.visible{max-width:240px;opacity:1;}
+.help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
+.help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
+.help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
+.help-wa::before{width:54px;height:54px;animation-delay:0s;}
+.help-wa::after{width:54px;height:54px;animation-delay:.6s;}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:.6;}100%{transform:scale(1.8);opacity:0;}}
+
+/* ── MOBILE BREAKPOINT ── */
 @media(max-width:768px){
+  /* Hide desktop nav links and guest action buttons */
   .nav-links,.nav-actions{display:none;}
+  /* Hide desktop avatar — hamburger drawer is the only auth UI on mobile */
+  .nav-user{display:none !important;}
+  /* Show hamburger */
   .nav-hamburger{display:flex;}
+  /* WhatsApp: hide label, enlarge tap target */
+  .help-text{display:none !important;}
+  .help-wa{width:60px;height:60px;}
+  /* Footer */
   .footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}
   .footer-brand{grid-column:1/-1;}
   .footer-bottom{flex-direction:column;gap:.5rem;text-align:center;}
