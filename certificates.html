@@ -104,8 +104,7 @@
         if(el("nav-name"))el("nav-name").textContent=n;
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        // Check admin role before caching — prevents role flash on next page load
-        try{const ud=await getDoc(doc(db,"users",user.uid));const isAdmin=ud.exists()&&ud.data().role==="admin";window.cacheAuthUser?.(user,isAdmin);if(isAdmin)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
+        window.cacheAuthUser?.(user, false);
       }else{
         g?.classList.remove("hidden");u?.classList.add("hidden");
         mg?.classList.remove("hidden");mu?.classList.add("hidden");

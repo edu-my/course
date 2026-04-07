@@ -12,9 +12,7 @@
   <style>
     body{background:#F0F2F5;}
 
-    /* ── AUTH GUARD — content hidden until Firebase confirms ── */
-    .dash-header, .dash-body { opacity: 0; pointer-events: none; }
-    body.auth-ready .dash-header, body.auth-ready .dash-body { opacity: 1; pointer-events: auto; transition: opacity .2s ease; }
+    /* ── STICKY WELCOME HEADER ── */
     .dash-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:sticky;top:var(--nav-height);z-index:100;}
     .dash-header-left h1{font-family:Bebas Neue,sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;}
     .dash-header-left p{color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.2rem;}
@@ -142,7 +140,7 @@
   <!-- STICKY HEADER -->
   <div class="dash-header">
     <div class="dash-header-left">
-      <h1>WELCOME BACK, <span id="welcome-name"></span>!</h1>
+      <h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1>
       <p>Your learning progress at a glance.</p>
     </div>
     <a href="courses.html" class="dash-enroll-btn">+ Enroll in More Courses</a>
@@ -220,15 +218,8 @@
       if(el("dd-name"))el("dd-name").textContent=n;
       if(el("dd-email"))el("dd-email").textContent=user.email||"";
       if(el("welcome-name"))el("welcome-name").textContent=n.toUpperCase();
-      // Check admin role FIRST, then cache once with correct value — eliminates flash
-      try{
-        const ud=await getDoc(doc(db,"users",user.uid));
-        const isAdmin=ud.exists()&&ud.data().role==="admin";
-        window.cacheAuthUser?.(user,isAdmin);
-        if(isAdmin)window.setAdminNav?.(true);
-      }catch(e){window.cacheAuthUser?.(user,false);}
-      // Reveal page content ONLY after auth + role fully resolved
-      document.body.classList.add("auth-ready");
+      window.cacheAuthUser?.(user,false);
+      try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
 
       await loadDashboard(user);
     })();
