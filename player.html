@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Course Player — edu-my.web</title>
+  <title>Course Player — iCraftCourse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
@@ -62,15 +63,26 @@
     .player-loading{position:fixed;inset:0;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:rgba(255,255,255,.5);z-index:10;}
     .player-loading.hidden{display:none;}
     @media(max-width:768px){.player-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.sidebar{height:auto;max-height:40vh;border-right:none;border-bottom:1px solid #2A2A2A;}}
+    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
+    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
+    [data-theme="dark"] .nav-hamburger span{background:white;}
+    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
+    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
+    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
+    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
+    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">eD</span>edu-my.web</a>
     <div class="nav-links">
       <a href="courses.html" class="nav-link">&#8592; Courses</a>
       <a href="dashboard.html" class="nav-link">Dashboard</a>
     </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()"><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user hidden" id="nav-user">
       <div class="nav-avatar" id="nav-avatar">U</div>
       <div class="nav-user-name" id="nav-name">User</div>

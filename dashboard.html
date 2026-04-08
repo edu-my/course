@@ -7,12 +7,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
     body{background:#F0F2F5;}
 
     /* ── STICKY WELCOME HEADER ── */
+
+    :root{--bg:#fff;--bg-alt:#FAF8F7;--bg-card:#fff;--border:#EEEBEB;--txt:#1A1A1A;--txt-m:#6B6B6B;}
+    [data-theme="dark"]{--bg:#111;--bg-alt:#1A1A1A;--bg-card:#1E1E1E;--border:rgba(255,255,255,.08);--txt:#F0F0F0;--txt-m:#9B9B9B;}
+    body{background:var(--bg);}
+    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
+    [data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
+    [data-theme="dark"] .nav-hamburger span{background:white;}
+    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
+    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
+    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
+    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
+    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+    [data-theme="dark"] .dash-header{background:#0A0A0A;}
+    [data-theme="dark"] .kpi-card,[data-theme="dark"] .panel,[data-theme="dark"] .enroll-card{background:#1E1E1E;border-color:rgba(255,255,255,.08);}
+    [data-theme="dark"] .kpi-label,[data-theme="dark"] .panel-title{color:var(--txt-m);}
+    [data-theme="dark"] .enroll-title,[data-theme="dark"] .kpi-num{color:var(--txt);}
+    [data-theme="dark"] .enroll-meta,.enroll-prog-label{color:var(--txt-m);}
+    [data-theme="dark"] .progress-wrap{background:rgba(255,255,255,.08);}
+    [data-theme="dark"] table th,[data-theme="dark"] table td{border-color:rgba(255,255,255,.06);color:var(--txt-m);}
+    [data-theme="dark"] table td:first-child{color:var(--txt);}
+    [data-theme="dark"] .empty-row{color:var(--txt-m);}
+    /* AUTH GUARD — hide content until Firebase confirms */
+    .dash-header,.dash-body{opacity:0;pointer-events:none;}
+    body.auth-ready .dash-header,body.auth-ready .dash-body{opacity:1;pointer-events:auto;transition:opacity .2s ease;}
     .dash-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:sticky;top:var(--nav-height);z-index:100;}
     .dash-header-left h1{font-family:Bebas Neue,sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;}
     .dash-header-left p{color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.2rem;}
@@ -97,7 +124,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">iC</span>edu-my.<span>web</span></a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
       <a href="courses.html" class="nav-link">Courses</a>
@@ -107,6 +134,9 @@
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()">
+      <div class="tt-track"><div class="tt-knob"></div></div>
+    </button>
     <div class="nav-user hidden" id="nav-user">
       <div class="nav-avatar" id="nav-avatar">U</div>
       <div class="nav-user-name" id="nav-name">User</div>
@@ -140,7 +170,7 @@
   <!-- STICKY HEADER -->
   <div class="dash-header">
     <div class="dash-header-left">
-      <h1>WELCOME BACK, <span id="welcome-name">STUDENT</span>!</h1>
+      <h1>WELCOME BACK, <span id="welcome-name"></span>!</h1>
       <p>Your learning progress at a glance.</p>
     </div>
     <a href="courses.html" class="dash-enroll-btn">+ Enroll in More Courses</a>
@@ -218,9 +248,14 @@
       if(el("dd-name"))el("dd-name").textContent=n;
       if(el("dd-email"))el("dd-email").textContent=user.email||"";
       if(el("welcome-name"))el("welcome-name").textContent=n.toUpperCase();
-      window.cacheAuthUser?.(user,false);
-      try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
-
+      try{
+        const ud=await getDoc(doc(db,"users",user.uid));
+        const isAdmin=ud.exists()&&ud.data().role==="admin";
+        window.cacheAuthUser?.(user,isAdmin);
+        if(isAdmin)window.setAdminNav?.(true);
+      }catch(e){window.cacheAuthUser?.(user,false);}
+      // Reveal content only after auth+role confirmed
+      document.body.classList.add("auth-ready");
       await loadDashboard(user);
     })();
 
