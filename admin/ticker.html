@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Ticker — Admin</title>
+  <script src="../js/theme.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/nav.css"/>
+  <style>
+    body{background:#F0F2F5;}
+    .navbar{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-logo-badge{background:var(--red)!important;}
+    .nav-link{color:rgba(255,255,255,.6);}
+    .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.08);color:white;}
+    .nav-user-name{color:rgba(255,255,255,.8);}
+    .nav-avatar{background:var(--orange);}
+    .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
+    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,.06);}
+    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(255,255,255,.04);color:white;}
+    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);color:white;}
+    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;}
+    .admin-main{padding:2rem;overflow-y:auto;}
+    .page-title{font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    /* TICKER PREVIEW */
+    .ticker-preview{border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.5rem;position:relative;}
+    .ticker-preview-bar{padding:.65rem 0;overflow:hidden;position:relative;}
+    .ticker-preview-bar::before,.ticker-preview-bar::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;}
+    .ticker-preview-bar::before{left:0;}
+    .ticker-preview-bar::after{right:0;}
+    .ticker-track{display:flex;animation:ticker-scroll 20s linear infinite;width:max-content;}
+    .ticker-track:hover{animation-play-state:paused;}
+    .ticker-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2rem;font-size:.78rem;font-weight:600;letter-spacing:.5px;white-space:nowrap;text-decoration:none;}
+    .ticker-dot{width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0;}
+    @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+    /* SETTINGS PANEL */
+    .settings-panel{background:white;border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm);}
+    .settings-panel h3{font-size:.9rem;font-weight:700;margin-bottom:1rem;color:var(--dark);}
+    .color-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+    .color-swatch{width:36px;height:36px;border-radius:8px;cursor:pointer;border:3px solid transparent;transition:border-color .2s;flex-shrink:0;}
+    .color-swatch.selected{border-color:var(--red);}
+    .color-custom{display:flex;align-items:center;gap:.5rem;}
+    .color-custom label{font-size:.82rem;color:var(--gray);}
+    /* ANNOUNCEMENTS LIST */
+    .ann-panel{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;}
+    .ann-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gray-light);background:var(--off-white);display:flex;align-items:center;justify-content:space-between;}
+    .ann-header h3{font-size:.92rem;font-weight:700;}
+    .ann-row{display:grid;grid-template-columns:1fr auto auto auto;gap:.75rem;align-items:center;padding:.85rem 1.25rem;border-bottom:1px solid var(--gray-light);font-size:.85rem;}
+    .ann-row:last-child{border-bottom:none;}
+    .ann-text{color:var(--dark);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ann-url{font-size:.75rem;color:var(--gray);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ann-empty{padding:2rem;text-align:center;color:var(--gray);font-size:.85rem;}
+    /* FORM */
+    .add-form{background:white;border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm);}
+    .add-form h3{font-size:.9rem;font-weight:700;margin-bottom:1rem;}
+    .form-row{display:grid;grid-template-columns:1fr 200px;gap:.75rem;margin-bottom:.75rem;}
+    .toggle-small{width:40px;height:22px;background:var(--gray-light);border-radius:11px;position:relative;cursor:pointer;border:none;transition:background .2s;flex-shrink:0;}
+    .toggle-small.on{background:var(--green);}
+    .toggle-small::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle-small.on::after{transform:translateX(18px);}
+    .toast{position:fixed;bottom:2rem;right:2rem;background:#1E8A4C;color:white;padding:.85rem 1.5rem;border-radius:var(--radius);font-weight:600;font-size:.9rem;z-index:1000;transform:translateY(100px);opacity:0;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+    .toast.show{transform:translateY(0);opacity:1;}
+    .nav-mobile-drawer{background:var(--dark);}
+    .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+    @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}.form-row{grid-template-columns:1fr;}.ann-row{grid-template-columns:1fr auto auto;}}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Admin</a>
+      <a href="../index.html" class="nav-link">← View Site</a>
+    </div>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()"><div class="tt-track"><div class="tt-knob"></div></div></button>
+    <div class="nav-user" id="nav-user" style="margin-left:auto">
+      <div class="nav-avatar" id="nav-avatar">A</div>
+      <div class="nav-user-name" id="nav-name">Admin</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">Admin</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="../profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <a href="../index.html" class="nav-dropdown-item"><span class="item-icon">🌐</span> View Site</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">📊 Overview</a>
+    <a href="courses.html" class="nav-link">📚 Courses</a>
+    <a href="payments.html" class="nav-link">💳 Payments</a>
+    <a href="users.html" class="nav-link">👥 Users</a>
+    <a href="ticker.html" class="nav-link active">📢 News Ticker</a>
+    <a href="stats.html" class="nav-link">📈 Stats</a>
+    <div class="nav-actions" style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);flex-direction:column;gap:.5rem;width:100%">
+      <button class="btn btn-danger" id="btn-logout-mobile" style="width:100%">🚪 Log Out</button>
+    </div>
+  </div>
+
+  <div class="admin-wrap">
+    <aside class="admin-sidebar">
+      <div class="sidebar-section">Main</div>
+      <a href="index.html" class="admin-nav-item"><span class="ni">📊</span> Overview</a>
+      <div class="sidebar-section">Manage</div>
+      <a href="courses.html" class="admin-nav-item"><span class="ni">📚</span> Courses</a>
+      <a href="payments.html" class="admin-nav-item"><span class="ni">💳</span> Payments</a>
+      <a href="users.html" class="admin-nav-item"><span class="ni">👥</span> Users</a>
+      <a href="stats.html" class="admin-nav-item"><span class="ni">📈</span> Stats</a>
+      <div class="sidebar-section">Content</div>
+      <a href="ticker.html" class="admin-nav-item active"><span class="ni">📢</span> News Ticker</a>
+      <div class="sidebar-section">Site</div>
+      <a href="../index.html" class="admin-nav-item"><span class="ni">🌐</span> View Site</a>
+      <a href="../courses.html" class="admin-nav-item"><span class="ni">🔍</span> View Courses</a>
+    </aside>
+
+    <main class="admin-main">
+      <div class="page-title">📢 News Ticker Manager</div>
+
+      <!-- LIVE PREVIEW -->
+      <div class="ticker-preview" id="ticker-preview-wrap">
+        <div class="ticker-preview-bar" id="ticker-preview-bg" style="background:#1A1A1A;">
+          <div class="ticker-preview-bar::before" style="background:linear-gradient(to right,#1A1A1A,transparent)"></div>
+          <div class="ticker-track" id="ticker-preview-track"></div>
+        </div>
+      </div>
+
+      <!-- BACKGROUND COLOR SETTINGS -->
+      <div class="settings-panel">
+        <h3>🎨 Ticker Background Color</h3>
+        <div class="color-row">
+          <div class="color-swatch selected" style="background:#1A1A1A" data-color="#1A1A1A" title="Dark (default)" onclick="setTickerColor('#1A1A1A',this)"></div>
+          <div class="color-swatch" style="background:#D72B2B" data-color="#D72B2B" title="Red" onclick="setTickerColor('#D72B2B',this)"></div>
+          <div class="color-swatch" style="background:#1A5FAB" data-color="#1A5FAB" title="Blue" onclick="setTickerColor('#1A5FAB',this)"></div>
+          <div class="color-swatch" style="background:#1E8A4C" data-color="#1E8A4C" title="Green" onclick="setTickerColor('#1E8A4C',this)"></div>
+          <div class="color-swatch" style="background:#C96A00" data-color="#C96A00" title="Orange" onclick="setTickerColor('#C96A00',this)"></div>
+          <div class="color-swatch" style="background:#4A154B" data-color="#4A154B" title="Purple" onclick="setTickerColor('#4A154B',this)"></div>
+          <div class="color-custom">
+            <label>Custom:</label>
+            <input type="color" id="color-custom-pick" value="#1A1A1A" style="width:40px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:2px;" onchange="setTickerColor(this.value,null)"/>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveTickerColor()">Save Color</button>
+        </div>
+      </div>
+
+      <!-- ADD ANNOUNCEMENT FORM -->
+      <div class="add-form">
+        <h3>➕ Add Announcement</h3>
+        <div class="alert" id="form-alert" style="display:none;margin-bottom:1rem"></div>
+        <div class="form-row">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Announcement Text *</label>
+            <input type="text" id="ann-text" class="form-control" placeholder="e.g. 🎓 New Course: MUET Writing Masterclass — Enroll Now"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Link URL</label>
+            <input type="text" id="ann-url" class="form-control" placeholder="courses.html"/>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;cursor:pointer">
+            <button class="toggle-small on" id="ann-active-toggle" onclick="this.classList.toggle('on')"></button>
+            Active (visible on site)
+          </label>
+          <button class="btn btn-primary" onclick="addAnnouncement()">Add to Ticker</button>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENTS LIST -->
+      <div class="ann-panel">
+        <div class="ann-header">
+          <h3>📋 Current Announcements</h3>
+          <span style="font-size:.78rem;color:var(--gray)" id="ann-count">Loading...</span>
+        </div>
+        <div id="ann-list"><div class="ann-empty">Loading...</div></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,collection,getDocs,doc,getDoc,addDoc,updateDoc,deleteDoc,setDoc,serverTimestamp,query,orderBy}
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
+    const auth=getAuth(app), db=getFirestore(app);
+    let allAnn=[], currentColor="#1A1A1A";
+
+    // ADMIN GUARD
+    onAuthStateChanged(auth,async(user)=>{
+      if(!user){location.href="../login.html";return;}
+      const ud=await getDoc(doc(db,"users",user.uid));
+      if(!ud.exists()||ud.data().role!=="admin"){location.href="../index.html";return;}
+      const n=user.displayName||"Admin";
+      document.getElementById("nav-avatar").textContent=n.charAt(0).toUpperCase();
+      document.getElementById("nav-name").textContent=n;
+      document.getElementById("dd-name").textContent=n;
+      document.getElementById("dd-email").textContent=user.email||"";
+      window.cacheAuthUser?.(user,true);
+      window.setAdminNav?.(true);
+      await loadAll();
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="../login.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>document.getElementById("btn-logout").click());
+
+    async function loadAll(){
+      // Load ticker settings (color)
+      try{
+        const sd=await getDoc(doc(db,"settings","ticker"));
+        if(sd.exists()&&sd.data().bgColor){
+          currentColor=sd.data().bgColor;
+          applyColor(currentColor);
+          document.getElementById("color-custom-pick").value=currentColor;
+          document.querySelectorAll(".color-swatch").forEach(s=>{
+            s.classList.toggle("selected",s.dataset.color===currentColor);
+          });
+        }
+      }catch(e){}
+
+      // Load announcements
+      await loadAnnouncements();
+    }
+
+    async function loadAnnouncements(){
+      try{
+        const snap=await getDocs(collection(db,"announcements"));
+        allAnn=[];snap.forEach(d=>allAnn.push({id:d.id,...d.data()}));
+        allAnn.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+        renderList();
+        renderPreview();
+      }catch(e){document.getElementById("ann-list").innerHTML='<div class="ann-empty">Error loading: '+e.message+'</div>';}
+    }
+
+    function renderList(){
+      const list=document.getElementById("ann-list");
+      const count=document.getElementById("ann-count");
+      const active=allAnn.filter(a=>a.active).length;
+      count.textContent=`${allAnn.length} total · ${active} active`;
+      if(!allAnn.length){list.innerHTML='<div class="ann-empty">No announcements yet. Add one above.</div>';return;}
+      list.innerHTML=allAnn.map(a=>`
+        <div class="ann-row">
+          <div>
+            <div class="ann-text">${a.text||''}</div>
+            <div class="ann-url">${a.url||'No link'}</div>
+          </div>
+          <button class="toggle-small ${a.active?'on':''}" title="${a.active?'Active':'Inactive'}" onclick="toggleActive('${a.id}',${!a.active})"></button>
+          <button class="btn btn-secondary btn-sm" onclick="editAnn('${a.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAnn('${a.id}')">Delete</button>
+        </div>`).join("");
+    }
+
+    function renderPreview(){
+      const active=allAnn.filter(a=>a.active);
+      const items=active.length?active:[{text:"📢 Add announcements above to see them here",url:""}];
+      const all=[...items,...items];
+      const track=document.getElementById("ticker-preview-track");
+      track.innerHTML=all.map(i=>`<a class="ticker-item" href="${i.url||'#'}" style="color:rgba(255,255,255,.75)" onclick="return false"><span class="ticker-dot"></span>${i.text}</a>`).join("");
+      track.style.animationDuration=(items.length*5)+"s";
+    }
+
+    function applyColor(color){
+      currentColor=color;
+      document.getElementById("ticker-preview-bg").style.background=color;
+    }
+
+    window.setTickerColor=function(color,el){
+      applyColor(color);
+      document.querySelectorAll(".color-swatch").forEach(s=>s.classList.remove("selected"));
+      if(el)el.classList.add("selected");
+      document.getElementById("color-custom-pick").value=color;
+    };
+
+    window.saveTickerColor=async function(){
+      try{
+        await setDoc(doc(db,"settings","ticker"),{bgColor:currentColor},{merge:true});
+        showToast("Ticker color saved!");
+      }catch(e){showToast("Error: "+e.message,true);}
+    };
+
+    window.addAnnouncement=async function(){
+      const text=document.getElementById("ann-text").value.trim();
+      const url=document.getElementById("ann-url").value.trim()||"courses.html";
+      const active=document.getElementById("ann-active-toggle").classList.contains("on");
+      const alert=document.getElementById("form-alert");
+      alert.style.display="none";
+      if(!text){alert.className="alert alert-error";alert.textContent="Please enter announcement text.";alert.style.display="flex";return;}
+      try{
+        await addDoc(collection(db,"announcements"),{text,url,active,createdAt:serverTimestamp()});
+        document.getElementById("ann-text").value="";
+        document.getElementById("ann-url").value="";
+        await loadAnnouncements();
+        showToast("Announcement added!");
+      }catch(e){alert.className="alert alert-error";alert.textContent="Error: "+e.message;alert.style.display="flex";}
+    };
+
+    window.toggleActive=async function(id,val){
+      try{await updateDoc(doc(db,"announcements",id),{active:val});await loadAnnouncements();}
+      catch(e){showToast("Error: "+e.message,true);}
+    };
+
+    window.editAnn=function(id){
+      const a=allAnn.find(x=>x.id===id);if(!a)return;
+      const newText=prompt("Edit announcement text:",a.text);
+      if(newText===null)return;
+      const newUrl=prompt("Edit URL:",a.url||"courses.html");
+      if(newUrl===null)return;
+      updateDoc(doc(db,"announcements",id),{text:newText.trim(),url:newUrl.trim()})
+        .then(()=>{loadAnnouncements();showToast("Updated!");})
+        .catch(e=>showToast("Error: "+e.message,true));
+    };
+
+    window.deleteAnn=async function(id){
+      const a=allAnn.find(x=>x.id===id);
+      if(!confirm(`Delete: "${a?.text||'this announcement'}"?`))return;
+      try{await deleteDoc(doc(db,"announcements",id));await loadAnnouncements();showToast("Deleted!");}
+      catch(e){showToast("Error: "+e.message,true);}
+    };
+
+    function showToast(msg,err=false){
+      const t=document.getElementById("toast");
+      t.textContent=(err?"❌ ":"✅ ")+msg;
+      t.style.background=err?"#8B0000":"#1E8A4C";
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"),3000);
+    }
+  </script>
+  <script src="../js/nav.js"></script>
+</body>
+</html>
