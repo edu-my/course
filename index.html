@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>edu-my.web — Craft Your Skills, Shape Your Future</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -10,47 +11,17 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    /* ── DARK MODE TOKENS ── */
-    :root{--bg:#fff;--bg-alt:#FAF8F7;--bg-card:#fff;--border:#EEEBEB;--txt:#1A1A1A;--txt-m:#6B6B6B;--ticker-bg:#1A1A1A;--ticker-txt:rgba(255,255,255,.75);--prev-bg:#111;--prev-side:#1A1A1A;--prev-panel:#1E1E1E;--prev-border:rgba(255,255,255,.08);--hiw-bg:#fff;}
-    [data-theme="dark"]{--bg:#111;--bg-alt:#1A1A1A;--bg-card:#1E1E1E;--border:rgba(255,255,255,.08);--txt:#F0F0F0;--txt-m:#9B9B9B;--ticker-bg:#0A0A0A;--ticker-txt:rgba(255,255,255,.65);--prev-bg:#0A0A0A;--prev-side:#111;--prev-panel:#141414;--prev-border:rgba(255,255,255,.06);--hiw-bg:#111;}
-    body{background:var(--bg);color:var(--txt);}
-
-    /* ── DARK MODE: NAV ── */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-dropdown-item.danger{color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] #nav-mobile-user{border-top-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .nav-mobile-drawer .nav-actions{border-top-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .help-text{background:#1E1E1E;border-color:rgba(255,255,255,.1);color:white;}
-
-    /* ── HERO ── */
     .hero{background:var(--red);padding:4rem var(--page-padding);display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:3rem;min-height:520px;position:relative;overflow:hidden;}
     .hero::before{content:'';position:absolute;right:-100px;top:-100px;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;}
     .hero-content{position:relative;z-index:2;}
     .hero .section-eyebrow{background:rgba(255,255,255,.15);color:white;}
-    .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,5rem);color:white;letter-spacing:2px;line-height:1;margin:.75rem 0 1rem;}
+    .hero-title{font-family:Bebas Neue,sans-serif;font-size:clamp(3rem,5vw,5rem);color:var(--white);letter-spacing:2px;line-height:1;margin:.75rem 0 1rem;}
     .hero-subtitle{color:rgba(255,255,255,.82);font-size:1.05rem;max-width:420px;margin-bottom:1.5rem;}
     .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem;}
     .hero-visual{position:relative;z-index:2;display:flex;justify-content:center;}
-    .hero-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:1.75rem;width:360px;min-width:260px;box-shadow:var(--shadow-lg);}
-    .hero-card-label{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt-m);margin-bottom:.75rem;}
-    .hero-card-course{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.85rem;}
-    .hero-card-icon{font-size:1.75rem;flex-shrink:0;}
-    .hero-card-title{font-weight:700;font-size:.92rem;color:var(--txt);line-height:1.3;}
-    .hero-card-meta{font-size:.72rem;color:var(--txt-m);margin-top:.15rem;}
-    .hero-card-stats{display:flex;gap:1.25rem;padding-top:.85rem;border-top:1px solid var(--border);}
-    .hcs-item{text-align:center;}
-    .hcs-num{font-size:1rem;font-weight:800;color:var(--red);}
-    .hcs-label{font-size:.62rem;color:var(--txt-m);text-transform:uppercase;letter-spacing:.5px;margin-top:.1rem;}
+    .hero-card{background:var(--white);border-radius:var(--radius-lg);padding:1.75rem;width:360px;min-width:360px;box-shadow:var(--shadow-lg);}
+
+    /* trust row */
     .hero-trust{display:flex;align-items:center;gap:.85rem;}
     .trust-avatars{display:flex;}
     .trust-avatar{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800;color:white;margin-left:-8px;flex-shrink:0;}
@@ -58,71 +29,23 @@
     .trust-text{font-size:.8rem;color:rgba(255,255,255,.7);}
     .trust-text strong{color:white;}
 
-    /* ── TICKER ── */
-    .ticker-wrap{background:var(--ticker-bg);padding:.65rem 0;overflow:hidden;position:relative;}
-    .ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;}
-    .ticker-wrap::before{left:0;background:linear-gradient(to right,var(--ticker-bg),transparent);}
-    .ticker-wrap::after{right:0;background:linear-gradient(to left,var(--ticker-bg),transparent);}
-    .ticker-track{display:flex;animation:ticker-scroll 36s linear infinite;width:max-content;}
-    .ticker-track:hover{animation-play-state:paused;}
-    .ticker-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2.5rem;font-size:.78rem;font-weight:600;letter-spacing:.5px;color:var(--ticker-txt);white-space:nowrap;text-decoration:none;}
-    .ticker-item:hover{color:var(--red);}
-    .ticker-dot{width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0;}
-    @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+    /* hero card latest course */
+    .hero-card-label{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-bottom:.75rem;}
+    .hero-card-course{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.85rem;}
+    .hero-card-icon{font-size:1.75rem;flex-shrink:0;}
+    .hero-card-title{font-weight:700;font-size:.92rem;color:var(--dark);line-height:1.3;}
+    .hero-card-meta{font-size:.72rem;color:var(--gray);margin-top:.15rem;}
+    .hero-card-stats{display:flex;gap:1.25rem;padding-top:.85rem;border-top:1px solid var(--gray-light);}
+    .hcs-item{text-align:center;}
+    .hcs-num{font-size:1rem;font-weight:800;color:var(--red);}
+    .hcs-label{font-size:.62rem;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-top:.1rem;}
 
-    /* ── STATS ── */
     .stats-strip{background:var(--dark);padding:1.5rem var(--page-padding);display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:1rem;}
     .stat-item{text-align:center;}
-    .stat-item strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);letter-spacing:1px;}
+    .stat-item strong{display:block;font-family:Bebas Neue,sans-serif;font-size:2rem;color:var(--red);letter-spacing:1px;}
     .stat-item span{font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;}
-
-    /* ── INTERACTIVE PREVIEW ── */
-    .preview-section{background:var(--prev-bg);}
-    .preview-inner{display:grid;grid-template-columns:260px 1fr;min-height:420px;}
-    .preview-sidebar{background:var(--prev-side);border-right:1px solid var(--prev-border);padding:1.5rem 0;}
-    .preview-sidebar-title{font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 1.25rem 1rem;}
-    .preview-items-row{display:flex;flex-direction:column;}
-    .preview-item{display:flex;align-items:flex-start;gap:.75rem;padding:.9rem 1.25rem;cursor:pointer;border-left:3px solid transparent;transition:background .15s;}
-    .preview-item:hover{background:rgba(255,255,255,.04);}
-    .preview-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);}
-    .preview-num{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,.2);flex-shrink:0;width:24px;}
-    .preview-item.active .preview-num{color:var(--red);}
-    .preview-item-title{font-size:.82rem;font-weight:700;color:rgba(255,255,255,.5);line-height:1.3;}
-    .preview-item.active .preview-item-title{color:white;}
-    .preview-item-sub{font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.15rem;}
-    .preview-panel{background:var(--prev-panel);padding:2rem 2.5rem;position:relative;display:flex;flex-direction:column;}
-    .preview-panel-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
-    .preview-breadcrumb{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);}
-    .preview-live{display:flex;align-items:center;gap:.4rem;font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);}
-    .preview-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
-    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-    .preview-quote{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.1rem,2.5vw,1.6rem);color:white;letter-spacing:1px;line-height:1.2;margin-bottom:1.5rem;}
-    .preview-prompt{position:absolute;top:2rem;right:2.5rem;background:var(--red);color:white;font-size:.7rem;font-weight:700;padding:.45rem .9rem;border-radius:4px;max-width:220px;text-align:right;line-height:1.4;}
-    .preview-box{background:rgba(255,255,255,.06);border-radius:8px;padding:1.25rem;margin-bottom:1rem;font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.7;}
-    .preview-box strong{color:white;}
-    .preview-tip{background:rgba(255,255,255,.04);border-radius:8px;padding:.9rem 1.25rem;font-size:.78rem;font-style:italic;color:rgba(255,255,255,.5);}
-    .preview-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem;}
-    .preview-tag{padding:.25rem .75rem;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);}
-    .preview-cta{margin-top:auto;padding-top:1.5rem;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;}
-
-    /* ── PREVIEW MODAL ── */
-    .pv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
-    .pv-overlay.open{display:flex;}
-    .pv-modal{background:#1A1A1A;border-radius:12px;width:100%;max-width:680px;box-shadow:0 24px 80px rgba(0,0,0,.6);overflow:hidden;}
-    .pv-head{background:#111;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);}
-    .pv-head-title{font-size:.82rem;font-weight:700;color:white;}
-    .pv-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.5rem;cursor:pointer;line-height:1;padding:0;}
-    .pv-close:hover{color:white;}
-    .pv-body{padding:1.75rem;}
-    .pv-label{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:.4rem;}
-    .pv-quote{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:white;letter-spacing:1px;margin-bottom:1rem;line-height:1.2;}
-    .pv-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.7;}
-    .pv-foot{padding:1rem 1.5rem;background:#111;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:.75rem;flex-wrap:wrap;}
-
-    /* ── BROWSE ── */
-    .browse-section{background:var(--bg-alt);padding:4rem var(--page-padding);}
     .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .course-card{background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;}
+    .course-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;}
     .course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-red);}
     .course-thumb{height:160px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3.5rem;}
     .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
@@ -130,456 +53,264 @@
     .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
     .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
     .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    [data-theme="dark"] .thumb-ai{background:linear-gradient(135deg,#3D1515,#5C1E1E);}
-    [data-theme="dark"] .thumb-soft{background:linear-gradient(135deg,#0F1E3D,#152A5C);}
-    [data-theme="dark"] .thumb-personal{background:linear-gradient(135deg,#0F2D1A,#154022);}
-    [data-theme="dark"] .thumb-education{background:linear-gradient(135deg,#2D2200,#3D2E00);}
-    [data-theme="dark"] .thumb-default{background:linear-gradient(135deg,#1A1530,#231C45);}
     .course-badge{position:absolute;top:12px;left:12px;}
     .course-body{padding:1.25rem;}
     .course-cat{font-size:.72rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;}
-    .course-title{font-size:1rem;font-weight:700;color:var(--txt);margin-bottom:.4rem;line-height:1.4;}
-    .course-desc{font-size:.82rem;color:var(--txt-m);line-height:1.5;margin-bottom:1rem;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.85rem;}
-    .course-price{font-weight:700;font-size:1.1rem;color:var(--txt);}
+    .course-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.4rem;line-height:1.4;}
+    .course-desc{font-size:.82rem;color:var(--gray);line-height:1.5;margin-bottom:1rem;}
+    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gray-light);padding-top:.85rem;}
+    .course-price{font-weight:700;font-size:1.1rem;color:var(--dark);}
     .course-price.free{color:var(--green);}
-
-    /* ── HIW ── */
-    .hiw-section{background:var(--hiw-bg);}
+    .hiw-section{background:var(--white);}
     .hiw-step{text-align:center;padding:1rem;}
-    .hiw-num{width:56px;height:56px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;margin:0 auto 1rem;}
-    [data-theme="dark"] .hiw-step h4{color:var(--txt);}
-    [data-theme="dark"] .hiw-step p{color:var(--txt-m);}
-    [data-theme="dark"] .browse-section h2,[data-theme="dark"] .browse-section p{color:var(--txt);}
+    .hiw-num{width:56px;height:56px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:1.5rem;margin:0 auto 1rem;}
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:900px){
-      .hero{grid-template-columns:1fr;text-align:center;}
-      .hero-visual{display:none;}
-      .hero-btns{justify-content:center;}
-      .hero-subtitle{margin:0 auto 1.5rem;}
-      .hero-trust{justify-content:center;}
-      .preview-inner{grid-template-columns:1fr;}
-      .preview-sidebar{border-right:none;border-bottom:1px solid var(--prev-border);padding:.5rem 0;}
-      .preview-sidebar-title{display:none;}
-      .preview-items-row{flex-direction:row;overflow-x:auto;padding:0 .75rem;scrollbar-width:none;}
-      .preview-items-row::-webkit-scrollbar{display:none;}
-      .preview-item{flex-direction:column;gap:.1rem;padding:.6rem .85rem;border-left:none;border-bottom:3px solid transparent;white-space:nowrap;flex-shrink:0;}
-      .preview-item.active{border-left-color:transparent;border-bottom-color:var(--red);}
-      .preview-item-sub{display:none;}
-      .preview-prompt{position:static;margin-bottom:1rem;max-width:100%;text-align:left;}
-      .preview-panel{padding:1.25rem;}
-      .course-grid{grid-template-columns:1fr 1fr;}
-      .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
-    }
-    @media(max-width:580px){
-      .course-grid{grid-template-columns:1fr;}
-      .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
-    }
+    /* pulsing whatsapp */
+    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
+    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
+    .help-text.visible{max-width:240px;opacity:1;}
+    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
+    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
+    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
+    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
+    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
+    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
+
+    @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center;}.hero-visual{display:none;}.hero-btns{justify-content:center;}.hero-subtitle{margin:0 auto 1.5rem;}.hero-trust{justify-content:center;}}
+    @media(max-width:768px){.course-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
-  <div class="nav-links">
-    <a href="index.html" class="nav-link active">Home</a>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="courses.html" class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
+    
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">Home</a>
     <a href="courses.html" class="nav-link">Courses</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-  </div>
-  <!-- Dark mode toggle with sun/moon icons -->
-  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="tt-icon tt-sun">☀️</span>
-    <span class="tt-icon tt-moon">🌙</span>
-    <div class="tt-knob"></div>
-  </button>
-  <div class="nav-actions" id="nav-guest">
-    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-  </div>
-  <div class="nav-user hidden" id="nav-user">
-    <div class="nav-avatar" id="nav-avatar">U</div>
-    <div class="nav-user-name" id="nav-name">User</div>
-    <div class="nav-dropdown">
-      <div class="nav-dropdown-header">
-        <div class="nav-dropdown-name" id="dd-name">User</div>
-        <div class="nav-dropdown-email" id="dd-email"></div>
-      </div>
-      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
-      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
-      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
-      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
     </div>
   </div>
-  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-</nav>
 
-<!-- MOBILE DRAWER -->
-<div class="nav-mobile-drawer" id="nav-mobile-drawer">
-  <a href="index.html" class="nav-link active">Home</a>
-  <a href="courses.html" class="nav-link">Courses</a>
-  <a href="dashboard.html" class="nav-link">Dashboard</a>
-  <div class="nav-actions" id="nav-mobile-guest">
-    <a href="login.html" class="btn btn-secondary">Log In</a>
-    <a href="register.html" class="btn btn-primary">Get Started</a>
-  </div>
-  <div class="hidden" id="nav-mobile-user">
-    <a href="dashboard.html" class="nav-link">My Dashboard</a>
-    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="section-eyebrow">🎓 CPD Accredited Courses</div>
-    <h1 class="hero-title">Craft Your Skills,<br/>Shape Your Future.</h1>
-    <p class="hero-subtitle">Professional education in soft skills, personal development, and AI — built for Malaysian educators.</p>
-    <div class="hero-btns">
-      <a href="courses.html" class="btn btn-primary btn-lg">Browse Courses</a>
-      <a href="courses.html?filter=free" class="btn btn-ghost btn-lg">Free Courses →</a>
-    </div>
-    <div class="hero-trust">
-      <div class="trust-avatars">
-        <div class="trust-avatar" style="background:#A81F1F">K</div>
-        <div class="trust-avatar" style="background:#1E8A4C">A</div>
-        <div class="trust-avatar" style="background:#1A5FAB">R</div>
-        <div class="trust-avatar" style="background:#B36200">N</div>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="section-eyebrow">&#127891; CPD Accredited Courses</div>
+      <h1 class="hero-title">Craft Your Skills,<br/>Shape Your Future.</h1>
+      <p class="hero-subtitle">Professional education in soft skills, personal development, and AI — built for Malaysian educators.</p>
+      <div class="hero-btns">
+        <a href="courses.html" class="btn btn-primary btn-lg">Browse Courses</a>
+        <a href="courses.html?filter=free" class="btn btn-ghost btn-lg">Free Courses &#8594;</a>
       </div>
-      <div class="trust-text">Trusted by <strong>100+ Malaysian educators</strong></div>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="hero-card">
-      <div class="hero-card-label">Available Now</div>
-      <div class="hero-card-course" id="hero-course-row">
-        <div class="hero-card-icon" id="hero-icon">📚</div>
-        <div>
-          <div class="hero-card-title" id="hero-course-title">Loading...</div>
-          <div class="hero-card-meta" id="hero-course-meta">&nbsp;</div>
+      <div class="hero-trust">
+        <div class="trust-avatars">
+          <div class="trust-avatar" style="background:#A81F1F">K</div>
+          <div class="trust-avatar" style="background:#1E8A4C">A</div>
+          <div class="trust-avatar" style="background:#1A5FAB">R</div>
+          <div class="trust-avatar" style="background:#B36200">N</div>
         </div>
-      </div>
-      <div class="progress-wrap"><div class="progress-fill" id="hero-prog" style="width:0%"></div></div>
-      <div style="font-size:.72rem;color:var(--txt-m);margin-top:.35rem" id="hero-prog-label">&nbsp;</div>
-      <div class="hero-card-stats">
-        <div class="hcs-item"><div class="hcs-num" id="hcs-enrolled">—</div><div class="hcs-label">Enrolled</div></div>
-        <div class="hcs-item"><div class="hcs-num">4.9★</div><div class="hcs-label">Rating</div></div>
-        <div class="hcs-item"><div class="hcs-num" id="hcs-price">—</div><div class="hcs-label">Price</div></div>
+        <div class="trust-text">Trusted by <strong>100+ Malaysian educators</strong></div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker-wrap"><div class="ticker-track" id="ticker-track"></div></div>
-
-<!-- STATS -->
-<div class="stats-strip">
-  <div class="stat-item"><strong>100+</strong><span>Students Enrolled</span></div>
-  <div class="stat-item"><strong id="stat-courses">—</strong><span>Courses Available</span></div>
-  <div class="stat-item"><strong>4.9★</strong><span>Average Rating</span></div>
-  <div class="stat-item"><strong>CPD</strong><span>Accredited Content</span></div>
-</div>
-
-<!-- INTERACTIVE PREVIEW -->
-<section class="preview-section">
-  <div class="preview-inner">
-    <div class="preview-sidebar">
-      <div class="preview-sidebar-title">Course Previews</div>
-      <div class="preview-items-row" id="preview-list"></div>
-    </div>
-    <div class="preview-panel" id="preview-panel">
-      <div style="margin:auto;text-align:center;color:rgba(255,255,255,.3);font-size:.85rem;">Loading previews...</div>
-    </div>
-  </div>
-</section>
-
-<!-- PREVIEW MODAL -->
-<div class="pv-overlay" id="pv-overlay">
-  <div class="pv-modal">
-    <div class="pv-head">
-      <div class="pv-head-title" id="pv-title">Preview</div>
-      <button class="pv-close" onclick="closePV()">✕</button>
-    </div>
-    <div class="pv-body">
-      <div class="pv-label" id="pv-label"></div>
-      <div class="pv-quote" id="pv-quote"></div>
-      <div class="pv-desc" id="pv-desc"></div>
-    </div>
-    <div class="pv-foot">
-      <a id="pv-link" href="courses.html" class="btn btn-primary">View Full Course</a>
-      <button class="btn btn-secondary" onclick="closePV()">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- BROWSE -->
-<section class="browse-section">
-  <div class="container">
-    <div class="mb-4">
-      <div class="section-eyebrow">📚 Our Courses</div>
-      <h2 class="section-title" style="color:var(--txt)">BROWSE &amp; CHOOSE</h2>
-      <p class="section-subtitle" style="color:var(--txt-m)">Free and paid courses built for Malaysian professionals.</p>
-    </div>
-    <div class="course-grid" id="featured-courses">
-      <div class="loading-text" style="grid-column:1/-1"><div class="spinner spinner-sm"></div>&nbsp;Loading courses...</div>
-    </div>
-    <div class="text-center mt-4"><a href="courses.html" class="btn btn-secondary btn-lg">View All Courses</a></div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section-pad hiw-section">
-  <div class="container">
-    <div class="text-center mb-4">
-      <div class="section-eyebrow">⚙️ How it works</div>
-      <h2 class="section-title" style="color:var(--txt)">SIMPLE. FAST. YOURS.</h2>
-    </div>
-    <div class="hiw-steps-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">
-      <div class="hiw-step"><div class="hiw-num">1</div><h4>Browse &amp; Choose</h4><p>Explore free and paid courses.</p></div>
-      <div class="hiw-step"><div class="hiw-num">2</div><h4>Register &amp; Enroll</h4><p>Create a free account. No credit card.</p></div>
-      <div class="hiw-step"><div class="hiw-num">3</div><h4>Pay via DuitNow</h4><p>Scan QR, send receipt via WhatsApp.</p></div>
-      <div class="hiw-step"><div class="hiw-num">4</div><h4>Learn &amp; Certify</h4><p>Complete modules. CPD certificate, downloadable.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
-      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
-    </div>
-    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
-    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
-    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
-  </div>
-  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
-</footer>
-
-<!-- WHATSAPP -->
-<div class="help-float">
-  <span class="help-text" id="help-text">Let me know how I can help</span>
-  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
-    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </a>
-</div>
-
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-import {getFirestore,collection,getDocs,query,where,orderBy,limit,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-
-const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
-const auth=getAuth(app), db=getFirestore(app);
-const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
-
-// ── DARK MODE ──
-const html=document.documentElement;
-html.setAttribute('data-theme',localStorage.getItem('edumytheme')||'light');
-document.getElementById('theme-toggle').addEventListener('click',()=>{
-  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);
-  localStorage.setItem('edumytheme',next);
-});
-
-// ── AUTH ──
-onAuthStateChanged(auth,async(user)=>{
-  const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
-  const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
-  if(user){
-    g?.classList.add("hidden");u?.classList.remove("hidden");
-    mg?.classList.add("hidden");mu?.classList.remove("hidden");
-    const n=user.displayName||"User";
-    const el=id=>document.getElementById(id);
-    if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
-    if(el("nav-name"))el("nav-name").textContent=n;
-    if(el("dd-name"))el("dd-name").textContent=n;
-    if(el("dd-email"))el("dd-email").textContent=user.email||"";
-    try{
-      const ud=await getDoc(doc(db,"users",user.uid));
-      const isAdmin=ud.exists()&&ud.data().role==="admin";
-      window.cacheAuthUser?.(user,isAdmin);
-      if(isAdmin)window.setAdminNav?.(true);
-    }catch(e){window.cacheAuthUser?.(user,false);}
-  }else{
-    g?.classList.remove("hidden");u?.classList.add("hidden");
-    mg?.classList.remove("hidden");mu?.classList.add("hidden");
-    window.clearAuthCache?.();
-  }
-});
-document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-
-// ── TICKER — pull from Firestore announcements collection ──
-const TICKER_FALLBACK=[
-  {text:"🎓 New Course: MUET Writing Masterclass — Enroll Now",url:"courses.html"},
-  {text:"📢 CPD-accredited certificates now available for all completed courses",url:"courses.html"},
-  {text:"🆓 AI for Educators is FREE — Start learning today",url:"courses.html"},
-  {text:"📱 Access all courses on any device, anytime",url:"courses.html"},
-  {text:"🇲🇾 Built for Malaysian educators — content in Malaysian context",url:"courses.html"},
-];
-async function loadTicker(){
-  let items=TICKER_FALLBACK;
-  try{
-    const snap=await getDocs(query(collection(db,"announcements"),where("active","==",true)));
-    if(!snap.empty){items=[];snap.forEach(d=>items.push(d.data()));}
-  }catch(e){}
-  const all=[...items,...items];
-  const track=document.getElementById("ticker-track");
-  track.innerHTML=all.map(i=>`<a class="ticker-item" href="${i.url||'courses.html'}"><span class="ticker-dot"></span>${i.text}</a>`).join("");
-  track.style.animationDuration=(items.length*6)+"s";
-}
-
-// ── INTERACTIVE PREVIEW — pulled from Firestore courses ──
-let PREVIEWS=[], activePreview=0;
-
-async function loadPreviews(courses){
-  // Use real published courses as previews — take up to 4
-  const published=courses.filter(c=>c.isPublished!==false).slice(0,4);
-  if(!published.length){
-    document.getElementById("preview-panel").innerHTML=`<div style="margin:auto;color:rgba(255,255,255,.3);font-size:.85rem;text-align:center">No courses published yet.</div>`;
-    return;
-  }
-  PREVIEWS=published.map((c,i)=>{
-    const nums=["01","02","03","04"];
-    const lessons=(c.modules||[]).flatMap(m=>m.lessons||[]);
-    const firstLesson=lessons[0];
-    const mods=(c.modules||[]).length;
-    const lessonCount=lessons.length;
-    return {
-      num: nums[i]||String(i+1).padStart(2,"0"),
-      title: c.title,
-      sub: c.category||"Course Preview",
-      module: (c.modules&&c.modules[0])?c.modules[0].title:"Module 1",
-      prompt: firstLesson?firstLesson.title:"Explore this course",
-      quote: `"${c.description?(c.description.substring(0,80)+(c.description.length>80?"...":"")):c.title}"`,
-      content: `<strong>Course:</strong> ${c.title}<br/><br/>`+
-               `<strong>Modules:</strong> ${mods} module${mods!==1?'s':''} · ${lessonCount} lesson${lessonCount!==1?'s':''}<br/><br/>`+
-               (c.modules||[]).slice(0,3).map(m=>`<strong>${m.title}</strong> — ${(m.lessons||[]).length} lesson${(m.lessons||[]).length!==1?'s':''}`).join('<br/>'),
-      tip: c.totalDuration?`Duration: ${c.totalDuration}. `:"" + (c.isFree?"This course is completely FREE.":"RM "+parseFloat(c.price||0).toFixed(2)+" — one-time payment."),
-      tags: [c.category||"Course", c.isFree?"FREE":"PAID", mods+" MODULES"],
-      url: `course.html?id=${c.id}`,
-      id: c.id,
-      emoji: c.thumbnailEmoji||"📚",
-    };
-  });
-  activePreview=0;
-  renderPreviewList();
-  renderPreviewPanel();
-}
-
-function renderPreviewList(){
-  const isMobile=window.innerWidth<=900;
-  document.getElementById("preview-list").innerHTML=PREVIEWS.map((p,i)=>`
-    <div class="preview-item ${i===activePreview?'active':''}" onclick="selectPreview(${i})">
-      <div class="preview-num">${p.num}</div>
-      <div>
-        <div class="preview-item-title">${p.title}</div>
-        ${!isMobile?`<div class="preview-item-sub">${p.sub}</div>`:''}
-      </div>
-    </div>`).join("");
-}
-
-function renderPreviewPanel(){
-  if(!PREVIEWS.length)return;
-  const p=PREVIEWS[activePreview];
-  document.getElementById("preview-panel").innerHTML=`
-    <div class="preview-panel-bar">
-      <div class="preview-breadcrumb">${p.module}</div>
-      <div class="preview-live"><div class="preview-live-dot"></div> Live Preview</div>
-    </div>
-    <div class="preview-prompt">${p.prompt}</div>
-    <div class="preview-quote">${p.quote}</div>
-    <div class="preview-box">${p.content}</div>
-    <div class="preview-tip">${p.tip}</div>
-    <div class="preview-tags">${p.tags.map(t=>`<span class="preview-tag">${t}</span>`).join("")}</div>
-    <div class="preview-cta">
-      <button class="btn btn-primary" onclick="openPV(${activePreview})">See Full Preview</button>
-      <a href="${p.url}" class="btn btn-ghost" style="border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)">View Course</a>
-    </div>`;
-}
-
-window.selectPreview=i=>{activePreview=i;renderPreviewList();renderPreviewPanel();};
-
-window.openPV=i=>{
-  const p=PREVIEWS[i];
-  document.getElementById("pv-label").textContent=p.module;
-  document.getElementById("pv-title").textContent=p.title;
-  document.getElementById("pv-quote").textContent=p.quote.replace(/"/g,'');
-  document.getElementById("pv-desc").innerHTML=p.content+"<br/><br/><em style='color:rgba(255,255,255,.4)'>"+p.tip+"</em>";
-  document.getElementById("pv-link").href=p.url;
-  document.getElementById("pv-overlay").classList.add("open");
-  document.body.style.overflow="hidden";
-};
-window.closePV=()=>{document.getElementById("pv-overlay").classList.remove("open");document.body.style.overflow="";};
-document.getElementById("pv-overlay").addEventListener("click",e=>{if(e.target===document.getElementById("pv-overlay"))closePV();});
-window.addEventListener("resize",()=>{if(PREVIEWS.length)renderPreviewList();});
-
-// ── COURSES + HERO CARD ──
-async function loadCourses(){
-  const grid=document.getElementById("featured-courses");
-  const stat=document.getElementById("stat-courses");
-  try{
-    const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
-    const courses=[];
-    snap.forEach(d=>courses.push({id:d.id,...d.data()}));
-    courses.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    if(stat)stat.textContent=courses.length;
-
-    // Hero card — most recent course
-    if(courses.length){
-      const c=courses[0];
-      const isFree=c.isFree===true;
-      const mods=(c.modules||[]).length;
-      const lessons=(c.modules||[]).reduce((s,m)=>s+(m.lessons||[]).length,0);
-      const el=id=>document.getElementById(id);
-      // Use innerHTML for emoji so it renders correctly
-      if(el("hero-icon"))el("hero-icon").textContent=c.thumbnailEmoji||"📚";
-      if(el("hero-course-title"))el("hero-course-title").textContent=c.title;
-      if(el("hero-course-meta"))el("hero-course-meta").textContent=
-        (mods?mods+" module"+(mods!==1?"s":""):"")+(lessons?" · "+lessons+" lesson"+(lessons!==1?"s":""):"")+(c.totalDuration?" · "+c.totalDuration:"");
-      if(el("hcs-enrolled"))el("hcs-enrolled").textContent=c.enrollmentCount||"0";
-      if(el("hcs-price"))el("hcs-price").textContent=isFree?"Free":"RM "+parseFloat(c.price||0).toFixed(2);
-      if(el("hero-prog"))el("hero-prog").style.width="100%";
-      if(el("hero-prog-label"))el("hero-prog-label").textContent=isFree?"Free to enroll":"Enroll now";
-    }
-
-    // Course grid
-    if(!courses.length){grid.innerHTML='<p style="color:var(--txt-m);grid-column:1/-1">No courses yet.</p>';return;}
-    grid.innerHTML=courses.slice(0,6).map(c=>{
-      const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-      const bg=bgMap[c.category]||"thumb-default";
-      const desc=(c.description||"").substring(0,90)+(c.description?.length>90?"...":"");
-      return `<div class="course-card" onclick="location.href='course.html?id=${c.id}'">
-        <div class="course-thumb ${bg}">${c.thumbnailEmoji||"📚"}<span class="course-badge badge ${isFree?"badge-free":"badge-paid"}">${price}</span></div>
-        <div class="course-body">
-          <div class="course-cat">${c.category||"General"}</div>
-          <div class="course-title">${c.title}</div>
-          <div class="course-desc">${desc}</div>
-          <div class="course-footer">
-            <div class="course-price ${isFree?"free":""}">${price}</div>
-            <button class="btn ${isFree?"btn-success":"btn-primary"} btn-sm" onclick="event.stopPropagation();location.href='course.html?id=${c.id}'">${isFree?"Start Free":"Enroll Now"}</button>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-label" style="font-size:.75rem;font-weight:800;letter-spacing:2px;color:#9B9B9B;text-transform:uppercase;margin-bottom:.85rem;">Available Now</div>
+        <div class="hero-card-course" id="hero-latest-course">
+          <div class="hero-card-icon" id="hero-icon">📚</div>
+          <div>
+            <div class="hero-card-title" id="hero-course-title">Loading...</div>
+            <div class="hero-card-meta" id="hero-course-meta">&nbsp;</div>
           </div>
         </div>
-      </div>`;
-    }).join("");
+        <div class="progress-wrap"><div class="progress-fill" id="hero-prog" style="width:0%"></div></div>
+        <div style="font-size:.72rem;color:var(--gray);margin-top:.35rem" id="hero-prog-label">&nbsp;</div>
+        <div class="hero-card-stats">
+          <div class="hcs-item"><div class="hcs-num" id="hcs-enrolled">&#8212;</div><div class="hcs-label">Enrolled</div></div>
+          <div class="hcs-item"><div class="hcs-num">4.9&#9733;</div><div class="hcs-label">Rating</div></div>
+          <div class="hcs-item"><div class="hcs-num" id="hcs-price">&#8212;</div><div class="hcs-label">Price</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    // Load previews from same courses
-    await loadPreviews(courses);
+  <div class="stats-strip">
+    <div class="stat-item"><strong>100+</strong><span>Students Enrolled</span></div>
+    <div class="stat-item"><strong id="stat-courses">&#8212;</strong><span>Courses Available</span></div>
+    <div class="stat-item"><strong>4.9&#9733;</strong><span>Average Rating</span></div>
+    <div class="stat-item"><strong>CPD</strong><span>Accredited Content</span></div>
+  </div>
 
-  }catch(e){
-    grid.innerHTML='<p style="color:var(--txt-m);grid-column:1/-1">Could not load courses.</p>';
-  }
-}
+  <section class="section-pad">
+    <div class="container">
+      <div class="mb-4">
+        <div class="section-eyebrow">📚 Latest Courses</div>
+        <h2 class="section-title">START LEARNING TODAY</h2>
+        <p class="section-subtitle">From free foundational content to in-depth premium programmes.</p>
+      </div>
+      <div class="course-grid" id="featured-courses">
+        <div class="loading-text"><div class="spinner spinner-sm"></div>&nbsp;Loading courses...</div>
+      </div>
+      <div class="text-center mt-4"><a href="courses.html" class="btn btn-secondary btn-lg">View All Courses</a></div>
+    </div>
+  </section>
 
-// Run everything
-loadTicker();
-loadCourses();
-setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
-</script>
-<script src="js/nav.js"></script>
+  <section class="section-pad hiw-section">
+    <div class="container">
+      <div class="text-center mb-4">
+        <div class="section-eyebrow">&#9881;&#65039; How it works</div>
+        <h2 class="section-title">SIMPLE. FAST. YOURS.</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">
+        <div class="hiw-step"><div class="hiw-num">1</div><h4>Browse &amp; Choose</h4><p>Explore free and paid courses.</p></div>
+        <div class="hiw-step"><div class="hiw-num">2</div><h4>Register &amp; Enroll</h4><p>Create a free account.</p></div>
+        <div class="hiw-step"><div class="hiw-num">3</div><h4>Pay via DuitNow</h4><p>Scan QR, send receipt via WhatsApp.</p></div>
+        <div class="hiw-step"><div class="hiw-num">4</div><h4>Learn &amp; Certify</h4><p>Complete and get certified.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;">
+      <span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">eD</span>edu-my.web</a>
+        <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+      </div>
+      <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+      <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
+      <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>&#169; 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners &#127474;&#127486;</span></div>
+  </footer>
+
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+
+    onAuthStateChanged(auth,async(user)=>{
+      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+      if(user){
+        g?.classList.add("hidden");u?.classList.remove("hidden");
+        mg?.classList.add("hidden");mu?.classList.remove("hidden");
+        const n=user.displayName||"User",el=id=>document.getElementById(id);
+        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+        if(el("nav-name"))el("nav-name").textContent=n;
+        if(el("dd-name"))el("dd-name").textContent=n;
+        if(el("dd-email"))el("dd-email").textContent=user.email||"";
+        try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";window.cacheAuthUser?.(user,ia);if(ia)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
+      }else{
+        g?.classList.remove("hidden");u?.classList.add("hidden");
+        mg?.classList.remove("hidden");mu?.classList.add("hidden");
+      }
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
+    async function loadFeatured(){
+      const grid=document.getElementById("featured-courses");
+      const stat=document.getElementById("stat-courses");
+      try{
+        const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
+        const courses=[];snap.forEach(d=>courses.push({id:d.id,...d.data()}));
+        if(stat)stat.textContent=courses.length;
+
+        // Populate hero card with latest course
+        if(courses.length){
+          const latest=courses[courses.length-1];
+          const isFree=latest.isFree===true;
+          const mods=(latest.modules||[]).length;
+          const lessons=(latest.modules||[]).reduce((s,m)=>s+(m.lessons||[]).length,0);
+          const el=id=>document.getElementById(id);
+          if(el("hero-course-title"))el("hero-course-title").textContent=latest.title;
+          if(el("hero-course-meta"))el("hero-course-meta").textContent=(mods?mods+" modules":"")+( lessons?" \u00b7 "+lessons+" lessons":"")+(latest.totalDuration?" \u00b7 "+latest.totalDuration:"");
+          if(el("hero-latest-course")){const ico=el("hero-latest-course").querySelector(".hero-card-icon");if(ico)ico.textContent=latest.thumbnailEmoji||'📚';}
+          if(el("hcs-enrolled"))el("hcs-enrolled").textContent=latest.enrollmentCount||"0";
+          if(el("hcs-price"))el("hcs-price").textContent=isFree?"Free":"RM "+parseFloat(latest.price||0).toFixed(2);
+          if(el("hero-prog"))el("hero-prog").style.width="100%";
+          if(el("hero-prog-label"))el("hero-prog-label").textContent=isFree?"Free to enroll":"Enroll now";
+        }
+
+        if(!courses.length){grid.innerHTML='<p style="color:var(--gray)">No courses yet.</p>';return;}
+        grid.innerHTML=courses.slice(0,3).map(c=>{
+          const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+          const bg=bgMap[c.category]||"thumb-default";
+          return '<div class="course-card" onclick="location.href=\'course.html?id='+c.id+'\'">'
+            +'<div class="course-thumb '+bg+'">'+(c.thumbnailEmoji||"📚")+'<span class="course-badge badge '+(isFree?"badge-free":"badge-paid")+'">'+price+'</span></div>'
+            +'<div class="course-body"><div class="course-cat">'+(c.category||"General")+'</div>'
+            +'<div class="course-title">'+c.title+'</div>'
+            +'<div class="course-footer"><div class="course-price '+(isFree?"free":"")+'">'+price+'</div>'
+            +'<button class="btn '+(isFree?"btn-success":"btn-primary")+' btn-sm" onclick="event.stopPropagation();location.href=\'course.html?id='+c.id+'\'">'+( isFree?"Start Free":"Enroll Now")+'</button>'
+            +'</div></div></div>';
+        }).join("");
+      }catch(e){grid.innerHTML='<p style="color:var(--gray)">Could not load courses.</p>';}
+    }
+    loadFeatured();
+  </script>
+  <script src="js/nav.js"></script>
+
+  <!-- PULSING WHATSAPP HELP -->
+
+  <!-- FLOATING WHATSAPP -->
+  <style>
+    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
+    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
+    .help-text.visible{max-width:240px;opacity:1;}
+    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
+    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
+    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
+    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
+    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
+    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
+  </style>
+  <div class="help-float">
+    <span class="help-text" id="help-text">Let me know how I can help</span>
+    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
+  <!-- END FLOATING WHATSAPP -->
 </body>
 </html>

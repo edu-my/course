@@ -2,46 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-
-    :root{--bg:#fff;--bg-alt:#FAF8F7;--bg-card:#fff;--border:#EEEBEB;--txt:#1A1A1A;--txt-m:#6B6B6B;}
-    [data-theme="dark"]{--bg:#111;--bg-alt:#1A1A1A;--bg-card:#1E1E1E;--border:rgba(255,255,255,.08);--txt:#F0F0F0;--txt-m:#9B9B9B;}
-    body{background:var(--bg);color:var(--txt);}
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .filter-bar{background:#1A1A1A;border-bottom-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .filter-pill{background:#1E1E1E;border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5);}
-    [data-theme="dark"] .filter-pill:hover{border-color:var(--red);color:var(--red);}
-    [data-theme="dark"] .filter-pill.active{background:var(--red);border-color:var(--red);color:white;}
-    [data-theme="dark"] .search-input{background:#1E1E1E;border-color:rgba(255,255,255,.1);color:white;}
-    [data-theme="dark"] .course-card{background:#1E1E1E;border-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .course-title{color:var(--txt);}
-    [data-theme="dark"] .course-footer{border-top-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .course-price{color:var(--txt);}
-    [data-theme="dark"] .thumb-ai{background:linear-gradient(135deg,#3D1515,#5C1E1E);}
-    [data-theme="dark"] .thumb-soft{background:linear-gradient(135deg,#0F1E3D,#152A5C);}
-    [data-theme="dark"] .thumb-personal{background:linear-gradient(135deg,#0F2D1A,#154022);}
-    [data-theme="dark"] .thumb-education{background:linear-gradient(135deg,#2D2200,#3D2E00);}
-    [data-theme="dark"] .thumb-default{background:linear-gradient(135deg,#1A1530,#231C45);}
-    [data-theme="dark"] .results-bar{color:var(--txt-m);}
-    [data-theme="dark"] .page-header{background:#0A0A0A;}
     .page-header{background:var(--dark);padding:3rem var(--page-padding);text-align:center;}
     .page-header h1{font-family:Bebas Neue,sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:2px;color:var(--white);margin-bottom:.5rem;}
     .page-header p{color:rgba(255,255,255,.5);font-size:.95rem;}
@@ -74,18 +43,27 @@
     .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
     @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
+
+    /* DARK MODE NAV */
+    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
+    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
+    [data-theme="dark"] .nav-hamburger span{background:white;}
+    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
+    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
+    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
+    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
+    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
+    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
 </head>
 <body>
   <nav class="navbar">
     <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
     <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link active">Courses</a><a href="dashboard.html" class="nav-link">Dashboard</a></div>
-    <!-- Dark mode toggle -->
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()">
-      <div class="tt-track">
-        <div class="tt-knob"></div>
-      </div>
-    </button>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
+    
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -161,7 +139,7 @@
         if(el("nav-name"))el("nav-name").textContent=n;
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";isAdmin=ia;window.cacheAuthUser?.(user,ia);if(ia)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
+        try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";isAdmin=ia;window.cacheAuthUser?.(user,ia);if(ia){window.setAdminNav?.(true);}}catch(e){window.cacheAuthUser?.(user,false);}
         try{
           const [es,ps]=await Promise.all([
             getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),

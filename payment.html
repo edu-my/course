@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Payment — iCraftCourse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
@@ -32,6 +32,8 @@
     .status-step strong{display:block;font-size:.9rem;color:var(--dark);margin-bottom:.15rem;}
     .status-step span{font-size:.8rem;color:var(--gray);}
     @media(max-width:768px){.payment-wrap{grid-template-columns:1fr;}}
+
+    /* DARK MODE NAV */
     [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
     [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
     [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
@@ -40,6 +42,7 @@
     [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
     [data-theme="dark"] .nav-dropdown-header{background:#161616;}
     [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
+    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
     [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
     [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
@@ -52,7 +55,8 @@
       <a href="courses.html" class="nav-link">Courses</a>
       <a href="dashboard.html" class="nav-link">Dashboard</a>
     </div>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()"><div class="tt-track"><div class="tt-knob"></div></div></button>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
+    
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
