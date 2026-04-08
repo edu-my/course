@@ -1,6 +1,2 @@
-// theme.js — apply dark/light theme BEFORE page renders (prevents flash)
-// Place as FIRST script in <head> on every page
-(function(){
-  var t = localStorage.getItem('edumytheme') || 'light';
-  document.documentElement.setAttribute('data-theme', t);
-})();
+// theme.js — run FIRST in <head>, applies theme before any render
+(function(){document.documentElement.setAttribute('data-theme',localStorage.getItem('edumytheme')||'light');})();
