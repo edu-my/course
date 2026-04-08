@@ -56,6 +56,10 @@
     [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
     [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
     [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+
+    /* NAV AUTH ANTI-SHIFT: reserve fixed space so navbar width never changes */
+    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
+    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
   </style>
 </head>
 <body>
