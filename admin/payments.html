@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <script src="../js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Payment Approvals — Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -92,6 +93,7 @@
       <a href="index.html" class="nav-link">Admin</a>
       <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
@@ -102,12 +104,13 @@
         </div>
         <a href="../profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
         <a href="../index.html" class="nav-dropdown-item"><span class="item-icon">&#127760;</span> View Site</a>
-                <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+        <a href="index.html" class="nav-dropdown-item" style="border-top:1px solid rgba(255,255,255,.1)"><span class="item-icon">&#128295;</span> Admin Panel</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
       </div>
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
   </nav>
-  <div class="admin-wrap">    <aside class="admin-sidebar"><div class="sidebar-section">Main</div><a href="index.html" class="admin-nav-item"><span class="ni">&#128202;</span> Overview</a><div class="sidebar-section">Manage</div><a href="courses.html" class="admin-nav-item"><span class="ni">&#128218;</span> Courses</a><a href="payments.html" class="admin-nav-item  active"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a><a href="users.html" class="admin-nav-item"><span class="ni">&#128101;</span> Users</a><a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a><div class="sidebar-section">Site</div><a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a><a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a></aside>
+  <div class="admin-wrap">    <aside class="admin-sidebar"><div class="sidebar-section">Main</div><a href="index.html" class="admin-nav-item"><span class="ni">&#128202;</span> Overview</a><div class="sidebar-section">Manage</div><a href="courses.html" class="admin-nav-item"><span class="ni">&#128218;</span> Courses</a><a href="payments.html" class="admin-nav-item  active"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a><a href="users.html" class="admin-nav-item"><span class="ni">&#128101;</span> Users</a><a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a><div class="sidebar-section">Content</div><a href="ticker.html" class="admin-nav-item"><span class="ni">📢</span> News Ticker</a><div class="sidebar-section">Site</div><a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a><a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a></aside>
     <main class="admin-main">
       <div class="page-title">&#128179; Payment Approvals</div>
       <div class="filter-tabs">

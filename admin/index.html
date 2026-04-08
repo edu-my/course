@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <script src="../js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Overview — Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -63,6 +64,7 @@
       <a href="index.html" class="nav-link active">Admin</a>
       <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
@@ -106,7 +108,7 @@
       <a href="payments.html" class="admin-nav-item"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a>
       <a href="users.html" class="admin-nav-item"><span class="ni">&#128101;</span> Users</a>
       <a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a>
-      <div class="sidebar-section">Site</div>
+      <div class="sidebar-section">Content</div><a href="ticker.html" class="admin-nav-item"><span class="ni">📢</span> News Ticker</a><div class="sidebar-section">Site</div>
       <a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a>
       <a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a>
     </aside>
