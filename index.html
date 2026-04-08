@@ -540,8 +540,8 @@ async function loadCourses(){
       const mods=(c.modules||[]).length;
       const lessons=(c.modules||[]).reduce((s,m)=>s+(m.lessons||[]).length,0);
       const el=id=>document.getElementById(id);
-      // Use innerHTML for emoji so it renders correctly
-      if(el("hero-icon"))el("hero-icon").textContent=c.thumbnailEmoji||"📚";
+      // Use innerHTML so HTML entities like &#128218; render as actual emoji
+      if(el("hero-icon"))el("hero-icon").innerHTML=c.thumbnailEmoji||"📚";
       if(el("hero-course-title"))el("hero-course-title").textContent=c.title;
       if(el("hero-course-meta"))el("hero-course-meta").textContent=
         (mods?mods+" module"+(mods!==1?"s":""):"")+(lessons?" · "+lessons+" lesson"+(lessons!==1?"s":""):"")+(c.totalDuration?" · "+c.totalDuration:"");
@@ -558,7 +558,7 @@ async function loadCourses(){
       const bg=bgMap[c.category]||"thumb-default";
       const desc=(c.description||"").substring(0,90)+(c.description?.length>90?"...":"");
       return `<div class="course-card" onclick="location.href='course.html?id=${c.id}'">
-        <div class="course-thumb ${bg}">${c.thumbnailEmoji||"📚"}<span class="course-badge badge ${isFree?"badge-free":"badge-paid"}">${price}</span></div>
+        <div class="course-thumb ${bg}"><span>${c.thumbnailEmoji||"📚"}</span><span class="course-badge badge ${isFree?"badge-free":"badge-paid"}">${price}</span></div>
         <div class="course-body">
           <div class="course-cat">${c.category||"General"}</div>
           <div class="course-title">${c.title}</div>
