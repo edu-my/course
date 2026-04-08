@@ -89,9 +89,15 @@
     [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
 
     /* NAV AUTH ANTI-SHIFT: reserve fixed space so navbar width never changes */
-    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
-    .navbar{contain:layout;}
-    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
+#nav-guest,
+#nav-user{
+  justify-content:flex-end;
+}
+.navbar{contain:layout;}
+#nav-guest.hidden,
+#nav-user.hidden{
+  display:none!important;
+}
   </style>
 </head>
 <body>
