@@ -173,15 +173,13 @@
       .course-grid{grid-template-columns:1fr 1fr;}
       .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
     }
-    #nav-guest,
-#nav-user{
-  justify-content:flex-end;
-}
-.navbar{contain:layout;}
-#nav-guest.hidden,
-#nav-user.hidden{
-  display:none!important;
-}
+    @media(max-width:580px){
+      .course-grid{grid-template-columns:1fr;}
+      .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
+    }
+
+    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
+    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
   </style>
 </head>
 <body>
@@ -196,10 +194,10 @@
   </div>
   <!-- Dark mode toggle with sun/moon icons -->
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-  <div class="tt-track">
+    <span class="tt-icon tt-sun">☀️</span>
+    <span class="tt-icon tt-moon">🌙</span>
     <div class="tt-knob"></div>
-  </div>
-</button>
+  </button>
   <div class="nav-actions" id="nav-guest">
     <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
     <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -323,12 +321,7 @@
 <!-- BROWSE -->
 <section class="browse-section">
   <div class="container">
-    <div class="mb-4">
-      <div class="section-eyebrow">📚 Our Courses</div>
-      <h2 class="section-title" style="color:var(--txt)">BROWSE &amp; CHOOSE</h2>
-      <p class="section-subtitle" style="color:var(--txt-m)">Free and paid courses built for Malaysian professionals.</p>
-    </div>
-    <div class="course-grid" id="featured-courses">
+<div class="course-grid" id="featured-courses">
       <div class="loading-text" style="grid-column:1/-1"><div class="spinner spinner-sm"></div>&nbsp;Loading courses...</div>
     </div>
     <div class="text-center mt-4"><a href="courses.html" class="btn btn-secondary btn-lg">View All Courses</a></div>
@@ -462,9 +455,7 @@ async function loadPreviews(courses){
       module: (c.modules&&c.modules[0])?c.modules[0].title:"Module 1",
       prompt: firstLesson?firstLesson.title:"Explore this course",
       quote: `"${c.description?(c.description.substring(0,80)+(c.description.length>80?"...":"")):c.title}"`,
-      content: `<strong>Course:</strong> ${c.title}<br/><br/>`+
-               `<strong>Modules:</strong> ${mods} module${mods!==1?'s':''} · ${lessonCount} lesson${lessonCount!==1?'s':''}<br/><br/>`+
-               (c.modules||[]).slice(0,3).map(m=>`<strong>${m.title}</strong> — ${(m.lessons||[]).length} lesson${(m.lessons||[]).length!==1?'s':''}`).join('<br/>'),
+      content: c.description||c.title,
       tip: c.totalDuration?`Duration: ${c.totalDuration}. `:"" + (c.isFree?"This course is completely FREE.":"RM "+parseFloat(c.price||0).toFixed(2)+" — one-time payment."),
       tags: [c.category||"Course", c.isFree?"FREE":"PAID", mods+" MODULES"],
       url: `course.html?id=${c.id}`,
