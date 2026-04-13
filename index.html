@@ -12,10 +12,6 @@
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
     /* ── DARK MODE TOKENS ── */
-    :root{--bg:#fff;--bg-alt:#FAF8F7;--bg-card:#fff;--border:#EEEBEB;--txt:#1A1A1A;--txt-m:#6B6B6B;--ticker-bg:#1A1A1A;--ticker-txt:rgba(255,255,255,.75);--prev-bg:#111;--prev-side:#1A1A1A;--prev-panel:#1E1E1E;--prev-border:rgba(255,255,255,.08);--hiw-bg:#fff;}
-    [data-theme="dark"]{--bg:#111;--bg-alt:#1A1A1A;--bg-card:#1E1E1E;--border:rgba(255,255,255,.08);--txt:#F0F0F0;--txt-m:#9B9B9B;--ticker-bg:#0A0A0A;--ticker-txt:rgba(255,255,255,.65);--prev-bg:#0A0A0A;--prev-side:#111;--prev-panel:#141414;--prev-border:rgba(255,255,255,.06);--hiw-bg:#111;}
-    body{background:var(--bg);color:var(--txt);}
-
     /* ── DARK MODE: NAV ── */
     [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
     [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
@@ -120,30 +116,7 @@
     .pv-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.7;}
     .pv-foot{padding:1rem 1.5rem;background:#111;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:.75rem;flex-wrap:wrap;}
 
-    /* ── BROWSE ── */
-    .browse-section{background:var(--bg-alt);padding:4rem var(--page-padding);}
-    .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .course-card{background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;}
     .course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-red);}
-    .course-thumb{height:160px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3.5rem;}
-    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
-    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
-    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
-    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
-    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    [data-theme="dark"] .thumb-ai{background:linear-gradient(135deg,#3D1515,#5C1E1E);}
-    [data-theme="dark"] .thumb-soft{background:linear-gradient(135deg,#0F1E3D,#152A5C);}
-    [data-theme="dark"] .thumb-personal{background:linear-gradient(135deg,#0F2D1A,#154022);}
-    [data-theme="dark"] .thumb-education{background:linear-gradient(135deg,#2D2200,#3D2E00);}
-    [data-theme="dark"] .thumb-default{background:linear-gradient(135deg,#1A1530,#231C45);}
-    .course-badge{position:absolute;top:12px;left:12px;}
-    .course-body{padding:1.25rem;}
-    .course-cat{font-size:.72rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;}
-    .course-title{font-size:1rem;font-weight:700;color:var(--txt);margin-bottom:.4rem;line-height:1.4;}
-    .course-desc{font-size:.82rem;color:var(--txt-m);line-height:1.5;margin-bottom:1rem;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.85rem;}
-    .course-price{font-weight:700;font-size:1.1rem;color:var(--txt);}
-    .course-price.free{color:var(--green);}
 
     /* ── HIW ── */
     .hiw-section{background:var(--hiw-bg);}
@@ -151,7 +124,6 @@
     .hiw-num{width:56px;height:56px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;margin:0 auto 1rem;}
     [data-theme="dark"] .hiw-step h4{color:var(--txt);}
     [data-theme="dark"] .hiw-step p{color:var(--txt-m);}
-    [data-theme="dark"] .browse-section h2,[data-theme="dark"] .browse-section p{color:var(--txt);}
 
     /* ── RESPONSIVE ── */
     @media(max-width:900px){
@@ -170,12 +142,10 @@
       .preview-item-sub{display:none;}
       .preview-prompt{position:static;margin-bottom:1rem;max-width:100%;text-align:left;}
       .preview-panel{padding:1.25rem;}
-      .course-grid{grid-template-columns:1fr 1fr;}
-      .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
+        .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
     }
     @media(max-width:580px){
-      .course-grid{grid-template-columns:1fr;}
-      .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
+        .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
     }
 
     #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
@@ -193,11 +163,6 @@
     <a href="dashboard.html" class="nav-link">Dashboard</a>
   </div>
   <!-- Dark mode toggle with sun/moon icons -->
-  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="tt-icon tt-sun">☀️</span>
-    <span class="tt-icon tt-moon">🌙</span>
-    <div class="tt-knob"></div>
-  </button>
   <div class="nav-actions" id="nav-guest">
     <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
     <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -318,16 +283,6 @@
   </div>
 </div>
 
-<!-- BROWSE -->
-<section class="browse-section">
-  <div class="container">
-<div class="course-grid" id="featured-courses">
-      <div class="loading-text" style="grid-column:1/-1"><div class="spinner spinner-sm"></div>&nbsp;Loading courses...</div>
-    </div>
-    <div class="text-center mt-4"><a href="courses.html" class="btn btn-secondary btn-lg">View All Courses</a></div>
-  </div>
-</section>
-
 <!-- HOW IT WORKS -->
 <section class="section-pad hiw-section">
   <div class="container">
@@ -374,15 +329,6 @@ import {getFirestore,collection,getDocs,query,where,orderBy,limit,doc,getDoc} fr
 const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
 const auth=getAuth(app), db=getFirestore(app);
 const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
-
-// ── DARK MODE ──
-const html=document.documentElement;
-html.setAttribute('data-theme',localStorage.getItem('edumytheme')||'light');
-document.getElementById('theme-toggle').addEventListener('click',()=>{
-  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);
-  localStorage.setItem('edumytheme',next);
-});
 
 // ── AUTH ──
 onAuthStateChanged(auth,async(user)=>{
@@ -455,7 +401,8 @@ async function loadPreviews(courses){
       module: (c.modules&&c.modules[0])?c.modules[0].title:"Module 1",
       prompt: firstLesson?firstLesson.title:"Explore this course",
       quote: `"${c.description?(c.description.substring(0,80)+(c.description.length>80?"...":"")):c.title}"`,
-      content: c.description||c.title,
+      content: (c.description||'No description available.')+
+               `<br/><br/><strong>${mods} module${mods!==1?'s':''} · ${lessonCount} lesson${lessonCount!==1?'s':''}</strong>`,
       tip: c.totalDuration?`Duration: ${c.totalDuration}. `:"" + (c.isFree?"This course is completely FREE.":"RM "+parseFloat(c.price||0).toFixed(2)+" — one-time payment."),
       tags: [c.category||"Course", c.isFree?"FREE":"PAID", mods+" MODULES"],
       url: `course.html?id=${c.id}`,
@@ -517,8 +464,6 @@ window.addEventListener("resize",()=>{if(PREVIEWS.length)renderPreviewList();});
 
 // ── COURSES + HERO CARD ──
 async function loadCourses(){
-  const grid=document.getElementById("featured-courses");
-  const stat=document.getElementById("stat-courses");
   try{
     const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
     const courses=[];
