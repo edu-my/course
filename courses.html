@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -11,9 +10,10 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    .page-header{background:var(--dark);padding:3rem var(--page-padding);text-align:center;}
-    .page-header h1{font-family:Bebas Neue,sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:2px;color:var(--white);margin-bottom:.5rem;}
-    .page-header p{color:rgba(255,255,255,.5);font-size:.95rem;}
+    .page-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;margin:0;}
+    .page-header p{color:rgba(255,255,255,.4);font-size:.78rem;margin:.2rem 0 0;}
+    .page-header-right{padding:.55rem 1.25rem;background:#D72B2B;color:white;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
     .filter-bar{background:var(--white);border-bottom:1px solid var(--gray-light);padding:1rem var(--page-padding);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:var(--nav-height);z-index:100;box-shadow:var(--shadow-sm);}
     .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;flex:1;}
     .filter-pill{padding:.4rem 1rem;border-radius:20px;border:2px solid var(--gray-light);background:var(--white);color:var(--gray);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
@@ -43,36 +43,12 @@
     .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
     @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
-
-    /* NAV ANTI-SHIFT */
-    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
-    /* DARK MODE NAV */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .filter-bar{background:#1A1A1A;border-bottom-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .filter-pill{background:#1E1E1E;border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.5);}
-    [data-theme="dark"] .filter-pill.active{background:var(--red);border-color:var(--red);color:white;}
-    [data-theme="dark"] .search-input{background:#1E1E1E;border-color:rgba(255,255,255,.1);color:white;}
-    [data-theme="dark"] .course-card{background:#1E1E1E;border-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .course-title{color:#F0F0F0;}
-    [data-theme="dark"] .course-price{color:#F0F0F0;}
-    [data-theme="dark"] .course-footer{border-top-color:rgba(255,255,255,.08);}
-    [data-theme="dark"] .page-header{background:#0A0A0A;}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="../index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
     <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link active">Courses</a><a href="dashboard.html" class="nav-link">Dashboard</a></div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -106,7 +82,7 @@
       <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
     </div>
   </div>
-  <div class="page-header"><h1>ALL COURSES</h1><p>Free and paid courses available</p></div>
+  <div class="page-header"><div><h1>ALL COURSES</h1><p>Free and paid courses available</p></div><span class="page-header-right" id="header-count">Loading...</span></div>
   <div class="filter-bar">
     <div class="filter-pills">
       <button class="filter-pill active" data-filter="all">All</button>
@@ -148,7 +124,8 @@
         if(el("nav-name"))el("nav-name").textContent=n;
         if(el("dd-name"))el("dd-name").textContent=n;
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";isAdmin=ia;window.cacheAuthUser?.(user,ia);if(ia)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
+        window.cacheAuthUser?.(user,false);
+        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){isAdmin=true;window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
         try{
           const [es,ps]=await Promise.all([
             getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
@@ -194,6 +171,7 @@
         return mf&&ms;
       });
       bar.innerHTML="Showing <strong>"+filtered.length+"</strong> of <strong>"+allCourses.length+"</strong> courses";
+      const hc=document.getElementById("header-count");if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
       if(!filtered.length){grid.innerHTML='<div class="empty-state">&#x1F50D; No courses found.</div>';return;}
       grid.innerHTML=filtered.map(c=>{
         const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
