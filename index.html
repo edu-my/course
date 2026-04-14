@@ -119,39 +119,12 @@
     .pv-quote{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:white;letter-spacing:1px;margin-bottom:1rem;line-height:1.2;}
     .pv-desc{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.7;}
     .pv-foot{padding:1rem 1.5rem;background:#111;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:.75rem;flex-wrap:wrap;}
-
-    /* ── BROWSE ── */
-    .browse-section{background:var(--bg-alt);padding:4rem var(--page-padding);}
-    .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .course-card{background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;}
-    .course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-red);}
-    .course-thumb{height:160px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3.5rem;}
-    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
-    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
-    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
-    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
-    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    [data-theme="dark"] .thumb-ai{background:linear-gradient(135deg,#3D1515,#5C1E1E);}
-    [data-theme="dark"] .thumb-soft{background:linear-gradient(135deg,#0F1E3D,#152A5C);}
-    [data-theme="dark"] .thumb-personal{background:linear-gradient(135deg,#0F2D1A,#154022);}
-    [data-theme="dark"] .thumb-education{background:linear-gradient(135deg,#2D2200,#3D2E00);}
-    [data-theme="dark"] .thumb-default{background:linear-gradient(135deg,#1A1530,#231C45);}
-    .course-badge{position:absolute;top:12px;left:12px;}
-    .course-body{padding:1.25rem;}
-    .course-cat{font-size:.72rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;}
-    .course-title{font-size:1rem;font-weight:700;color:var(--txt);margin-bottom:.4rem;line-height:1.4;}
-    .course-desc{font-size:.82rem;color:var(--txt-m);line-height:1.5;margin-bottom:1rem;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.85rem;}
-    .course-price{font-weight:700;font-size:1.1rem;color:var(--txt);}
-    .course-price.free{color:var(--green);}
-
     /* ── HIW ── */
     .hiw-section{background:var(--hiw-bg);}
     .hiw-step{text-align:center;padding:1rem;}
     .hiw-num{width:56px;height:56px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;margin:0 auto 1rem;}
     [data-theme="dark"] .hiw-step h4{color:var(--txt);}
     [data-theme="dark"] .hiw-step p{color:var(--txt-m);}
-    [data-theme="dark"] .browse-section h2,[data-theme="dark"] .browse-section p{color:var(--txt);}
 
     /* ── RESPONSIVE ── */
     @media(max-width:900px){
@@ -170,12 +143,10 @@
       .preview-item-sub{display:none;}
       .preview-prompt{position:static;margin-bottom:1rem;max-width:100%;text-align:left;}
       .preview-panel{padding:1.25rem;}
-      .course-grid{grid-template-columns:1fr 1fr;}
-      .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
+        .hiw-steps-grid{grid-template-columns:1fr 1fr!important;}
     }
     @media(max-width:580px){
-      .course-grid{grid-template-columns:1fr;}
-      .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
+        .preview-panel-bar{flex-direction:column;align-items:flex-start;gap:.4rem;}
     }
 
     #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
@@ -317,16 +288,6 @@
     </div>
   </div>
 </div>
-
-<!-- BROWSE -->
-<section class="browse-section">
-  <div class="container">
-<div class="course-grid" id="featured-courses">
-      <div class="loading-text" style="grid-column:1/-1"><div class="spinner spinner-sm"></div>&nbsp;Loading courses...</div>
-    </div>
-    <div class="text-center mt-4"><a href="courses.html" class="btn btn-secondary btn-lg">View All Courses</a></div>
-  </div>
-</section>
 
 <!-- HOW IT WORKS -->
 <section class="section-pad hiw-section">
@@ -517,8 +478,6 @@ window.addEventListener("resize",()=>{if(PREVIEWS.length)renderPreviewList();});
 
 // ── COURSES + HERO CARD ──
 async function loadCourses(){
-  const grid=document.getElementById("featured-courses");
-  const stat=document.getElementById("stat-courses");
   try{
     const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
     const courses=[];
@@ -543,26 +502,6 @@ async function loadCourses(){
       if(el("hero-prog"))el("hero-prog").style.width="100%";
       if(el("hero-prog-label"))el("hero-prog-label").textContent=isFree?"Free to enroll":"Enroll now";
     }
-
-    // Course grid
-    if(!courses.length){grid.innerHTML='<p style="color:var(--txt-m);grid-column:1/-1">No courses yet.</p>';return;}
-    grid.innerHTML=courses.slice(0,6).map(c=>{
-      const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-      const bg=bgMap[c.category]||"thumb-default";
-      const desc=(c.description||"").substring(0,90)+(c.description?.length>90?"...":"");
-      return `<div class="course-card" onclick="location.href='course.html?id=${c.id}'">
-        <div class="course-thumb ${bg}"><span>${c.thumbnailEmoji||"📚"}</span><span class="course-badge badge ${isFree?"badge-free":"badge-paid"}">${price}</span></div>
-        <div class="course-body">
-          <div class="course-cat">${c.category||"General"}</div>
-          <div class="course-title">${c.title}</div>
-          <div class="course-desc">${desc}</div>
-          <div class="course-footer">
-            <div class="course-price ${isFree?"free":""}">${price}</div>
-            <button class="btn ${isFree?"btn-success":"btn-primary"} btn-sm" onclick="event.stopPropagation();location.href='course.html?id=${c.id}'">${isFree?"Start Free":"Enroll Now"}</button>
-          </div>
-        </div>
-      </div>`;
-    }).join("");
 
     // Load previews from same courses
     await loadPreviews(courses);
