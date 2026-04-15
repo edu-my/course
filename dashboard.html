@@ -99,9 +99,10 @@
     .dash-header,.dash-body{opacity:0;pointer-events:none;}
     body.auth-ready .dash-header,body.auth-ready .dash-body{opacity:1;pointer-events:auto;transition:opacity .15s ease;}
     /* NAV ANTI-SHIFT */
+    /* NAV: fixed-width auth section prevents layout shift on auth swap */
     #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
+    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
     /* DARK MODE */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
     [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
     [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
     [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
@@ -115,40 +116,45 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="courses.html" class="nav-link">Courses</a>
-      <a href="dashboard.html" class="nav-link active">Dashboard</a>
-    </div>
-    <div class="nav-actions" id="nav-guest">
-      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-    </div>
-    <div class="nav-user hidden" id="nav-user" style="margin-left:auto">
-      <div class="nav-avatar" id="nav-avatar">U</div>
-      <div class="nav-user-name" id="nav-name">User</div>
-      <div class="nav-dropdown">
-        <div class="nav-dropdown-header">
-          <div class="nav-dropdown-name" id="dd-name">User</div>
-          <div class="nav-dropdown-email" id="dd-email"></div>
-        </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
-      </div>
-    </div>
-    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-  </nav>
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+  <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
     <a href="courses.html" class="nav-link">Courses</a>
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <div class="nav-actions" id="nav-mobile-guest">
-      <a href="login.html" class="btn btn-secondary">Log In</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
+    <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
     </div>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link">Courses</a>
+  <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
     <div class="hidden" id="nav-mobile-user">
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
       <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>

@@ -13,7 +13,7 @@
     .page-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
     .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;margin:0;}
     .page-header p{color:rgba(255,255,255,.4);font-size:.78rem;margin:.2rem 0 0;}
-    .page-header-right{padding:.55rem 1.25rem;background:#D72B2B;color:white;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
+    .page-count{padding:.55rem 1.25rem;background:#D72B2B;color:white;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
     .filter-bar{background:var(--white);border-bottom:1px solid var(--gray-light);padding:1rem var(--page-padding);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:var(--nav-height);z-index:100;box-shadow:var(--shadow-sm);}
     .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;flex:1;}
     .filter-pill{padding:.4rem 1rem;border-radius:20px;border:2px solid var(--gray-light);background:var(--white);color:var(--gray);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
@@ -43,48 +43,58 @@
     .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
     @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
-    /* NAV AUTH ANTI-SHIFT */
+    /* NAV: fixed-width auth section prevents layout shift on auth swap */
     #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
+    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
-    <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link active">Courses</a><a href="dashboard.html" class="nav-link">Dashboard</a></div>
-    <div class="nav-actions" id="nav-guest">
-      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-    </div>
-    <div class="nav-user hidden" id="nav-user" style="margin-left:auto">
-      <div class="nav-avatar" id="nav-avatar">U</div>
-      <div class="nav-user-name" id="nav-name">User</div>
-      <div class="nav-dropdown">
-        <div class="nav-dropdown-header">
-          <div class="nav-dropdown-name" id="dd-name">User</div>
-          <div class="nav-dropdown-email" id="dd-email"></div>
-        </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
-      </div>
-    </div>
-    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-  </nav>
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+  <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
-    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="courses.html" class="nav-link active">Courses</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <div class="nav-actions" id="nav-mobile-guest">
-      <a href="login.html" class="btn btn-secondary">Log In</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
     </div>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link active">Courses</a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
     <div class="hidden" id="nav-mobile-user">
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
       <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
     </div>
   </div>
-  <div class="page-header"><div><h1>ALL COURSES</h1><p>Free and paid courses available</p></div><span class="page-header-right" id="header-count">Loading...</span></div>
+  <div class="page-header"><div><h1>ALL COURSES</h1><p>Free and paid courses available</p></div><span class="page-count" id="header-count">Loading...</span></div>
   <div class="filter-bar">
     <div class="filter-pills">
       <button class="filter-pill active" data-filter="all">All</button>
