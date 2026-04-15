@@ -43,17 +43,19 @@
     .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
     @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
+    /* NAV AUTH ANTI-SHIFT */
+    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="../index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
     <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link active">Courses</a><a href="dashboard.html" class="nav-link">Dashboard</a></div>
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
-    <div class="nav-user hidden" id="nav-user">
+    <div class="nav-user hidden" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">U</div>
       <div class="nav-user-name" id="nav-name">User</div>
       <div class="nav-dropdown">
