@@ -12,17 +12,31 @@
   <style>
     /* ── TOKENS ─────────────────────────────────────── */
     :root {
-      --red:    #D72B2B;
-      --red-dk: #B02020;
-      --dark:   #1A1A1A;
-      --white:  #ffffff;
-      --grey:   #f4f4f4;
-      --grey2:  #e8e8e8;
-      --muted:  #888;
-      --radius: 12px;
-      --shadow: 0 4px 24px rgba(0,0,0,.10);
-      --nav-h:  64px;
+      --red:          #D72B2B;
+      --red-dark:     #B02020;
+      --red-light:    #fdf0f0;
+      --red-dk:       #B02020;
+      --dark:         #1A1A1A;
+      --white:        #ffffff;
+      --off-white:    #f9f9f9;
+      --grey:         #f4f4f4;
+      --grey2:        #e8e8e8;
+      --gray:         #888;
+      --gray-light:   #e8e8e8;
+      --muted:        #888;
+      --radius:       12px;
+      --radius-lg:    16px;
+      --shadow:       0 4px 24px rgba(0,0,0,.10);
+      --shadow-lg:    0 8px 32px rgba(0,0,0,.15);
+      --nav-height:   64px;
+      --nav-h:        64px;
+      --page-padding: 32px;
     }
+
+    /* nav.css needs .hidden and .open */
+    .hidden { display: none !important; }
+    #nav-mobile-drawer { display: none; }
+    #nav-mobile-drawer.open { display: flex; }
 
     /* ── RESET ──────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -349,13 +363,6 @@
       .dash-hero::after { display: none; }
       .dash-hero-stats { display: none; }
       .dash-right { grid-template-columns: 1fr; }
-      .nav-links, .nav-guest { display: none; }
-      .nav-hamburger {
-        display: flex; margin-left: auto;
-        background: none; border: none; cursor: pointer;
-        flex-direction: column; gap: 5px; padding: 8px;
-      }
-      .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; }
       .course-card { grid-template-columns: 44px 1fr; }
       .course-cta { display: none; }
     }
@@ -372,51 +379,51 @@
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard-root" style="display:none;">
-
-  <!-- NAV -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span>EDU</span>MY</a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="courses.html" class="nav-link">Courses</a>
-      <a href="dashboard.html" class="nav-link active">Dashboard</a>
-    </div>
-    <div class="nav-actions" id="nav-guest">
-      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-    </div>
-    <div class="nav-user hidden" id="nav-user">
-      <div class="nav-avatar" id="nav-avatar">U</div>
-      <div class="nav-user-name" id="nav-name">User</div>
-      <div class="nav-dropdown">
-        <div class="nav-dropdown-header">
-          <div class="nav-dropdown-name" id="dd-name">User</div>
-          <div class="nav-dropdown-email" id="dd-email"></div>
-        </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
-      </div>
-    </div>
-    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-  </nav>
-
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+<!-- NAV (outside dashboard-root so nav.js always has access) -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo"><span>EDU</span>MY</a>
+  <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
     <a href="courses.html" class="nav-link">Courses</a>
     <a href="dashboard.html" class="nav-link active">Dashboard</a>
-    <div class="nav-actions" id="nav-mobile-guest">
-      <a href="login.html" class="btn btn-secondary">Log In</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
-    </div>
-    <div class="hidden" id="nav-mobile-user">
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
     </div>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link">Courses</a>
+  <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-root" style="display:none;">
 
   <!-- HERO -->
   <div class="dash-hero">
