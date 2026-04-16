@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/nav.css" />
 
   <style>
     /* ── TOKENS ─────────────────────────────────────── */
@@ -35,63 +36,7 @@
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
-    /* ── NAV ────────────────────────────────────────── */
-    .nav {
-      position: sticky; top: 0; z-index: 100;
-      height: var(--nav-h);
-      background: var(--dark);
-      display: flex; align-items: center;
-      padding: 0 24px;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      color: var(--white);
-      letter-spacing: 1px;
-      flex-shrink: 0;
-    }
-    .nav-logo span { color: var(--red); }
-    .nav-links {
-      display: flex; align-items: center; gap: 4px;
-      flex: 1;
-      padding-left: 32px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 14px; font-weight: 500;
-      color: rgba(255,255,255,.7);
-      padding: 6px 14px;
-      border-radius: 6px;
-      transition: color .15s, background .15s;
-    }
-    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.08); }
-    .nav-links a.active { color: var(--red); }
-    .nav-guest {
-      display: flex; align-items: center; gap: 8px;
-      min-width: 170px; justify-content: flex-end;
-    }
-    .nav-guest a {
-      font-size: 13px; font-weight: 600;
-      padding: 8px 18px; border-radius: 6px;
-      transition: opacity .15s;
-    }
-    .btn-login  { color: var(--white); border: 1px solid rgba(255,255,255,.25); }
-    .btn-signup { background: var(--red); color: var(--white); }
-    .btn-login:hover, .btn-signup:hover { opacity: .85; }
-    .nav-user {
-      display: flex; align-items: center; gap: 12px;
-      margin-left: auto;
-    }
-    .nav-user-name { font-size: 14px; font-weight: 500; color: var(--white); }
-    .nav-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--red);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 700; color: var(--white);
-      cursor: pointer; flex-shrink: 0;
-      user-select: none;
-    }
-    .nav-hamburger { display: none; }
+    /* nav handled by css/nav.css */
 
     /* ── HERO BANNER ────────────────────────────────── */
     .dash-hero {
@@ -319,19 +264,7 @@
       margin-top: 2px;
     }
 
-    /* signout link */
-    .signout-row {
-      padding: 12px 20px;
-      border-top: 1px solid var(--grey2);
-      text-align: center;
-    }
-    .signout-row button {
-      background: none; border: none; cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px; color: var(--muted);
-      transition: color .15s;
-    }
-    .signout-row button:hover { color: var(--red); }
+
 
     /* announcements */
     .ann-list { display: flex; flex-direction: column; }
@@ -443,25 +376,47 @@
 <div id="dashboard-root" style="display:none;">
 
   <!-- NAV -->
-  <nav class="nav">
-    <a href="index.html" class="nav-logo">Edu<span>MY</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="courses.html">Courses</a></li>
-      <li><a href="dashboard.html" class="active">Dashboard</a></li>
-    </ul>
-    <div class="nav-guest" id="nav-guest" style="display:none;">
-      <a href="index.html#login"  class="btn-login">Log In</a>
-      <a href="index.html#signup" class="btn-signup">Sign Up</a>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo"><span>EDU</span>MY</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link">Courses</a>
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
     </div>
-    <div class="nav-user" id="nav-user" style="display:none;">
-      <span class="nav-user-name" id="nav-user-name"></span>
-      <div class="nav-avatar" id="nav-avatar" title="Sign out">?</div>
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
     </div>
-    <button class="nav-hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
   </nav>
+
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link active">Dashboard</a>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+    </div>
+  </div>
 
   <!-- HERO -->
   <div class="dash-hero">
@@ -560,9 +515,7 @@
             </div>
           </div>
         </div>
-        <div class="signout-row">
-          <button id="signout-btn">Sign out</button>
-        </div>
+
       </div>
 
       <!-- ANNOUNCEMENTS -->
@@ -644,12 +597,25 @@
     $('auth-guard').style.display     = 'none';
     $('dashboard-root').style.display = 'block';
 
-    /* Fill name / nav */
+    /* Fill name / nav — using nav.js IDs */
     const name = user.displayName || user.email?.split('@')[0] || 'Learner';
     const ini  = initials(name);
-    $('nav-user').style.display  = 'flex';
-    $('nav-user-name').textContent = name;
-    $('nav-avatar').textContent    = ini;
+
+    // nav.js handles show/hide via hidden class
+    const navGuest = $('nav-guest');
+    const navUser  = $('nav-user');
+    const mGuest   = $('nav-mobile-guest');
+    const mUser    = $('nav-mobile-user');
+    if (navGuest) navGuest.classList.add('hidden');
+    if (navUser)  navUser.classList.remove('hidden');
+    if (mGuest)   mGuest.classList.add('hidden');
+    if (mUser)    mUser.classList.remove('hidden');
+
+    if ($('nav-avatar'))  $('nav-avatar').textContent  = ini;
+    if ($('nav-name'))    $('nav-name').textContent    = name;
+    if ($('dd-name'))     $('dd-name').textContent     = name;
+    if ($('dd-email'))    $('dd-email').textContent    = user.email || '';
+
     $('hero-name').textContent     = name.split(' ')[0];
     $('profile-name').textContent  = name;
     $('profile-email').textContent = user.email || '';
@@ -862,19 +828,17 @@
   }
 
   /* SIGN OUT */
-  $('signout-btn')?.addEventListener('click', async () => {
-    if (confirm('Sign out of EduMY?')) {
-      await signOut(auth);
-      window.location = 'index.html';
-    }
-  });
-  $('nav-avatar')?.addEventListener('click', async () => {
-    if (confirm('Sign out of EduMY?')) {
-      await signOut(auth);
-      window.location = 'index.html';
-    }
-  });
+  const logoutBtn       = $('btn-logout');
+  const logoutBtnMobile = $('btn-logout-mobile');
+  const doLogout = async () => {
+    await signOut(auth);
+    window.clearAuthCache?.();
+    window.location = 'index.html';
+  };
+  if (logoutBtn)       logoutBtn.addEventListener('click', doLogout);
+  if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', doLogout);
 </script>
 
+  <script src="js/nav.js"></script>
 </body>
 </html>
