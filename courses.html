@@ -2,54 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="js/theme.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    .page-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;margin:0;}
-    .page-header p{color:rgba(255,255,255,.4);font-size:.78rem;margin:.2rem 0 0;}
-    .page-count{padding:.55rem 1.25rem;background:#D72B2B;color:white;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
-    .filter-bar{background:var(--white);border-bottom:1px solid var(--gray-light);padding:1rem var(--page-padding);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:var(--nav-height);z-index:100;box-shadow:var(--shadow-sm);}
-    .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;flex:1;}
-    .filter-pill{padding:.4rem 1rem;border-radius:20px;border:2px solid var(--gray-light);background:var(--white);color:var(--gray);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:DM Sans,sans-serif;}
-    .filter-pill:hover{border-color:var(--red);color:var(--red);}
-    .filter-pill.active{border-color:var(--red);background:var(--red);color:var(--white);}
-    .search-input{padding:.45rem 1rem;border:2px solid var(--gray-light);border-radius:20px;font-family:DM Sans,sans-serif;font-size:.85rem;outline:none;width:220px;}
-    .search-input:focus{border-color:var(--red);}
-    .results-bar{padding:1.25rem var(--page-padding) 0;font-size:.85rem;color:var(--gray);}
-    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1.5rem var(--page-padding) 4rem;}
-    .course-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;}
-    .course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-red);}
-    .course-thumb{height:160px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3.5rem;flex-shrink:0;}
-    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
-    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
-    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
-    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
-    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
-    .course-badge{position:absolute;top:12px;left:12px;}
-    .course-body{padding:1.25rem;display:flex;flex-direction:column;flex:1;}
-    .course-cat{font-size:.72rem;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;}
-    .course-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.4rem;line-height:1.4;}
-    .course-desc{font-size:.82rem;color:var(--gray);line-height:1.5;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--gray-light);padding-top:.85rem;min-height:52px;margin-top:auto;}
-    .course-price{font-weight:700;font-size:1.1rem;color:var(--dark);}
-    .course-price.free{color:var(--green);}
-    .course-action-btn{min-width:110px;text-align:center;white-space:nowrap;}
-    .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:var(--gray);}
-    @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
-    @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}}
-    /* NAV: fixed-width auth section prevents layout shift on auth swap */
+    *{box-sizing:border-box;}
+    body{background:#f7f7f7;color:#1a1a1a;font-family:'DM Sans',sans-serif;}
     #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
     #nav-guest.hidden,#nav-user.hidden{display:none!important;}
+
+    /* PAGE HEADER — matches dashboard compact style */
+    .page-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:#fff;line-height:1;margin:0;}
+    .page-header p{color:rgba(255,255,255,.4);font-size:.78rem;margin:.2rem 0 0;}
+    .page-header-count{padding:.55rem 1.25rem;background:#D72B2B;color:#fff;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
+
+    /* FILTER BAR */
+    .filter-bar{background:#fff;border-bottom:1px solid #efefef;padding:.85rem var(--page-padding);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:var(--nav-height);z-index:100;}
+    .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;flex:1;}
+    .filter-pill{padding:.4rem 1rem;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;color:#888;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+    .filter-pill:hover{border-color:#D72B2B;color:#D72B2B;}
+    .filter-pill.active{border-color:#D72B2B;background:#D72B2B;color:#fff;}
+    .search-wrap{position:relative;}
+    .search-input{padding:.42rem 1rem .42rem 2.25rem;border:1.5px solid #e0e0e0;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:220px;transition:border-color .15s;}
+    .search-input:focus{border-color:#D72B2B;}
+    .search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.82rem;color:#bbb;pointer-events:none;}
+
+    /* RESULTS BAR */
+    .results-bar{padding:1rem var(--page-padding) 0;font-size:.82rem;color:#aaa;}
+    .results-bar strong{color:#1a1a1a;}
+
+    /* COURSE GRID */
+    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;padding:1.25rem var(--page-padding) 4rem;}
+    .course-card{background:#fff;border-radius:12px;border:1px solid #efefef;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;}
+    .course-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(215,43,43,.1);}
+    .course-thumb{height:150px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3rem;flex-shrink:0;}
+    .thumb-ai{background:#FFEAEA;}
+    .thumb-soft{background:#EAF0FF;}
+    .thumb-personal{background:#EAFFF2;}
+    .thumb-education{background:#FFF8EA;}
+    .thumb-default{background:#F5F0FF;}
+    .course-badge{position:absolute;top:12px;left:12px;padding:.22rem .65rem;border-radius:12px;font-size:.68rem;font-weight:700;}
+    .badge-free{background:#EAFFF2;color:#1E8A4C;}
+    .badge-paid{background:#FFEAEA;color:#D72B2B;}
+    .course-body{padding:1.15rem;display:flex;flex-direction:column;flex:1;}
+    .course-cat{font-size:.65rem;color:#D72B2B;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.35rem;}
+    .course-title{font-size:.95rem;font-weight:700;color:#1a1a1a;margin-bottom:.35rem;line-height:1.4;}
+    .course-desc{font-size:.78rem;color:#999;line-height:1.55;margin-bottom:.9rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
+    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f5f5f5;padding-top:.85rem;margin-top:auto;}
+    .course-price{font-weight:800;font-size:1rem;color:#1a1a1a;}
+    .course-price.free{color:#1E8A4C;}
+    .course-btn{border:none;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;min-width:100px;text-align:center;transition:all .15s;}
+    .course-btn.red{background:#D72B2B;color:#fff;}
+    .course-btn.red:hover{background:#A81F1F;}
+    .course-btn.green{background:#1E8A4C;color:#fff;}
+    .course-btn.green:hover{background:#155f35;}
+    .course-btn.ghost{background:#fff;color:#D72B2B;border:1.5px solid #D72B2B;}
+    .course-btn.ghost:hover{background:#D72B2B;color:#fff;}
+    .course-btn.amber{background:#F59E0B;color:#fff;}
+    .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:#aaa;font-size:.9rem;}
+
+    @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}.filter-bar{flex-direction:column;align-items:stretch;}}
   </style>
 </head>
 <body>
-  <nav class="navbar">
+
+<nav class="navbar">
   <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
   <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
@@ -76,7 +100,8 @@
   </div>
   <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
 </nav>
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
   <a href="index.html" class="nav-link">Home</a>
   <a href="courses.html" class="nav-link active">Courses</a>
   <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -89,149 +114,173 @@
     <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
   </div>
 </div>
-    <div class="hidden" id="nav-mobile-user">
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
-    </div>
+
+<div class="page-header">
+  <div>
+    <h1>ALL COURSES</h1>
+    <p>Free and paid courses available</p>
   </div>
-  <div class="page-header"><div><h1>ALL COURSES</h1><p>Free and paid courses available</p></div><span class="page-count" id="header-count">Loading...</span></div>
-  <div class="filter-bar">
-    <div class="filter-pills">
-      <button class="filter-pill active" data-filter="all">All</button>
-      <button class="filter-pill" data-filter="free">&#x1F193; Free</button>
-      <button class="filter-pill" data-filter="paid">&#x1F4B3; Paid</button>
-      <button class="filter-pill" data-filter="AI">&#x1F916; AI</button>
-      <button class="filter-pill" data-filter="Soft Skills">&#x1F4AC; Soft Skills</button>
-      <button class="filter-pill" data-filter="Personal Development">&#x1F331; Personal Dev</button>
-      <button class="filter-pill" data-filter="Education">&#x1F4DA; Education</button>
-    </div>
-    <input type="text" class="search-input" id="search-input" placeholder="&#x1F50D; Search courses..."/>
+  <span class="page-header-count" id="header-count">Loading...</span>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-pills">
+    <button class="filter-pill active" data-filter="all">All</button>
+    <button class="filter-pill" data-filter="free">🆓 Free</button>
+    <button class="filter-pill" data-filter="paid">💳 Paid</button>
+    <button class="filter-pill" data-filter="AI">🤖 AI</button>
+    <button class="filter-pill" data-filter="Soft Skills">💬 Soft Skills</button>
+    <button class="filter-pill" data-filter="Personal Development">🌱 Personal Dev</button>
+    <button class="filter-pill" data-filter="Education">📚 Education</button>
   </div>
-  <div class="results-bar" id="results-bar">Loading...</div>
-  <div class="courses-grid" id="courses-grid"><div class="loading-text" style="grid-column:1/-1;padding:4rem;justify-content:center;"><div class="spinner"></div>&nbsp;Loading courses...</div></div>
-  <script type="module">
-    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-    const app=initializeApp({
-      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
-      authDomain:"kolamdata.firebaseapp.com",
-      projectId:"kolamdata",
-      storageBucket:"kolamdata.firebasestorage.app",
-      messagingSenderId:"16403132310",
-      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
-    }); const auth=getAuth(app); const db=getFirestore(app);
-    const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
-    let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
-
-    onAuthStateChanged(auth,async(user)=>{
-      currentUser=user;
-      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
-      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
-      if(user){
-        g?.classList.add("hidden");u?.classList.remove("hidden");
-        mg?.classList.add("hidden");mu?.classList.remove("hidden");
-        const n=user.displayName||"User",el=id=>document.getElementById(id);
-        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
-        if(el("nav-name"))el("nav-name").textContent=n;
-        if(el("dd-name"))el("dd-name").textContent=n;
-        if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        window.cacheAuthUser?.(user,false);
-        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){isAdmin=true;window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}}catch(e){}
-        try{
-          const [es,ps]=await Promise.all([
-            getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
-            getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))
-          ]);
-          userStatus={};
-          es.forEach(d=>{ userStatus[d.data().courseId]="enrolled"; });
-          ps.forEach(d=>{ const p=d.data(); if(!userStatus[p.courseId]) userStatus[p.courseId]=p.status; });
-        }catch(e){}
-      }else{
-        g?.classList.remove("hidden");u?.classList.add("hidden");
-        mg?.classList.remove("hidden");mu?.classList.add("hidden");
-        userStatus={};
-      }
-      renderCourses();
-    });
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-
-    async function loadCourses(){
-      try{
-        const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
-        allCourses=[];snap.forEach(d=>allCourses.push({id:d.id,...d.data()}));
-        renderCourses();
-      }catch(e){document.getElementById("courses-grid").innerHTML='<div class="empty-state">Could not load: '+e.message+'</div>';}
-    }
-
-    function getCourseBtn(c){
-      const isFree=c.isFree===true,st=userStatus[c.id];
-      if(isAdmin)                      return {cls:"btn-secondary", label:"View Course",             href:"player.html?id="+c.id};
-      if(st==="enrolled")              return {cls:"btn-success",   label:"▶️ View Course", href:"player.html?id="+c.id};
-      if(st==="approved")              return {cls:"btn-success",   label:"✓ Approved",          href:"player.html?id="+c.id};
-      if(st==="pending")               return {cls:"btn-warning",   label:"⏳ Pending...",        href:"payment.html?course="+c.id};
-      if(isFree)                       return {cls:"btn-success",   label:"Start Free",               href:"course.html?id="+c.id};
-      return                                  {cls:"btn-primary",   label:"Enroll Now",               href:"course.html?id="+c.id};
-    }
-
-    function renderCourses(){
-      const grid=document.getElementById("courses-grid"),bar=document.getElementById("results-bar");
-      const filtered=allCourses.filter(c=>{
-        const mf=activeFilter==="all"||activeFilter==="free"&&c.isFree===true||activeFilter==="paid"&&c.isFree!==true||c.category===activeFilter;
-        const ms=!searchTerm||c.title.toLowerCase().includes(searchTerm)||(c.description||"").toLowerCase().includes(searchTerm);
-        return mf&&ms;
-      });
-      bar.innerHTML="Showing <strong>"+filtered.length+"</strong> of <strong>"+allCourses.length+"</strong> courses";
-      const hc=document.getElementById("header-count");if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
-      if(!filtered.length){grid.innerHTML='<div class="empty-state">&#x1F50D; No courses found.</div>';return;}
-      grid.innerHTML=filtered.map(c=>{
-        const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-        const bg=bgMap[c.category]||"thumb-default",btn=getCourseBtn(c);
-        return '<div class="course-card" onclick="location.href=\''+btn.href+'\'">' 
-          +'<div class="course-thumb '+bg+'">'+(c.thumbnailEmoji||'&#x1F4DA;')+'<span class="course-badge badge '+(isFree?'badge-free':'badge-paid')+'">'+price+'</span></div>'
-          +'<div class="course-body"><div class="course-cat">'+(c.category||'General')+'</div>'
-          +'<div class="course-title">'+c.title+'</div>'
-          +'<div class="course-desc">'+(c.description||'')+'</div>'
-          +'<div class="course-footer"><div class="course-price '+(isFree?'free':'')+'">'+price+'</div>'
-          +'<button class="btn '+btn.cls+' btn-sm course-action-btn" onclick="event.stopPropagation();location.href=\''+btn.href+'\'">' +btn.label+'</button>'
-          +'</div></div></div>';
-      }).join("");
-    }
-    document.querySelectorAll(".filter-pill").forEach(p=>p.addEventListener("click",()=>{
-      document.querySelectorAll(".filter-pill").forEach(x=>x.classList.remove("active"));
-      p.classList.add("active"); activeFilter=p.dataset.filter; renderCourses();
-    }));
-    document.getElementById("search-input").addEventListener("input",e=>{searchTerm=e.target.value.toLowerCase().trim();renderCourses();});
-    const styleEl=document.createElement("style");
-    styleEl.textContent=".btn-warning{background:#F59E0B!important;color:white!important;border-color:#F59E0B!important;}";
-    document.head.appendChild(styleEl);
-    const params=new URLSearchParams(location.search);
-    if(params.get("filter")==="free"){activeFilter="free";document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter==="free"));}
-    if(params.get("cat")){activeFilter=params.get("cat");document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter===activeFilter));}
-    loadCourses();
-  </script>
-  <script src="js/nav.js"></script>
-
-  <!-- FLOATING WHATSAPP -->
-  <style>
-    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
-    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
-    .help-text.visible{max-width:240px;opacity:1;}
-    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
-    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
-    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
-    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
-    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
-    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
-  </style>
-  <div class="help-float">
-    <span class="help-text" id="help-text">Let me know how I can help</span>
-    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
-      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="search-input" placeholder="Search courses..."/>
   </div>
-  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
-  <!-- END FLOATING WHATSAPP -->
+</div>
+
+<div class="results-bar" id="results-bar">Loading...</div>
+<div class="courses-grid" id="courses-grid">
+  <div class="empty-state">Loading courses...</div>
+</div>
+
+<div class="help-float">
+  <span class="help-text" id="help-text">Let me know how I can help</span>
+  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
+const auth=getAuth(app),db=getFirestore(app);
+const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
+
+// AUTH
+onAuthStateChanged(auth,async(user)=>{
+  currentUser=user;
+  const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+  const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+  if(user){
+    g?.classList.add("hidden");u?.classList.remove("hidden");
+    mg?.classList.add("hidden");mu?.classList.remove("hidden");
+    const n=user.displayName||"User",el=id=>document.getElementById(id);
+    if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+    if(el("nav-name"))el("nav-name").textContent=n;
+    if(el("dd-name"))el("dd-name").textContent=n;
+    if(el("dd-email"))el("dd-email").textContent=user.email||"";
+    try{
+      const ud=await getDoc(doc(db,"users",user.uid));
+      const ia=ud.exists()&&ud.data().role==="admin";
+      isAdmin=ia;
+      window.cacheAuthUser?.(user,ia);
+      if(ia)window.setAdminNav?.(true);
+    }catch(e){window.cacheAuthUser?.(user,false);}
+    try{
+      const [es,ps]=await Promise.all([
+        getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
+        getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))
+      ]);
+      userStatus={};
+      es.forEach(d=>{userStatus[d.data().courseId]="enrolled";});
+      ps.forEach(d=>{const p=d.data();if(!userStatus[p.courseId])userStatus[p.courseId]=p.status;});
+    }catch(e){}
+  }else{
+    g?.classList.remove("hidden");u?.classList.add("hidden");
+    mg?.classList.remove("hidden");mu?.classList.add("hidden");
+    userStatus={};
+  }
+  renderCourses();
+});
+document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
+// COURSES
+async function loadCourses(){
+  try{
+    const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
+    allCourses=[];
+    snap.forEach(d=>allCourses.push({id:d.id,...d.data()}));
+    const hc=document.getElementById("header-count");
+    if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
+    renderCourses();
+  }catch(e){
+    document.getElementById("courses-grid").innerHTML='<div class="empty-state">Could not load courses: '+e.message+'</div>';
+  }
+}
+
+function getCourseBtn(c){
+  const isFree=c.isFree===true,st=userStatus[c.id];
+  if(isAdmin)     return {cls:"ghost",  label:"View Course", href:"player.html?id="+c.id};
+  if(st==="enrolled") return {cls:"green", label:"▶ Continue",   href:"player.html?id="+c.id};
+  if(st==="approved") return {cls:"green", label:"✓ Start Now",  href:"player.html?id="+c.id};
+  if(st==="pending")  return {cls:"amber", label:"⏳ Pending",    href:"payment.html?course="+c.id};
+  if(isFree)          return {cls:"green", label:"Start Free",    href:"course.html?id="+c.id};
+  return                     {cls:"red",   label:"Enroll Now",   href:"course.html?id="+c.id};
+}
+
+function renderCourses(){
+  const grid=document.getElementById("courses-grid"),bar=document.getElementById("results-bar");
+  const filtered=allCourses.filter(c=>{
+    const mf=activeFilter==="all"
+      ||(activeFilter==="free"&&c.isFree===true)
+      ||(activeFilter==="paid"&&c.isFree!==true)
+      ||c.category===activeFilter;
+    const ms=!searchTerm||c.title.toLowerCase().includes(searchTerm)||(c.description||"").toLowerCase().includes(searchTerm);
+    return mf&&ms;
+  });
+  bar.innerHTML="Showing <strong>"+filtered.length+"</strong> of <strong>"+allCourses.length+"</strong> courses";
+  if(!filtered.length){grid.innerHTML='<div class="empty-state">🔍 No courses found.</div>';return;}
+  grid.innerHTML=filtered.map(c=>{
+    const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+    const bg=bgMap[c.category]||"thumb-default",btn=getCourseBtn(c);
+    const emoji=c.thumbnailEmoji||"📚";
+    return `<div class="course-card" onclick="location.href='${btn.href}'">
+      <div class="course-thumb ${bg}">${emoji}<span class="course-badge ${isFree?'badge-free':'badge-paid'}">${price}</span></div>
+      <div class="course-body">
+        <div class="course-cat">${c.category||"General"}</div>
+        <div class="course-title">${c.title}</div>
+        <div class="course-desc">${c.description||""}</div>
+        <div class="course-footer">
+          <div class="course-price ${isFree?"free":""}">${price}</div>
+          <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// FILTERS + SEARCH
+document.querySelectorAll(".filter-pill").forEach(p=>p.addEventListener("click",()=>{
+  document.querySelectorAll(".filter-pill").forEach(x=>x.classList.remove("active"));
+  p.classList.add("active");
+  activeFilter=p.dataset.filter;
+  renderCourses();
+}));
+document.getElementById("search-input").addEventListener("input",e=>{
+  searchTerm=e.target.value.toLowerCase().trim();
+  renderCourses();
+});
+
+// URL PARAMS — ?filter=free or ?cat=AI
+const params=new URLSearchParams(location.search);
+if(params.get("filter")==="free"){
+  activeFilter="free";
+  document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter==="free"));
+}
+if(params.get("cat")){
+  activeFilter=params.get("cat");
+  document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter===activeFilter));
+}
+
+loadCourses();
+setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
+</script>
+<script src="js/nav.js"></script>
 </body>
 </html>
