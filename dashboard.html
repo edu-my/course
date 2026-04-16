@@ -1,468 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <script src="js/theme.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Dashboard — edu-my.web</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — EduMY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+
   <style>
-    body{background:#F0F2F5;}
-
-    /* ── STICKY WELCOME HEADER ── */
-    .dash-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:sticky;top:var(--nav-height);z-index:100;}
-    .dash-header-left h1{font-family:Bebas Neue,sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:white;line-height:1;}
-    .dash-header-left p{color:rgba(255,255,255,.4);font-size:.78rem;margin-top:.2rem;}
-    .dash-enroll-btn{padding:.55rem 1.25rem;background:#D72B2B;color:white;border:none;border-radius:8px;font-family:DM Sans,sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .2s;}
-    .dash-enroll-btn:hover{background:#A81F1F;}
-
-    /* ── MAIN CONTENT ── */
-    .dash-body{padding:1.75rem var(--page-padding);max-width:1100px;margin:0 auto;}
-
-    /* ── KPI ROW ── */
-    .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem;}
-    .kpi-card{background:white;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;border:1px solid var(--gray-light);display:flex;align-items:center;gap:1rem;}
-    .kpi-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
-    .kpi-num{font-family:Bebas Neue,sans-serif;font-size:2rem;color:var(--dark);line-height:1;letter-spacing:.5px;}
-    .kpi-label{font-size:.7rem;color:var(--gray);text-transform:uppercase;letter-spacing:1.5px;margin-top:.2rem;}
-
-    /* ── SECTION HEADER ── */
-    .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-    .section-hd h2{font-family:Bebas Neue,sans-serif;font-size:1.4rem;letter-spacing:1px;color:var(--dark);}
-    .section-enroll{padding:.4rem 1rem;background:white;border:1.5px solid var(--red);color:var(--red);border-radius:7px;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;}
-    .section-enroll:hover{background:var(--red);color:white;}
-
-    /* ── COURSE TABLE ── */
-    .course-table{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;margin-bottom:1.75rem;}
-    .ct-head{display:grid;grid-template-columns:minmax(0,3fr) 100px minmax(0,2fr) 110px;padding:.65rem 1.5rem;background:var(--off-white);border-bottom:1px solid var(--gray-light);}
-    .ct-head span{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray);}
-    .ct-row{display:grid;grid-template-columns:minmax(0,3fr) 100px minmax(0,2fr) 110px;padding:1rem 1.5rem;border-bottom:1px solid var(--gray-light);align-items:center;gap:.5rem;transition:background .15s;}
-    .ct-row:last-child{border-bottom:none;}
-    .ct-row:hover{background:var(--off-white);}
-    .course-cell{display:flex;align-items:center;gap:.85rem;min-width:0;}
-    .c-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-    .c-name{font-size:.88rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .c-cat{font-size:.7rem;color:var(--gray);margin-top:.1rem;}
-    .type-badge{display:inline-block;padding:.22rem .65rem;border-radius:5px;font-size:.68rem;font-weight:700;}
-    .tb-free{background:var(--green-light);color:#1E6B3A;}
-    .tb-paid{background:var(--red-light);color:#A81F1F;}
-    .prog-col{}
-    .prog-bar-wrap{height:5px;background:var(--gray-light);border-radius:10px;overflow:hidden;margin:.3rem 0;}
-    .prog-bar-fill{height:100%;border-radius:10px;transition:width .4s;}
-    .fill-red{background:var(--red);}
-    .fill-green{background:var(--green);}
-    .fill-gray{background:var(--gray-light);}
-    .prog-pct{font-size:.72rem;color:var(--gray);}
-    .status-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:600;margin-top:.25rem;}
-    .sp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-    .sp-green{background:var(--green);}
-    .sp-red{background:var(--red);}
-    .sp-gray{background:var(--gray);}
-    .sp-amber{background:#F59E0B;}
-
-    /* ── ACTION BUTTONS — fixed width ── */
-    .action-btn{width:110px;padding:.45rem 0;border:none;border-radius:7px;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-align:center;display:inline-block;text-decoration:none;transition:all .2s;}
-    .ab-start   {background:var(--green-light);color:#1E6B3A;}
-    .ab-start:hover{background:#C8F5D8;}
-    .ab-continue{background:var(--red-light);color:var(--red);}
-    .ab-continue:hover{background:#FFD0D0;}
-    .ab-done    {background:var(--gray-light);color:var(--gray);cursor:default;}
-    .ab-pending {background:#FEF3C7;color:#92400E;cursor:default;}
-    .ab-approved{background:var(--green);color:white;}
-    .ab-approved:hover{background:#166b39;}
-
-    /* ── EMPTY STATE ── */
-    .empty-row{padding:3rem;text-align:center;color:var(--gray);font-size:.88rem;}
-
-    /* ── CERTIFICATES ── */
-    .cert-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.75rem;}
-    .cert-item{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;}
-    .cert-medal{width:44px;height:44px;background:var(--red-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
-    .cert-info{flex:1;min-width:0;}
-    .cert-course{font-size:.88rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .cert-meta{font-size:.72rem;color:var(--gray);margin-top:.2rem;}
-    .cert-dl-btn{padding:.45rem 1.1rem;background:var(--red);color:white;border:none;border-radius:7px;font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .2s;}
-    .cert-dl-btn:hover{background:var(--red-dark);}
-    .cert-empty{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);padding:2rem;text-align:center;color:var(--gray);font-size:.88rem;}
-
-    @media(max-width:768px){
-      .kpi-row{grid-template-columns:1fr 1fr;}
-      .ct-head,.ct-row{grid-template-columns:1fr 80px;}
-      .ct-head span:nth-child(2),.ct-head span:nth-child(3),.ct-row>*:nth-child(2),.ct-row>*:nth-child(3){display:none;}
+    /* ── TOKENS ─────────────────────────────────────── */
+    :root {
+      --red:    #D72B2B;
+      --red-dk: #B02020;
+      --dark:   #1A1A1A;
+      --white:  #ffffff;
+      --grey:   #f4f4f4;
+      --grey2:  #e8e8e8;
+      --muted:  #888;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,.10);
+      --nav-h:  64px;
     }
 
-    /* AUTH GUARD — hide content until auth confirmed */
-    .dash-header,.dash-body{opacity:0;pointer-events:none;}
-    body.auth-ready .dash-header,body.auth-ready .dash-body{opacity:1;pointer-events:auto;transition:opacity .15s ease;}
-    /* NAV ANTI-SHIFT */
-    /* NAV: fixed-width auth section prevents layout shift on auth swap */
-    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
-    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
-    /* DARK MODE */
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+    /* ── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--grey);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAV ────────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      height: var(--nav-h);
+      background: var(--dark);
+      display: flex; align-items: center;
+      padding: 0 24px;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--white);
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
+      flex: 1;
+      padding-left: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.7);
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.08); }
+    .nav-links a.active { color: var(--red); }
+    .nav-guest {
+      display: flex; align-items: center; gap: 8px;
+      min-width: 170px; justify-content: flex-end;
+    }
+    .nav-guest a {
+      font-size: 13px; font-weight: 600;
+      padding: 8px 18px; border-radius: 6px;
+      transition: opacity .15s;
+    }
+    .btn-login  { color: var(--white); border: 1px solid rgba(255,255,255,.25); }
+    .btn-signup { background: var(--red); color: var(--white); }
+    .btn-login:hover, .btn-signup:hover { opacity: .85; }
+    .nav-user {
+      display: flex; align-items: center; gap: 12px;
+      margin-left: auto;
+    }
+    .nav-user-name { font-size: 14px; font-weight: 500; color: var(--white); }
+    .nav-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--white);
+      cursor: pointer; flex-shrink: 0;
+      user-select: none;
+    }
+    .nav-hamburger { display: none; }
+
+    /* ── HERO BANNER ────────────────────────────────── */
+    .dash-hero {
+      background: var(--dark);
+      padding: 48px 32px 56px;
+      position: relative; overflow: hidden;
+    }
+    .dash-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(215,43,43,.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* big decorative letter */
+    .dash-hero::after {
+      content: 'EDU';
+      position: absolute; right: -20px; top: -10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 180px; line-height: 1;
+      color: rgba(255,255,255,.03);
+      pointer-events: none;
+      user-select: none;
+    }
+    .dash-hero-inner {
+      max-width: 1200px; margin: 0 auto;
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px;
+    }
+    .dash-hero-text h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      color: var(--white); line-height: 1.05; letter-spacing: 1px;
+    }
+    .dash-hero-text h1 span { color: var(--red); }
+    .dash-hero-text p { margin-top: 10px; color: rgba(255,255,255,.55); font-size: 15px; }
+    .dash-hero-stats { display: flex; gap: 12px; flex-shrink: 0; }
+    .hero-stat {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      padding: 20px 26px; text-align: center; min-width: 108px;
+    }
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px; color: var(--white); line-height: 1;
+    }
+    .hero-stat-num.accent { color: var(--red); }
+    .hero-stat-label {
+      font-size: 10px; font-weight: 600;
+      color: rgba(255,255,255,.4);
+      text-transform: uppercase; letter-spacing: .8px;
+      margin-top: 4px;
+    }
+
+    /* ── MAIN LAYOUT ────────────────────────────────── */
+    .dash-main {
+      max-width: 1200px; margin: 0 auto;
+      padding: 40px 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+    }
+    .dash-left  { display: flex; flex-direction: column; gap: 32px; }
+    .dash-right { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── SECTION HEADER ─────────────────────────────── */
+    .section-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .section-hd h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: .5px;
+    }
+    .section-hd a { font-size: 13px; font-weight: 600; color: var(--red); }
+    .section-hd a:hover { text-decoration: underline; }
+
+    /* ── COURSE CARDS ───────────────────────────────── */
+    .course-cards { display: flex; flex-direction: column; gap: 14px; }
+    .course-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      transition: transform .18s, box-shadow .18s;
+      cursor: pointer;
+    }
+    .course-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.13); }
+    .course-emoji {
+      width: 52px; height: 52px;
+      background: var(--grey);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .course-info { min-width: 0; }
+    .course-info h3 { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .course-meta { font-size: 12px; color: var(--muted); margin-top: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .course-progress { margin-top: 10px; }
+    .progress-bar { height: 5px; background: var(--grey2); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--red); border-radius: 99px; transition: width .6s ease; }
+    .progress-label {
+      font-size: 11px; color: var(--muted);
+      margin-top: 4px;
+      display: flex; justify-content: space-between;
+    }
+    .course-cta { flex-shrink: 0; }
+    .btn-continue {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--red); color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      padding: 9px 18px; border-radius: 8px;
+      border: none; cursor: pointer;
+      transition: background .15s, transform .1s;
+      white-space: nowrap;
+    }
+    .btn-continue:hover { background: var(--red-dk); transform: scale(1.02); }
+    .btn-review {
+      background: transparent; color: var(--dark);
+      border: 1.5px solid var(--grey2);
+    }
+    .btn-review:hover { border-color: var(--red); color: var(--red); background: transparent; }
+
+    /* badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 99px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .badge-free { background: #e6f9f0; color: #1a8a52; }
+    .badge-paid { background: #fff3cd; color: #856404; }
+    .badge-done { background: #e8f0fe; color: #1a56db; }
+
+    /* ── EMPTY STATE ────────────────────────────────── */
+    .empty-state {
+      background: var(--white); border-radius: var(--radius);
+      padding: 48px 32px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .empty-state p { font-size: 14px; color: var(--muted); }
+    .btn-red {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--red); color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      padding: 12px 24px; border-radius: 8px;
+      border: none; cursor: pointer; margin-top: 20px;
+      transition: background .15s;
+    }
+    .btn-red:hover { background: var(--red-dk); }
+
+    /* ── CERT LIST ──────────────────────────────────── */
+    .cert-list { display: flex; flex-direction: column; gap: 12px; }
+    .cert-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 16px 20px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .cert-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: linear-gradient(135deg, #D72B2B, #ff6b6b);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .cert-info { flex: 1; min-width: 0; }
+    .cert-info h4 { font-size: 14px; font-weight: 600; }
+    .cert-info p  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .cert-dl {
+      background: transparent; border: 1.5px solid var(--grey2);
+      border-radius: 6px; padding: 6px 12px;
+      font-size: 12px; font-weight: 600; color: var(--dark);
+      cursor: pointer; transition: border-color .15s, color .15s;
+      white-space: nowrap; font-family: 'DM Sans', sans-serif;
+    }
+    .cert-dl:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── SIDEBAR WIDGETS ────────────────────────────── */
+    .widget { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .widget-head {
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--grey2);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .widget-head h3 { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .4px; }
+    .widget-head a  { font-size: 12px; font-weight: 600; color: var(--red); }
+    .widget-head a:hover { text-decoration: underline; }
+    .widget-body { padding: 16px 20px; }
+
+    /* profile */
+    .profile-widget { padding: 28px 20px 0; text-align: center; }
+    .profile-avatar-lg {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 700; color: var(--white);
+      margin: 0 auto 12px;
+    }
+    .profile-name  { font-size: 17px; font-weight: 700; }
+    .profile-email { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .profile-stats {
+      display: flex; border-top: 1px solid var(--grey2); margin-top: 20px;
+    }
+    .profile-stat {
+      flex: 1; padding: 14px 8px; text-align: center;
+      border-right: 1px solid var(--grey2);
+    }
+    .profile-stat:last-child { border-right: none; }
+    .profile-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px; line-height: 1; color: var(--dark);
+    }
+    .profile-stat-num.red { color: var(--red); }
+    .profile-stat-lbl {
+      font-size: 10px; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .6px;
+      margin-top: 2px;
+    }
+
+    /* signout link */
+    .signout-row {
+      padding: 12px 20px;
+      border-top: 1px solid var(--grey2);
+      text-align: center;
+    }
+    .signout-row button {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: var(--muted);
+      transition: color .15s;
+    }
+    .signout-row button:hover { color: var(--red); }
+
+    /* announcements */
+    .ann-list { display: flex; flex-direction: column; }
+    .ann-item {
+      padding: 12px 0; border-bottom: 1px solid var(--grey2);
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .ann-item:last-child { border-bottom: none; }
+    .ann-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 4px; }
+    .ann-dot.muted { background: var(--grey2); }
+    .ann-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
+    .ann-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* recommended */
+    .rec-list { display: flex; flex-direction: column; gap: 4px; }
+    .rec-card {
+      display: flex; gap: 12px; align-items: center;
+      padding: 10px 8px; border-radius: 8px;
+      cursor: pointer; transition: background .15s;
+    }
+    .rec-card:hover { background: var(--grey); }
+    .rec-emoji {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: var(--grey);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .rec-info { flex: 1; min-width: 0; }
+    .rec-info h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rec-info p  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .rec-price { font-size: 12px; font-weight: 700; color: var(--red); flex-shrink: 0; }
+    .rec-price.free { color: #1a8a52; }
+
+    /* ── SKELETON ───────────────────────────────────── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--grey2) 25%, #ececec 50%, var(--grey2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ── TOAST ──────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--dark); color: var(--white);
+      padding: 12px 24px; border-radius: 8px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      z-index: 9999; transition: transform .3s ease;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── AUTH GUARD ─────────────────────────────────── */
+    #auth-guard {
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+      background: var(--grey);
+    }
+    .auth-box {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 48px 40px;
+      text-align: center; max-width: 400px; width: 100%;
+    }
+    .auth-box h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; margin-bottom: 8px;
+    }
+    .auth-box h2 span { color: var(--red); }
+    .auth-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 960px) {
+      .dash-main { grid-template-columns: 1fr; }
+      .dash-right { order: -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    }
+    @media (max-width: 640px) {
+      .dash-main { padding: 20px 16px 60px; gap: 24px; }
+      .dash-hero  { padding: 28px 16px 36px; }
+      .dash-hero::after { display: none; }
+      .dash-hero-stats { display: none; }
+      .dash-right { grid-template-columns: 1fr; }
+      .nav-links, .nav-guest { display: none; }
+      .nav-hamburger {
+        display: flex; margin-left: auto;
+        background: none; border: none; cursor: pointer;
+        flex-direction: column; gap: 5px; padding: 8px;
+      }
+      .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; }
+      .course-card { grid-template-columns: 44px 1fr; }
+      .course-cta { display: none; }
+    }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-  <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
-  <div class="nav-links">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="courses.html" class="nav-link">Courses</a>
-    <a href="dashboard.html" class="nav-link active">Dashboard</a>
-  </div>
-  <div class="nav-actions" id="nav-guest">
-    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-  </div>
-  <div class="nav-user hidden" id="nav-user">
-    <div class="nav-avatar" id="nav-avatar">U</div>
-    <div class="nav-user-name" id="nav-name">User</div>
-    <div class="nav-dropdown">
-      <div class="nav-dropdown-header">
-        <div class="nav-dropdown-name" id="dd-name">User</div>
-        <div class="nav-dropdown-email" id="dd-email"></div>
-      </div>
-      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
-      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
-      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
-      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
-    </div>
-  </div>
-  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-</nav>
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
-  <a href="index.html" class="nav-link">Home</a>
-  <a href="courses.html" class="nav-link">Courses</a>
-  <a href="dashboard.html" class="nav-link active">Dashboard</a>
-  <div class="nav-actions" id="nav-mobile-guest">
-    <a href="login.html" class="btn btn-secondary">Log In</a>
-    <a href="register.html" class="btn btn-primary">Get Started</a>
-  </div>
-  <div class="hidden" id="nav-mobile-user">
-    <a href="dashboard.html" class="nav-link">My Dashboard</a>
-    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+
+<!-- AUTH GUARD -->
+<div id="auth-guard" style="display:none;">
+  <div class="auth-box">
+    <h2>Sign In to <span>EduMY</span></h2>
+    <p>You need to be logged in to view your dashboard.</p>
+    <a href="index.html" class="btn-red" style="display:inline-flex;">Go to Homepage</a>
   </div>
 </div>
-    <div class="hidden" id="nav-mobile-user">
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+
+<!-- DASHBOARD -->
+<div id="dashboard-root" style="display:none;">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Edu<span>MY</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+    </ul>
+    <div class="nav-guest" id="nav-guest" style="display:none;">
+      <a href="index.html#login"  class="btn-login">Log In</a>
+      <a href="index.html#signup" class="btn-signup">Sign Up</a>
+    </div>
+    <div class="nav-user" id="nav-user" style="display:none;">
+      <span class="nav-user-name" id="nav-user-name"></span>
+      <div class="nav-avatar" id="nav-avatar" title="Sign out">?</div>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="dash-hero">
+    <div class="dash-hero-inner">
+      <div class="dash-hero-text">
+        <h1>Welcome back,<br><span id="hero-name">Learner</span>!</h1>
+        <p>Continue where you left off — your progress is saved.</p>
+      </div>
+      <div class="dash-hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num" id="stat-enrolled">—</div>
+          <div class="hero-stat-label">Enrolled</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num accent" id="stat-completed">—</div>
+          <div class="hero-stat-label">Completed</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num" id="stat-certs">—</div>
+          <div class="hero-stat-label">Certs Earned</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- STICKY HEADER -->
-  <div class="dash-header">
-    <div class="dash-header-left">
-      <h1>WELCOME BACK, <span id="welcome-name"></span>!</h1>
-      <p>Your learning progress at a glance.</p>
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- LEFT -->
+    <div class="dash-left">
+
+      <!-- MY COURSES -->
+      <section>
+        <div class="section-hd">
+          <h2>My Courses</h2>
+          <a href="courses.html">Browse more →</a>
+        </div>
+        <div class="course-cards" id="course-list">
+          <!-- skeleton placeholders -->
+          <div class="course-card" style="pointer-events:none;cursor:default;">
+            <div class="skeleton" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div class="skeleton" style="height:16px;width:55%;margin-bottom:8px;"></div>
+              <div class="skeleton" style="height:11px;width:35%;margin-bottom:12px;"></div>
+              <div class="skeleton" style="height:5px;width:100%;"></div>
+            </div>
+            <div class="skeleton" style="width:96px;height:36px;border-radius:8px;"></div>
+          </div>
+          <div class="course-card" style="pointer-events:none;cursor:default;">
+            <div class="skeleton" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div class="skeleton" style="height:16px;width:45%;margin-bottom:8px;"></div>
+              <div class="skeleton" style="height:11px;width:30%;margin-bottom:12px;"></div>
+              <div class="skeleton" style="height:5px;width:100%;"></div>
+            </div>
+            <div class="skeleton" style="width:96px;height:36px;border-radius:8px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CERTIFICATES -->
+      <section>
+        <div class="section-hd">
+          <h2>My Certificates</h2>
+        </div>
+        <div class="cert-list" id="cert-list">
+          <div style="background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);">
+            <div class="skeleton" style="height:44px;width:100%;border-radius:8px;"></div>
+          </div>
+        </div>
+      </section>
+
     </div>
-    <a href="courses.html" class="dash-enroll-btn">+ Enroll in More Courses</a>
-  </div>
 
-  <div class="dash-body">
+    <!-- RIGHT / SIDEBAR -->
+    <div class="dash-right">
 
-    <!-- KPI CARDS -->
-    <div class="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-icon" style="background:var(--red-light)">&#128218;</div>
-        <div><div class="kpi-num" id="kpi-enrolled">&#8212;</div><div class="kpi-label">Enrolled</div></div>
+      <!-- PROFILE -->
+      <div class="widget">
+        <div class="profile-widget">
+          <div class="profile-avatar-lg" id="profile-avatar">?</div>
+          <div class="profile-name"  id="profile-name">—</div>
+          <div class="profile-email" id="profile-email">—</div>
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="profile-stat-num"     id="ps-enrolled">0</div>
+              <div class="profile-stat-lbl">Courses</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num red" id="ps-completed">0</div>
+              <div class="profile-stat-lbl">Done</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num"     id="ps-certs">0</div>
+              <div class="profile-stat-lbl">Certs</div>
+            </div>
+          </div>
+        </div>
+        <div class="signout-row">
+          <button id="signout-btn">Sign out</button>
+        </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-icon" style="background:var(--green-light)">&#9989;</div>
-        <div><div class="kpi-num" id="kpi-completed">&#8212;</div><div class="kpi-label">Completed</div></div>
+
+      <!-- ANNOUNCEMENTS -->
+      <div class="widget">
+        <div class="widget-head"><h3>Announcements</h3></div>
+        <div class="widget-body">
+          <div class="ann-list" id="ann-list">
+            <div class="skeleton" style="height:13px;width:80%;margin-bottom:8px;"></div>
+            <div class="skeleton" style="height:13px;width:65%;margin-bottom:8px;"></div>
+            <div class="skeleton" style="height:13px;width:72%;"></div>
+          </div>
+        </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-icon" style="background:#FFF8EA">&#127942;</div>
-        <div><div class="kpi-num" id="kpi-certs">&#8212;</div><div class="kpi-label">Certificates</div></div>
+
+      <!-- RECOMMENDED -->
+      <div class="widget">
+        <div class="widget-head">
+          <h3>Recommended</h3>
+          <a href="courses.html">See all</a>
+        </div>
+        <div class="widget-body">
+          <div class="rec-list" id="rec-list">
+            <div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:6px;"></div>
+            <div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:6px;"></div>
+            <div class="skeleton" style="height:44px;border-radius:8px;"></div>
+          </div>
+        </div>
       </div>
+
     </div>
+  </main>
+</div><!-- /dashboard-root -->
 
-    <!-- MY COURSES -->
-    <div class="section-hd">
-      <h2>MY COURSES</h2>
-      <a href="courses.html" class="section-enroll">+ Enroll in More</a>
-    </div>
-    <div class="course-table" id="course-table">
-      <div class="ct-head">
-        <span>Course</span>
-        <span>Type</span>
-        <span>Progress</span>
-        <span>Action</span>
-      </div>
-      <div class="empty-row"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</div>
-    </div>
+<div id="toast"></div>
 
-    <!-- MY CERTIFICATES -->
-    <div class="section-hd">
-      <h2>MY CERTIFICATES</h2>
-    </div>
-    <div id="cert-list" class="cert-list">
-      <div class="cert-empty"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</div>
-    </div>
+<!-- FIREBASE + LOGIC -->
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, query, where,
+           getDocs, orderBy, limit, doc, getDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  </div>
+  /* CONFIG */
+  const app = initializeApp({
+    apiKey:     "AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+    authDomain: "kolamdata.firebaseapp.com",
+    projectId:  "kolamdata",
+    appId:      "1:16403132310:web:464c4ad2d19812f95077b7"
+  });
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
 
-  <script type="module">
-    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import {getFirestore,collection,query,where,getDocs,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-    const app=initializeApp({
-      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
-      authDomain:"kolamdata.firebaseapp.com",
-      projectId:"kolamdata",
-      storageBucket:"kolamdata.firebasestorage.app",
-      messagingSenderId:"16403132310",
-      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
-    }); const auth=getAuth(app); const db=getFirestore(app);
-    const bgMap={"AI":"#FFEAEA","Soft Skills":"#EAF0FF","Personal Development":"#EAFFF2","Education":"#FFF8EA"};
+  /* UTILS */
+  const $ = id => document.getElementById(id);
+  const initials = name =>
+    (name || '?').trim().split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  const fmtDate = ts => {
+    if (!ts) return '';
+    const d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+    return d.toLocaleDateString('en-MY', { day:'numeric', month:'short', year:'numeric' });
+  };
+  function toast(msg) {
+    const el = $('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
 
-    function waitForAuth(){return new Promise(r=>{const u=onAuthStateChanged(auth,user=>{u();r(user);});});}
-
-    (async()=>{
-      const user=await waitForAuth();
-      if(!user){location.href="login.html";return;}
-
-      // Nav
-      const n=user.displayName||"User",el=id=>document.getElementById(id);
-      el("nav-guest")?.classList.add("hidden");el("nav-user")?.classList.remove("hidden");
-      el("nav-mobile-guest")?.classList.add("hidden");el("nav-mobile-user")?.classList.remove("hidden");
-      if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
-      if(el("nav-name"))el("nav-name").textContent=n;
-      if(el("dd-name"))el("dd-name").textContent=n;
-      if(el("dd-email"))el("dd-email").textContent=user.email||"";
-      if(el("welcome-name"))el("welcome-name").textContent=n.toUpperCase();
-      try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";window.cacheAuthUser?.(user,ia);if(ia)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
-
-      document.body.classList.add("auth-ready");
-      await loadDashboard(user);
-    })();
-
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-
-    async function loadDashboard(user){
-      try{
-        const [enrollSnap,certSnap,paySnap]=await Promise.all([
-          getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
-          getDocs(query(collection(db,"certificates"),where("userId","==",user.uid))),
-          getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))
-        ]);
-
-        const enrolls=[],certs=[],payments=[];
-        enrollSnap.forEach(d=>enrolls.push({id:d.id,...d.data()}));
-        certSnap.forEach(d=>certs.push({id:d.id,...d.data()}));
-        paySnap.forEach(d=>payments.push({id:d.id,...d.data()}));
-
-        // Only count active enrollments (cross-check with payments - exclude revoked)
-        const rejectedCourseIds=new Set(
-          payments.filter(p=>p.status==="rejected").map(p=>p.courseId)
-        );
-        // An enrollment is valid if it doesn't have a corresponding rejected payment
-        // (revoke removes enrollment but as safety net we also check here)
-        const activeEnrolls=enrolls.filter(e=>!rejectedCourseIds.has(e.courseId));
-        const completed=activeEnrolls.filter(e=>e.isCompleted).length;
-        document.getElementById("kpi-enrolled").textContent=activeEnrolls.length;
-        document.getElementById("kpi-completed").textContent=completed;
-        document.getElementById("kpi-certs").textContent=certs.length;
-
-        await renderCourseTable(enrolls,payments);
-        renderCerts(certs);
-      }catch(e){
-        document.getElementById("course-table").innerHTML='<div class="empty-row">Could not load: '+e.message+'</div>';
-      }
+  /* AUTH GATE */
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      $('auth-guard').style.display     = 'flex';
+      $('dashboard-root').style.display = 'none';
+      return;
     }
+    $('auth-guard').style.display     = 'none';
+    $('dashboard-root').style.display = 'block';
 
-    async function renderCourseTable(enrolls,payments){
-      const table=document.getElementById("course-table");
+    /* Fill name / nav */
+    const name = user.displayName || user.email?.split('@')[0] || 'Learner';
+    const ini  = initials(name);
+    $('nav-user').style.display  = 'flex';
+    $('nav-user-name').textContent = name;
+    $('nav-avatar').textContent    = ini;
+    $('hero-name').textContent     = name.split(' ')[0];
+    $('profile-name').textContent  = name;
+    $('profile-email').textContent = user.email || '';
+    $('profile-avatar').textContent = ini;
 
-      // Build payment map: courseId -> payment
-      const payMap={};
-      payments.forEach(p=>{
-        if(!payMap[p.courseId]||p.submittedAt?.seconds>(payMap[p.courseId].submittedAt?.seconds||0))
-          payMap[p.courseId]=p;
-      });
+    /* Load in parallel */
+    await Promise.all([
+      loadEnrollments(user.uid),
+      loadAnnouncements(),
+      loadRecommended(user.uid),
+    ]);
+  });
 
-      // Collect all courseIds from enrollments + pending payments
-      const courseIds=new Set([
-        ...enrolls.map(e=>e.courseId),
-        ...payments.filter(p=>p.status==="pending").map(p=>p.courseId)
-      ]);
+  /* ENROLLMENTS */
+  async function loadEnrollments(uid) {
+    try {
+      const snap = await getDocs(query(collection(db,'enrollments'), where('userId','==',uid)));
 
-      if(!courseIds.size){
-        table.innerHTML='<div class="empty-row">&#128218; No courses yet. <a href="courses.html" style="color:var(--red)">Browse courses</a> to get started!</div>';
+      if (snap.empty) {
+        renderEmptyCourses();
+        setStats(0, 0);
+        await loadCerts(uid, 0, {});
         return;
       }
 
-      // Fetch course details
-      const courseMap={};
-      await Promise.all([...courseIds].map(async cid=>{
-        try{const s=await getDoc(doc(db,"courses",cid));if(s.exists())courseMap[cid]={id:s.id,...s.data()};}catch(e){}
-      }));
+      const enrollments = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      const ids = [...new Set(enrollments.map(e => e.courseId).filter(Boolean))];
 
-      // Build rows — enrolled first, then pending-only
-      const rows=[];
-      enrolls.forEach(e=>{
-        const c=courseMap[e.courseId];if(!c)return;
-        rows.push({enroll:e,course:c,payment:payMap[e.courseId]||null});
-      });
-      payments.filter(p=>p.status==="pending"&&!enrolls.find(e=>e.courseId===p.courseId)).forEach(p=>{
-        const c=courseMap[p.courseId];if(!c)return;
-        rows.push({enroll:null,course:c,payment:p});
+      /* Fetch course docs */
+      const cDocs = await Promise.all(ids.map(id => getDoc(doc(db,'courses',id))));
+      const cMap  = {};
+      cDocs.forEach(d => { if (d.exists()) cMap[d.id] = { id:d.id, ...d.data() }; });
+
+      /* Render cards */
+      const list = $('course-list');
+      list.innerHTML = '';
+      let completed = 0;
+
+      enrollments.forEach(enr => {
+        const c    = cMap[enr.courseId];
+        if (!c) return;
+        const prog = Math.min(100, Math.max(0, enr.progress ?? 0));
+        const done = prog >= 100;
+        if (done) completed++;
+
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.onclick   = () => window.location = 'courses.html';
+        card.innerHTML = `
+          <div class="course-emoji"></div>
+          <div class="course-info">
+            <h3>${c.title}</h3>
+            <div class="course-meta">
+              <span class="badge ${c.isFree ? 'badge-free' : 'badge-paid'}">${c.isFree ? 'Free' : 'Paid'}</span>
+              ${done ? '<span class="badge badge-done">Completed ✓</span>' : ''}
+            </div>
+            <div class="course-progress">
+              <div class="progress-bar"><div class="progress-fill" style="width:${prog}%"></div></div>
+              <div class="progress-label">
+                <span>${prog}% complete</span>
+                <span>${c.modules?.length ?? 0} modules</span>
+              </div>
+            </div>
+          </div>
+          <div class="course-cta">
+            <button class="btn-continue ${done ? 'btn-review' : ''}">
+              ${done ? '↺ Review' : '▶ Continue'}
+            </button>
+          </div>
+        `;
+        /* emoji fix: innerHTML not textContent */
+        card.querySelector('.course-emoji').innerHTML = c.thumbnailEmoji || '📚';
+        list.appendChild(card);
       });
 
-      if(!rows.length){
-        table.innerHTML='<div class="empty-row">No courses found. <a href="courses.html" style="color:var(--red)">Browse courses</a>.</div>';
+      setStats(enrollments.length, completed);
+      await loadCerts(uid, enrollments.length, cMap);
+
+    } catch(e) {
+      console.error(e);
+      toast('Failed to load your courses.');
+      renderEmptyCourses();
+      setStats(0, 0);
+    }
+  }
+
+  function renderEmptyCourses() {
+    $('course-list').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🎓</div>
+        <h3>No courses yet</h3>
+        <p>You haven't enrolled in any courses. Start learning today!</p>
+        <a href="courses.html" class="btn-red">Browse Courses</a>
+      </div>`;
+  }
+
+  function setStats(enrolled, completed) {
+    $('stat-enrolled').textContent  = enrolled;
+    $('stat-completed').textContent = completed;
+    $('ps-enrolled').textContent    = enrolled;
+    $('ps-completed').textContent   = completed;
+  }
+
+  /* CERTIFICATES */
+  async function loadCerts(uid, enrolled, cMap) {
+    try {
+      const snap = await getDocs(query(collection(db,'certificates'), where('userId','==',uid)));
+      const n    = snap.size;
+      $('stat-certs').textContent = n;
+      $('ps-certs').textContent   = n;
+
+      const list = $('cert-list');
+      if (snap.empty) {
+        list.innerHTML = `
+          <div class="empty-state" style="padding:28px 20px;">
+            <div class="empty-icon">🏅</div>
+            <h3>No certificates yet</h3>
+            <p>Complete a course to earn your certificate.</p>
+          </div>`;
         return;
       }
 
-      const bg=c=>(bgMap[c?.category]||"#F0EDFF");
+      list.innerHTML = '';
+      snap.docs.forEach(d => {
+        const cert   = d.data();
+        const course = cMap?.[cert.courseId];
+        const card   = document.createElement('div');
+        card.className = 'cert-card';
+        card.innerHTML = `
+          <div class="cert-icon">🏅</div>
+          <div class="cert-info">
+            <h4>${course?.title ?? cert.courseTitle ?? 'Certificate'}</h4>
+            <p>Issued: ${fmtDate(cert.issuedAt) || 'N/A'}</p>
+          </div>
+          <button class="cert-dl" data-id="${d.id}">⬇ Download</button>
+        `;
+        card.querySelector('.cert-dl').addEventListener('click', () => toast('Certificate download coming soon!'));
+        list.appendChild(card);
+      });
 
-      const html='<div class="ct-head"><span>Course</span><span>Type</span><span>Progress</span><span>Action</span></div>'
-        +rows.map(({enroll:e,course:c,payment:p})=>{
-          const isFree=c.isFree===true;
-          const price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-          const prog=e?Math.round(e.progressPercent||0):0;
-          const isDone=e?.isCompleted===true;
-          const isPending=(!e&&p?.status==="pending");
-
-          // Progress column
-          let progHtml="";
-          if(isDone){
-            progHtml='<div class="prog-bar-wrap"><div class="prog-bar-fill fill-green" style="width:100%"></div></div>'
-              +'<div class="status-pill"><span class="sp-dot sp-green"></span><span style="color:var(--green)">Completed</span></div>';
-          }else if(isPending){
-            progHtml='<div class="status-pill"><span class="sp-dot sp-amber"></span><span style="color:#92400E">Payment pending</span></div>';
-          }else if(e){
-            const fillClass=prog>0?"fill-red":"fill-gray";
-            const statusLabel=prog>0?"In progress":"Not started";
-            const dotClass=prog>0?"sp-red":"sp-gray";
-            const textColor=prog>0?"color:var(--red)":"color:var(--gray)";
-            progHtml='<div style="display:flex;justify-content:space-between"><span class="prog-pct">'+prog+'%</span></div>'
-              +'<div class="prog-bar-wrap"><div class="prog-bar-fill '+fillClass+'" style="width:'+prog+'%"></div></div>'
-              +'<div class="status-pill"><span class="sp-dot '+dotClass+'"></span><span style="'+textColor+'">'+statusLabel+'</span></div>';
-          }
-
-          // Action button
-          let actionBtn="";
-          if(isDone){
-            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-done">&#10003; Done</a>';
-          }else if(isPending){
-            actionBtn='<span class="action-btn ab-pending">&#9203; Pending</span>';
-          }else if(e&&prog>0){
-            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-continue">Continue &#8594;</a>';
-          }else if(e){
-            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-start">&#9654; Start</a>';
-          }else if(p?.status==="approved"){
-            actionBtn='<a href="player.html?id='+c.id+'" class="action-btn ab-approved">&#10003; Approved</a>';
-          }
-
-          return '<div class="ct-row">'
-            +'<div class="course-cell">'
-            +'<div class="c-icon" style="background:'+bg(c)+'">'+( c.thumbnailEmoji||"&#128218;")+'</div>'
-            +'<div><div class="c-name">'+c.title+'</div><div class="c-cat">'+(c.category||"Course")+'</div></div>'
-            +'</div>'
-            +'<div><span class="type-badge '+(isFree?"tb-free":"tb-paid")+'">'+price+'</span></div>'
-            +'<div class="prog-col">'+progHtml+'</div>'
-            +'<div>'+actionBtn+'</div>'
-            +'</div>';
-        }).join("");
-
-      table.innerHTML=html;
+    } catch(e) {
+      console.error(e);
+      $('cert-list').innerHTML = '<p style="padding:16px;font-size:13px;color:var(--muted);">Could not load certificates.</p>';
     }
+  }
 
-    function renderCerts(certs){
-      const list=document.getElementById("cert-list");
-      if(!certs.length){
-        list.innerHTML='<div class="cert-empty">&#127942; No certificates yet. Complete a course to earn your first CPD certificate!</div>';
+  /* ANNOUNCEMENTS */
+  async function loadAnnouncements() {
+    try {
+      const snap = await getDocs(query(collection(db,'announcements'), orderBy('createdAt','desc'), limit(5)));
+      const list = $('ann-list');
+      if (snap.empty) {
+        list.innerHTML = '<p style="font-size:13px;color:var(--muted);">No announcements right now.</p>';
         return;
       }
-      list.innerHTML=certs.map(c=>{
-        const date=c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"}):"&#8212;";
-        return '<div class="cert-item">'
-          +'<div class="cert-medal">&#127942;</div>'
-          +'<div class="cert-info">'
-          +'<div class="cert-course">'+(c.courseName||"Course")+'</div>'
-          +'<div class="cert-meta">Issued: '+date+' &nbsp;&middot;&nbsp; ID: '+(c.certId||c.id)+'</div>'
-          +'</div>'
-          +'<button class="cert-dl-btn" onclick="downloadCert(\''+c.id+'\',\''+( c.certId||c.id)+'\',\''+encodeURIComponent(c.userName||"")+'\',\''+encodeURIComponent(c.courseName||"")+'\',\''+date+'\',\''+encodeURIComponent(c.courseId||"")+'\')">&#x1F4C4; Download PDF</button>'
-          +'</div>';
-      }).join("");
+      list.innerHTML = '';
+      snap.docs.forEach((d, i) => {
+        const a  = d.data();
+        const el = document.createElement('div');
+        el.className = 'ann-item';
+        el.innerHTML = `
+          <div class="ann-dot ${i > 0 ? 'muted' : ''}"></div>
+          <div>
+            <div class="ann-title">${a.title || 'Announcement'}</div>
+            <div class="ann-date">${fmtDate(a.createdAt)}</div>
+          </div>`;
+        list.appendChild(el);
+      });
+    } catch(e) {
+      $('ann-list').innerHTML = '<p style="font-size:13px;color:var(--muted);">Could not load announcements.</p>';
     }
+  }
 
-    window.downloadCert=async function(certId,certCode,nameEnc,courseEnc,date,courseIdEnc){
-      const btn=event.target;btn.textContent="Generating...";btn.disabled=true;
-      try{
-        await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
-        const {jsPDF}=window.jspdf;
-        const d=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
-        const W=297,H=210,name=decodeURIComponent(nameEnc),course=decodeURIComponent(courseEnc);
-        let creditHours="";
-        try{const cid=decodeURIComponent(courseIdEnc||"");if(cid){const cs=await getDoc(doc(db,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}}catch(e){}
-        d.setFillColor(255,255,255);d.rect(0,0,W,H,"F");
-        d.setDrawColor(215,43,43);d.setLineWidth(3);d.rect(10,10,W-20,H-20,"S");
-        d.setLineWidth(.5);d.rect(14,14,W-28,H-28,"S");
-        d.setFillColor(215,43,43);d.rect(10,10,W-20,35,"F");
-        d.setTextColor(255,255,255);d.setFontSize(26);d.setFont("helvetica","bold");
-        d.text("edu-my.web",W/2,30,{align:"center"});
-        d.setTextColor(26,26,26);d.setFontSize(34);
-        d.text("CERTIFICATE OF COMPLETION",W/2,72,{align:"center"});
-        d.setDrawColor(215,43,43);d.setLineWidth(1);d.line(50,79,W-50,79);
-        d.setFontSize(12);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
-        d.text("This is to certify that",W/2,92,{align:"center"});
-        d.setFontSize(30);d.setFont("helvetica","bold");d.setTextColor(26,26,26);
-        d.text(name,W/2,110,{align:"center"});
-        d.setFontSize(12);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
-        d.text("has successfully completed the course:",W/2,123,{align:"center"});
-        d.setFontSize(18);d.setFont("helvetica","bold");d.setTextColor(215,43,43);
-        d.text(course,W/2,138,{align:"center"});
-        d.setFontSize(11);d.setFont("helvetica","normal");d.setTextColor(107,107,107);
-        d.text("Date of Completion: "+date,W/2,152,{align:"center"});
-        d.setDrawColor(215,43,43);d.setLineWidth(.5);d.line(50,159,W-50,159);
-        d.setFontSize(8);d.setTextColor(150,150,150);
-        d.text("Certificate ID: "+certCode,W/2,167,{align:"center"});
-        d.setFillColor(215,43,43);d.roundedRect(W/2-25,172,50,11,3,3,"F");
-        d.setTextColor(255,255,255);d.setFontSize(9);d.setFont("helvetica","bold");
-        d.text("CPD ACCREDITED",W/2,179,{align:"center"});
-        if(creditHours){d.setFontSize(11);d.setFont("helvetica","normal");d.setTextColor(26,26,26);d.text("Total Credit Hours: "+creditHours,W/2,194,{align:"center"});}
-        d.setFontSize(8);d.setTextColor(150,150,150);
-        d.text("This certificate was digitally issued by edu-my.web",W/2,205,{align:"center"});
-        d.save("edu-my-Certificate-"+certCode+".pdf");
-      }catch(e){alert("Could not generate PDF: "+e.message);}
-      btn.textContent="&#x1F4C4; Download PDF";btn.disabled=false;
-    };
-  </script>
-  <script src="js/nav.js"></script>
+  /* RECOMMENDED */
+  async function loadRecommended(uid) {
+    try {
+      const enrSnap  = await getDocs(query(collection(db,'enrollments'), where('userId','==',uid)));
+      const enrolled = new Set(enrSnap.docs.map(d => d.data().courseId));
 
-  <!-- FLOATING WHATSAPP -->
-  <style>
-    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
-    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
-    .help-text.visible{max-width:240px;opacity:1;}
-    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
-    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
-    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
-    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
-    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
-    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
-  </style>
-  <div class="help-float">
-    <span class="help-text" id="help-text">Let me know how I can help</span>
-    <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
-      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-  </div>
-  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
-  <!-- END FLOATING WHATSAPP -->
+      const snap      = await getDocs(query(collection(db,'courses'), where('isPublished','==',true), limit(12)));
+      const available = snap.docs.filter(d => !enrolled.has(d.id)).slice(0,4);
+      const list      = $('rec-list');
+
+      if (!available.length) {
+        list.innerHTML = '<p style="font-size:13px;color:var(--muted);">You\'re enrolled in all available courses!</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+      available.forEach(d => {
+        const c    = d.data();
+        const card = document.createElement('div');
+        card.className = 'rec-card';
+        card.onclick   = () => window.location = 'courses.html';
+        card.innerHTML = `
+          <div class="rec-emoji"></div>
+          <div class="rec-info">
+            <h4>${c.title}</h4>
+            <p>${c.category ?? 'Course'} · ${c.modules?.length ?? 0} modules</p>
+          </div>
+          <div class="rec-price ${c.isFree ? 'free' : ''}">${c.isFree ? 'Free' : 'RM ' + (c.price ?? 0)}</div>
+        `;
+        card.querySelector('.rec-emoji').innerHTML = c.thumbnailEmoji || '📘';
+        list.appendChild(card);
+      });
+
+    } catch(e) {
+      $('rec-list').innerHTML = '<p style="font-size:13px;color:var(--muted);">Could not load recommendations.</p>';
+    }
+  }
+
+  /* SIGN OUT */
+  $('signout-btn')?.addEventListener('click', async () => {
+    if (confirm('Sign out of EduMY?')) {
+      await signOut(auth);
+      window.location = 'index.html';
+    }
+  });
+  $('nav-avatar')?.addEventListener('click', async () => {
+    if (confirm('Sign out of EduMY?')) {
+      await signOut(auth);
+      window.location = 'index.html';
+    }
+  });
+</script>
+
 </body>
 </html>
