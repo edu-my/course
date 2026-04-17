@@ -381,7 +381,7 @@
   </div>
 </div>
 
-<!-- NAV (outside dashboard-root so nav.js always has access) -->
+<!-- NAV (replaced to match courses.html topbar) -->
 <nav class="navbar">
   <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
   <div class="nav-links">
@@ -409,6 +409,20 @@
   </div>
   <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
 </nav>
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link">Courses</a>
+  <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
 
 <div class="nav-mobile-drawer" id="nav-mobile-drawer">
   <a href="index.html" class="nav-link">Home</a>
