@@ -74,15 +74,17 @@
   white-space: nowrap;
 }
 
-/* ── HERO BANNER — dark, used by dashboard ──────────────────────── */
-.dash-hero {
-  background: var(--dark);
-  padding: 22px 32px;
+/* ── DASHBOARD HEADER — reuses page-header pattern ────────────── */
+/* Dashboard header uses .page-header + .page-header-inner just like
+   courses. The only visual difference is the subtle red gradient.
+   Stats removed — shown in sidebar profile card instead. */
+
+.page-header.dash-header {
   position: relative;
   overflow: hidden;
 }
 
-.dash-hero::before {
+.page-header.dash-header::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -90,84 +92,8 @@
   pointer-events: none;
 }
 
-.dash-hero::after {
-  content: 'EDU';
-  position: absolute;
-  right: -10px;
-  top: -20px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 110px;
-  line-height: 1;
-  color: rgba(255,255,255,.03);
-  pointer-events: none;
-  user-select: none;
-}
-
-.dash-hero-inner {
-  max-width: var(--max-width);
-  margin: 0 auto;
+.page-header.dash-header .page-header-inner {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.dash-hero-text h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  color: var(--white);
-  line-height: 1;
-  letter-spacing: 1.2px;
-}
-
-.dash-hero-text h1 span {
-  color: var(--red);
-}
-
-.dash-hero-text h1 br {
-  display: none;
-}
-
-.dash-hero-text p {
-  margin-top: 4px;
-  color: rgba(255,255,255,.4);
-  font-size: 12px;
-}
-
-.dash-hero-stats {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.hero-stat {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: var(--radius);
-  padding: 8px 14px;
-  text-align: center;
-  min-width: 72px;
-}
-
-.hero-stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  color: var(--white);
-  line-height: 1;
-}
-
-.hero-stat-num.accent {
-  color: var(--red);
-}
-
-.hero-stat-label {
-  font-size: 9px;
-  font-weight: 600;
-  color: rgba(255,255,255,.4);
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  margin-top: 2px;
 }
 
 /* ── TWO-COLUMN LAYOUT — main + sidebar ─────────────────────────── */
@@ -602,6 +528,11 @@
 }
 
 /* ── AUTH GUARD ──────────────────────────────────────────────────── */
+/* Prevent content flash — dashboard-root hidden until Firebase auth resolves */
+#dashboard-root {
+  display: none;
+}
+
 #auth-guard {
   min-height: 100vh;
   display: flex;
@@ -688,24 +619,6 @@
 
   .layout-single {
     padding: 0 16px 60px;
-  }
-
-  .dash-hero {
-    padding: 16px;
-  }
-
-  .dash-hero::after {
-    display: none;
-  }
-
-  .dash-hero-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .dash-hero-stats {
-    display: none;
   }
 
   .layout-sidebar {
