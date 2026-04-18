@@ -244,11 +244,15 @@
     setTimeout(() => el.classList.remove('show'), 3000);
   }
 
-  /* AUTH GATE */
+  /* AUTH GATE — use cached auth to prevent flash */
+  let authResolved = false;
+  const hasCachedUser = !!sessionStorage.getItem('icraftuser');
+
   onAuthStateChanged(auth, async user => {
+    authResolved = true;
     if (!user) {
-      $('auth-guard').style.display     = 'flex';
       $('dashboard-root').style.display = 'none';
+      $('auth-guard').style.display     = 'flex';
       return;
     }
     $('auth-guard').style.display     = 'none';
@@ -500,6 +504,15 @@
 
   /* WhatsApp help float */
   setTimeout(() => { const t = $('help-text'); if (t) t.classList.add('visible'); }, 4000);
+
+  /* Fallback: if no cached user and Firebase is slow, show auth guard after delay */
+  if (!hasCachedUser) {
+    setTimeout(() => {
+      if (!authResolved) {
+        $('auth-guard').style.display = 'flex';
+      }
+    }, 1500);
+  }
 </script>
 <script src="js/nav.js"></script>
 </body>
