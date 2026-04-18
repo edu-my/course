@@ -528,14 +528,14 @@
 }
 
 /* ── AUTH GUARD ──────────────────────────────────────────────────── */
-/* Prevent content flash — dashboard-root hidden until Firebase auth resolves */
+/* Prevent content flash — both hidden until Firebase auth resolves */
 #dashboard-root {
   display: none;
 }
 
 #auth-guard {
+  display: none;
   min-height: 100vh;
-  display: flex;
   align-items: center;
   justify-content: center;
   background: var(--gray-100);
