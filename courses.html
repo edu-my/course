@@ -5,74 +5,15 @@
   <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
-  <style>
-    *{box-sizing:border-box;}
-    body{background:#f7f7f7;color:#1a1a1a;font-family:'DM Sans',sans-serif;}
-    #nav-guest,#nav-user{min-width:170px;justify-content:flex-end;}
-    #nav-guest.hidden,#nav-user.hidden{display:none!important;}
 
-    /* PAGE HEADER — matches dashboard compact style */
-    .page-header{background:#1A1A1A;padding:1.25rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1.5px;color:#fff;line-height:1;margin:0;}
-    .page-header p{color:rgba(255,255,255,.4);font-size:.78rem;margin:.2rem 0 0;}
-    .page-header-count{padding:.55rem 1.25rem;background:#D72B2B;color:#fff;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;white-space:nowrap;}
-
-    /* FILTER BAR */
-    .filter-bar{background:#fff;border-bottom:1px solid #efefef;padding:.85rem var(--page-padding);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:var(--nav-height);z-index:100;}
-    .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;flex:1;}
-    .filter-pill{padding:.4rem 1rem;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;color:#888;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
-    .filter-pill:hover{border-color:#D72B2B;color:#D72B2B;}
-    .filter-pill.active{border-color:#D72B2B;background:#D72B2B;color:#fff;}
-    .search-wrap{position:relative;}
-    .search-input{padding:.42rem 1rem .42rem 2.25rem;border:1.5px solid #e0e0e0;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:220px;transition:border-color .15s;}
-    .search-input:focus{border-color:#D72B2B;}
-    .search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.82rem;color:#bbb;pointer-events:none;}
-
-    /* RESULTS BAR */
-    .results-bar{padding:1rem var(--page-padding) 0;font-size:.82rem;color:#aaa;}
-    .results-bar strong{color:#1a1a1a;}
-
-    /* COURSE GRID */
-    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;padding:1.25rem var(--page-padding) 4rem;}
-    .course-card{background:#fff;border-radius:12px;border:1px solid #efefef;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;}
-    .course-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(215,43,43,.1);}
-    .course-thumb{height:150px;display:flex;align-items:center;justify-content:center;position:relative;font-size:3rem;flex-shrink:0;}
-    .thumb-ai{background:#FFEAEA;}
-    .thumb-soft{background:#EAF0FF;}
-    .thumb-personal{background:#EAFFF2;}
-    .thumb-education{background:#FFF8EA;}
-    .thumb-default{background:#F5F0FF;}
-    .course-badge{position:absolute;top:12px;left:12px;padding:.22rem .65rem;border-radius:12px;font-size:.68rem;font-weight:700;}
-    .badge-free{background:#EAFFF2;color:#1E8A4C;}
-    .badge-paid{background:#FFEAEA;color:#D72B2B;}
-    .course-body{padding:1.15rem;display:flex;flex-direction:column;flex:1;}
-    .course-cat{font-size:.65rem;color:#D72B2B;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.35rem;}
-    .course-title{font-size:.95rem;font-weight:700;color:#1a1a1a;margin-bottom:.35rem;line-height:1.4;}
-    .course-desc{font-size:.78rem;color:#999;line-height:1.55;margin-bottom:.9rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
-    .course-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f5f5f5;padding-top:.85rem;margin-top:auto;}
-    .course-price{font-weight:800;font-size:1rem;color:#1a1a1a;}
-    .course-price.free{color:#1E8A4C;}
-    .course-btn{border:none;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;min-width:100px;text-align:center;transition:all .15s;}
-    .course-btn.red{background:#D72B2B;color:#fff;}
-    .course-btn.red:hover{background:#A81F1F;}
-    .course-btn.green{background:#1E8A4C;color:#fff;}
-    .course-btn.green:hover{background:#155f35;}
-    .course-btn.ghost{background:#fff;color:#D72B2B;border:1.5px solid #D72B2B;}
-    .course-btn.ghost:hover{background:#D72B2B;color:#fff;}
-    .course-btn.amber{background:#F59E0B;color:#fff;}
-    .empty-state{grid-column:1/-1;text-align:center;padding:4rem;color:#aaa;font-size:.9rem;}
-
-    @media(max-width:1024px){.courses-grid{grid-template-columns:1fr 1fr;}}
-    @media(max-width:640px){.courses-grid{grid-template-columns:1fr;}.search-input{width:100%;}.filter-bar{flex-direction:column;align-items:stretch;}}
-  </style>
+  <!-- Shared CSS — single source of truth -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
 </head>
 <body>
 
+<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
 <nav class="navbar">
   <a href="index.html" class="nav-logo">edu-my.web</a>
   <div class="nav-links">
@@ -115,35 +56,64 @@
   </div>
 </div>
 
+<!-- ── PAGE HEADER — full-bleed dark bar ─────────────────────── -->
 <div class="page-header">
-  <div>
-    <h1>ALL COURSES</h1>
-    <p>Free and paid courses available</p>
+  <div class="page-header-inner">
+    <div>
+      <h1>ALL COURSES</h1>
+      <p>Free and paid courses available</p>
+    </div>
+    <span class="page-header-count" id="header-count">Loading...</span>
   </div>
-  <span class="page-header-count" id="header-count">Loading...</span>
 </div>
 
+<!-- ── FILTER BAR — full-bleed, sticky ───────────────────────── -->
 <div class="filter-bar">
-  <div class="filter-pills">
-    <button class="filter-pill active" data-filter="all">All</button>
-    <button class="filter-pill" data-filter="free">🆓 Free</button>
-    <button class="filter-pill" data-filter="paid">💳 Paid</button>
-    <button class="filter-pill" data-filter="AI">🤖 AI</button>
-    <button class="filter-pill" data-filter="Soft Skills">💬 Soft Skills</button>
-    <button class="filter-pill" data-filter="Personal Development">🌱 Personal Dev</button>
-    <button class="filter-pill" data-filter="Education">📚 Education</button>
-  </div>
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="search-input" placeholder="Search courses..."/>
+  <div class="filter-bar-inner">
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="free">🆓 Free</button>
+      <button class="filter-pill" data-filter="paid">💳 Paid</button>
+      <button class="filter-pill" data-filter="AI">🤖 AI</button>
+      <button class="filter-pill" data-filter="Soft Skills">💬 Soft Skills</button>
+      <button class="filter-pill" data-filter="Personal Development">🌱 Personal Dev</button>
+      <button class="filter-pill" data-filter="Education">📚 Education</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search courses..."/>
+    </div>
+    <div class="view-toggle">
+      <button class="view-toggle-btn" id="view-list" title="List view">☰</button>
+      <button class="view-toggle-btn active" id="view-grid" title="Grid view">▦</button>
+    </div>
   </div>
 </div>
 
-<div class="results-bar" id="results-bar">Loading...</div>
-<div class="courses-grid" id="courses-grid">
-  <div class="empty-state">Loading courses...</div>
+<!-- ── COURSES CONTENT — centered ────────────────────────────── -->
+<div class="layout-single">
+  <div class="results-bar" id="results-bar">Loading...</div>
+  <div class="courses-grid" id="courses-container">
+    <div class="empty-state">Loading courses...</div>
+  </div>
+  <div class="pagination" id="pagination"></div>
 </div>
 
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+    </div>
+    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
+    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
+</footer>
+
+<!-- ── WHATSAPP FLOAT ────────────────────────────────────────── -->
 <div class="help-float">
   <span class="help-text" id="help-text">Let me know how I can help</span>
   <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
@@ -151,6 +121,7 @@
   </a>
 </div>
 
+<!-- ── FIREBASE + LOGIC ──────────────────────────────────────── -->
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
@@ -160,8 +131,11 @@ const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDo
 const auth=getAuth(app),db=getFirestore(app);
 const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
 let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
+let currentView="grid"; // "grid" or "list"
+let currentPage=1;
+const PER_PAGE=9;
 
-// AUTH
+/* ── AUTH ──────────────────────────────────────────────────────── */
 onAuthStateChanged(auth,async(user)=>{
   currentUser=user;
   const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
@@ -197,10 +171,11 @@ onAuthStateChanged(auth,async(user)=>{
   }
   renderCourses();
 });
+
 document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
 document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
 
-// COURSES
+/* ── LOAD COURSES ─────────────────────────────────────────────── */
 async function loadCourses(){
   try{
     const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
@@ -210,22 +185,68 @@ async function loadCourses(){
     if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
     renderCourses();
   }catch(e){
-    document.getElementById("courses-grid").innerHTML='<div class="empty-state">Could not load courses: '+e.message+'</div>';
+    document.getElementById("courses-container").innerHTML='<div class="empty-state">Could not load courses: '+e.message+'</div>';
   }
 }
 
+/* ── COURSE BUTTON LOGIC ──────────────────────────────────────── */
 function getCourseBtn(c){
   const isFree=c.isFree===true,st=userStatus[c.id];
-  if(isAdmin)     return {cls:"ghost",  label:"View Course", href:"player.html?id="+c.id};
-  if(st==="enrolled") return {cls:"green", label:"▶ Continue",   href:"player.html?id="+c.id};
-  if(st==="approved") return {cls:"green", label:"✓ Start Now",  href:"player.html?id="+c.id};
-  if(st==="pending")  return {cls:"amber", label:"⏳ Pending",    href:"payment.html?course="+c.id};
-  if(isFree)          return {cls:"green", label:"Start Free",    href:"course.html?id="+c.id};
-  return                     {cls:"red",   label:"Enroll Now",   href:"course.html?id="+c.id};
+  if(isAdmin)         return {cls:"ghost",  label:"View Course", href:"player.html?id="+c.id};
+  if(st==="enrolled") return {cls:"green",  label:"▶ Continue",  href:"player.html?id="+c.id};
+  if(st==="approved") return {cls:"green",  label:"✓ Start Now", href:"player.html?id="+c.id};
+  if(st==="pending")  return {cls:"amber",  label:"⏳ Pending",   href:"payment.html?course="+c.id};
+  if(isFree)          return {cls:"green",  label:"Start Free",  href:"course.html?id="+c.id};
+  return                     {cls:"red",    label:"Enroll Now",  href:"course.html?id="+c.id};
 }
 
+/* ── RENDER — grid card ───────────────────────────────────────── */
+function renderGridCard(c){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const bg=bgMap[c.category]||"thumb-default",btn=getCourseBtn(c);
+  const emoji=c.thumbnailEmoji||"📚";
+  return `<div class="course-card-grid" onclick="location.href='${btn.href}'">
+    <div class="course-thumb ${bg}">${emoji}<span class="course-badge ${isFree?'badge-free':'badge-paid'}">${price}</span></div>
+    <div class="course-body">
+      <div class="course-cat">${c.category||"General"}</div>
+      <div class="course-title">${c.title}</div>
+      <div class="course-desc">${c.description||""}</div>
+      <div class="course-footer">
+        <div class="course-price ${isFree?"free":""}">${price}</div>
+        <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── RENDER — list row ────────────────────────────────────────── */
+function renderListRow(c){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const btn=getCourseBtn(c);
+  const emoji=c.thumbnailEmoji||"📚";
+  const mods=(c.modules||[]).length;
+  return `<div class="course-card-row" onclick="location.href='${btn.href}'">
+    <div class="course-emoji">${emoji}</div>
+    <div class="course-info">
+      <h3>${c.title}</h3>
+      <div class="course-meta">
+        <span class="badge ${isFree?'badge-free':'badge-paid'}">${isFree?'Free':'Paid'}</span>
+        <span>${c.category||"General"}</span>
+        <span>·</span>
+        <span>${mods} module${mods!==1?'s':''}</span>
+      </div>
+    </div>
+    <div class="course-price ${isFree?"free":""}">${price}</div>
+    <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+  </div>`;
+}
+
+/* ── RENDER COURSES ───────────────────────────────────────────── */
 function renderCourses(){
-  const grid=document.getElementById("courses-grid"),bar=document.getElementById("results-bar");
+  const container=document.getElementById("courses-container");
+  const bar=document.getElementById("results-bar");
+
+  // filter
   const filtered=allCourses.filter(c=>{
     const mf=activeFilter==="all"
       ||(activeFilter==="free"&&c.isFree===true)
@@ -234,40 +255,113 @@ function renderCourses(){
     const ms=!searchTerm||c.title.toLowerCase().includes(searchTerm)||(c.description||"").toLowerCase().includes(searchTerm);
     return mf&&ms;
   });
-  bar.innerHTML="Showing <strong>"+filtered.length+"</strong> of <strong>"+allCourses.length+"</strong> courses";
-  if(!filtered.length){grid.innerHTML='<div class="empty-state">🔍 No courses found.</div>';return;}
-  grid.innerHTML=filtered.map(c=>{
-    const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-    const bg=bgMap[c.category]||"thumb-default",btn=getCourseBtn(c);
-    const emoji=c.thumbnailEmoji||"📚";
-    return `<div class="course-card" onclick="location.href='${btn.href}'">
-      <div class="course-thumb ${bg}">${emoji}<span class="course-badge ${isFree?'badge-free':'badge-paid'}">${price}</span></div>
-      <div class="course-body">
-        <div class="course-cat">${c.category||"General"}</div>
-        <div class="course-title">${c.title}</div>
-        <div class="course-desc">${c.description||""}</div>
-        <div class="course-footer">
-          <div class="course-price ${isFree?"free":""}">${price}</div>
-          <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
+
+  // pagination calc
+  const totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
+  if(currentPage>totalPages) currentPage=totalPages;
+  const start=(currentPage-1)*PER_PAGE;
+  const paged=filtered.slice(start,start+PER_PAGE);
+
+  // results bar
+  bar.innerHTML=filtered.length
+    ? `Showing <strong>${start+1}–${Math.min(start+PER_PAGE,filtered.length)}</strong> of <strong>${filtered.length}</strong> courses`
+    : `Showing <strong>0</strong> of <strong>${allCourses.length}</strong> courses`;
+
+  // empty state
+  if(!filtered.length){
+    container.className=currentView==="grid"?"courses-grid":"courses-list";
+    container.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>No courses found</h3><p>Try adjusting your filters or search term.</p></div>';
+    renderPagination(0);
+    return;
+  }
+
+  // render cards
+  container.className=currentView==="grid"?"courses-grid":"courses-list";
+  container.innerHTML=paged.map(c=>currentView==="grid"?renderGridCard(c):renderListRow(c)).join("");
+
+  // pagination
+  renderPagination(totalPages);
 }
 
-// FILTERS + SEARCH
+/* ── PAGINATION ───────────────────────────────────────────────── */
+function renderPagination(totalPages){
+  const el=document.getElementById("pagination");
+  if(totalPages<=1){el.innerHTML="";return;}
+
+  let html='';
+
+  // prev
+  html+=`<button class="pagination-btn" ${currentPage===1?'disabled':''} data-page="${currentPage-1}">‹ Prev</button>`;
+
+  // page numbers — show max 5 with ellipsis
+  const maxVisible=5;
+  let startP=Math.max(1,currentPage-Math.floor(maxVisible/2));
+  let endP=Math.min(totalPages,startP+maxVisible-1);
+  if(endP-startP<maxVisible-1) startP=Math.max(1,endP-maxVisible+1);
+
+  if(startP>1){
+    html+=`<button class="pagination-btn" data-page="1">1</button>`;
+    if(startP>2) html+=`<span class="pagination-info">…</span>`;
+  }
+
+  for(let i=startP;i<=endP;i++){
+    html+=`<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+  }
+
+  if(endP<totalPages){
+    if(endP<totalPages-1) html+=`<span class="pagination-info">…</span>`;
+    html+=`<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`;
+  }
+
+  // next
+  html+=`<button class="pagination-btn" ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Next ›</button>`;
+
+  el.innerHTML=html;
+
+  // click handlers
+  el.querySelectorAll('.pagination-btn:not(:disabled)').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      currentPage=parseInt(btn.dataset.page);
+      renderCourses();
+      // scroll to top of courses
+      document.querySelector('.filter-bar').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+}
+
+/* ── VIEW TOGGLE ──────────────────────────────────────────────── */
+document.getElementById("view-list").addEventListener("click",()=>{
+  currentView="list";
+  document.getElementById("view-list").classList.add("active");
+  document.getElementById("view-grid").classList.remove("active");
+  currentPage=1;
+  renderCourses();
+});
+
+document.getElementById("view-grid").addEventListener("click",()=>{
+  currentView="grid";
+  document.getElementById("view-grid").classList.add("active");
+  document.getElementById("view-list").classList.remove("active");
+  currentPage=1;
+  renderCourses();
+});
+
+/* ── FILTERS + SEARCH ─────────────────────────────────────────── */
 document.querySelectorAll(".filter-pill").forEach(p=>p.addEventListener("click",()=>{
   document.querySelectorAll(".filter-pill").forEach(x=>x.classList.remove("active"));
   p.classList.add("active");
   activeFilter=p.dataset.filter;
+  currentPage=1;
   renderCourses();
 }));
+
 document.getElementById("search-input").addEventListener("input",e=>{
   searchTerm=e.target.value.toLowerCase().trim();
+  currentPage=1;
   renderCourses();
 });
 
-// URL PARAMS — ?filter=free or ?cat=AI
+/* ── URL PARAMS — ?filter=free or ?cat=AI ─────────────────────── */
 const params=new URLSearchParams(location.search);
 if(params.get("filter")==="free"){
   activeFilter="free";
@@ -278,6 +372,7 @@ if(params.get("cat")){
   document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter===activeFilter));
 }
 
+/* ── INIT ─────────────────────────────────────────────────────── */
 loadCourses();
 setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
 </script>

@@ -1,378 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <script src="js/theme.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — EduMY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/nav.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard — edu-my.web</title>
 
-  <style>
-    /* ── TOKENS ─────────────────────────────────────── */
-    :root {
-      --red:          #D72B2B;
-      --red-dark:     #B02020;
-      --red-light:    #fdf0f0;
-      --red-dk:       #B02020;
-      --dark:         #1A1A1A;
-      --white:        #ffffff;
-      --off-white:    #f9f9f9;
-      --grey:         #f4f4f4;
-      --grey2:        #e8e8e8;
-      --gray:         #888;
-      --gray-light:   #e8e8e8;
-      --muted:        #888;
-      --radius:       12px;
-      --radius-lg:    16px;
-      --shadow:       0 4px 24px rgba(0,0,0,.10);
-      --shadow-lg:    0 8px 32px rgba(0,0,0,.15);
-      --nav-height:   68px;
-      --nav-h:        68px;
-      --page-padding: 5%;
-    }
-
-    /* nav.css needs .hidden and .open */
-    .hidden { display: none !important; }
-    #nav-mobile-drawer { display: none; }
-    #nav-mobile-drawer.open { display: flex; }
-
-    /* ── RESET ──────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--grey);
-      color: var(--dark);
-      min-height: 100vh;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { display: block; max-width: 100%; }
-
-    /* nav handled by css/nav.css */
-
-    /* ── HERO BANNER ────────────────────────────────── */
-    .dash-hero {
-      background: var(--dark);
-      padding: 22px 32px;
-      position: relative; overflow: hidden;
-    }
-    .dash-hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(215,43,43,.18) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    /* big decorative letter */
-    .dash-hero::after {
-      content: 'EDU';
-      position: absolute; right: -10px; top: -20px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 110px; line-height: 1;
-      color: rgba(255,255,255,.03);
-      pointer-events: none;
-      user-select: none;
-    }
-    .dash-hero-inner {
-      max-width: 1200px; margin: 0 auto;
-      position: relative;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 32px;
-    }
-    .dash-hero-text h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px;
-      color: var(--white); line-height: 1; letter-spacing: 1.2px;
-    }
-    .dash-hero-text h1 span { color: var(--red); }
-    .dash-hero-text h1 br { display: none; }
-    .dash-hero-text p { margin-top: 4px; color: rgba(255,255,255,.4); font-size: 12px; }
-    .dash-hero-stats { display: flex; gap: 8px; flex-shrink: 0; }
-    .hero-stat {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: var(--radius);
-      padding: 8px 14px; text-align: center; min-width: 72px;
-    }
-    .hero-stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px; color: var(--white); line-height: 1;
-    }
-    .hero-stat-num.accent { color: var(--red); }
-    .hero-stat-label {
-      font-size: 9px; font-weight: 600;
-      color: rgba(255,255,255,.4);
-      text-transform: uppercase; letter-spacing: .6px;
-      margin-top: 2px;
-    }
-
-    /* ── MAIN LAYOUT ────────────────────────────────── */
-    .dash-main {
-      max-width: 1200px; margin: 0 auto;
-      padding: 40px 32px 80px;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 32px;
-    }
-    .dash-left  { display: flex; flex-direction: column; gap: 32px; }
-    .dash-right { display: flex; flex-direction: column; gap: 20px; }
-
-    /* ── SECTION HEADER ─────────────────────────────── */
-    .section-hd {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 18px;
-    }
-    .section-hd h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px; letter-spacing: .5px;
-    }
-    .section-hd a { font-size: 13px; font-weight: 600; color: var(--red); }
-    .section-hd a:hover { text-decoration: underline; }
-
-    /* ── COURSE CARDS ───────────────────────────────── */
-    .course-cards { display: flex; flex-direction: column; gap: 14px; }
-    .course-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px 22px;
-      display: grid;
-      grid-template-columns: 52px 1fr auto;
-      align-items: center;
-      gap: 16px;
-      transition: transform .18s, box-shadow .18s;
-      cursor: pointer;
-    }
-    .course-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.13); }
-    .course-emoji {
-      width: 52px; height: 52px;
-      background: var(--grey);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-    }
-    .course-info { min-width: 0; }
-    .course-info h3 { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .course-meta { font-size: 12px; color: var(--muted); margin-top: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-    .course-progress { margin-top: 10px; }
-    .progress-bar { height: 5px; background: var(--grey2); border-radius: 99px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--red); border-radius: 99px; transition: width .6s ease; }
-    .progress-label {
-      font-size: 11px; color: var(--muted);
-      margin-top: 4px;
-      display: flex; justify-content: space-between;
-    }
-    .course-cta { flex-shrink: 0; }
-    .btn-continue {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--red); color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 600;
-      padding: 9px 18px; border-radius: 8px;
-      border: none; cursor: pointer;
-      transition: background .15s, transform .1s;
-      white-space: nowrap;
-    }
-    .btn-continue:hover { background: var(--red-dk); transform: scale(1.02); }
-    .btn-review {
-      background: transparent; color: var(--dark);
-      border: 1.5px solid var(--grey2);
-    }
-    .btn-review:hover { border-color: var(--red); color: var(--red); background: transparent; }
-
-    /* badges */
-    .badge {
-      display: inline-flex; align-items: center;
-      font-size: 10px; font-weight: 700;
-      padding: 2px 8px; border-radius: 99px;
-      text-transform: uppercase; letter-spacing: .5px;
-    }
-    .badge-free { background: #e6f9f0; color: #1a8a52; }
-    .badge-paid { background: #fff3cd; color: #856404; }
-    .badge-done { background: #e8f0fe; color: #1a56db; }
-
-    /* ── EMPTY STATE ────────────────────────────────── */
-    .empty-state {
-      background: var(--white); border-radius: var(--radius);
-      padding: 48px 32px; text-align: center;
-      box-shadow: var(--shadow);
-    }
-    .empty-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-    .empty-state p { font-size: 14px; color: var(--muted); }
-    .btn-red {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--red); color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px; font-weight: 600;
-      padding: 12px 24px; border-radius: 8px;
-      border: none; cursor: pointer; margin-top: 20px;
-      transition: background .15s;
-    }
-    .btn-red:hover { background: var(--red-dk); }
-
-    /* ── CERT LIST ──────────────────────────────────── */
-    .cert-list { display: flex; flex-direction: column; gap: 12px; }
-    .cert-card {
-      background: var(--white); border-radius: var(--radius);
-      box-shadow: var(--shadow); padding: 16px 20px;
-      display: flex; align-items: center; gap: 16px;
-    }
-    .cert-icon {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: linear-gradient(135deg, #D72B2B, #ff6b6b);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .cert-info { flex: 1; min-width: 0; }
-    .cert-info h4 { font-size: 14px; font-weight: 600; }
-    .cert-info p  { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .cert-dl {
-      background: transparent; border: 1.5px solid var(--grey2);
-      border-radius: 6px; padding: 6px 12px;
-      font-size: 12px; font-weight: 600; color: var(--dark);
-      cursor: pointer; transition: border-color .15s, color .15s;
-      white-space: nowrap; font-family: 'DM Sans', sans-serif;
-    }
-    .cert-dl:hover { border-color: var(--red); color: var(--red); }
-
-    /* ── SIDEBAR WIDGETS ────────────────────────────── */
-    .widget { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .widget-head {
-      padding: 16px 20px 14px;
-      border-bottom: 1px solid var(--grey2);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .widget-head h3 { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .4px; }
-    .widget-head a  { font-size: 12px; font-weight: 600; color: var(--red); }
-    .widget-head a:hover { text-decoration: underline; }
-    .widget-body { padding: 16px 20px; }
-
-    /* profile */
-    .profile-widget { padding: 28px 20px 0; text-align: center; }
-    .profile-avatar-lg {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: var(--red);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: 700; color: var(--white);
-      margin: 0 auto 12px;
-    }
-    .profile-name  { font-size: 17px; font-weight: 700; }
-    .profile-email { font-size: 13px; color: var(--muted); margin-top: 2px; }
-    .profile-stats {
-      display: flex; border-top: 1px solid var(--grey2); margin-top: 20px;
-    }
-    .profile-stat {
-      flex: 1; padding: 14px 8px; text-align: center;
-      border-right: 1px solid var(--grey2);
-    }
-    .profile-stat:last-child { border-right: none; }
-    .profile-stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 30px; line-height: 1; color: var(--dark);
-    }
-    .profile-stat-num.red { color: var(--red); }
-    .profile-stat-lbl {
-      font-size: 10px; font-weight: 600;
-      color: var(--muted); text-transform: uppercase; letter-spacing: .6px;
-      margin-top: 2px;
-    }
-
-
-
-    /* announcements */
-    .ann-list { display: flex; flex-direction: column; }
-    .ann-item {
-      padding: 12px 0; border-bottom: 1px solid var(--grey2);
-      display: flex; gap: 12px; align-items: flex-start;
-    }
-    .ann-item:last-child { border-bottom: none; }
-    .ann-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 4px; }
-    .ann-dot.muted { background: var(--grey2); }
-    .ann-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
-    .ann-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    /* recommended */
-    .rec-list { display: flex; flex-direction: column; gap: 4px; }
-    .rec-card {
-      display: flex; gap: 12px; align-items: center;
-      padding: 10px 8px; border-radius: 8px;
-      cursor: pointer; transition: background .15s;
-    }
-    .rec-card:hover { background: var(--grey); }
-    .rec-emoji {
-      width: 40px; height: 40px; border-radius: 8px;
-      background: var(--grey);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
-    .rec-info { flex: 1; min-width: 0; }
-    .rec-info h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rec-info p  { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .rec-price { font-size: 12px; font-weight: 700; color: var(--red); flex-shrink: 0; }
-    .rec-price.free { color: #1a8a52; }
-
-    /* ── SKELETON ───────────────────────────────────── */
-    .skeleton {
-      background: linear-gradient(90deg, var(--grey2) 25%, #ececec 50%, var(--grey2) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: 6px;
-    }
-    @keyframes shimmer { to { background-position: -200% 0; } }
-
-    /* ── TOAST ──────────────────────────────────────── */
-    #toast {
-      position: fixed; bottom: 28px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--dark); color: var(--white);
-      padding: 12px 24px; border-radius: 8px;
-      font-size: 14px; font-weight: 500;
-      box-shadow: 0 8px 32px rgba(0,0,0,.25);
-      z-index: 9999; transition: transform .3s ease;
-      pointer-events: none;
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── AUTH GUARD ─────────────────────────────────── */
-    #auth-guard {
-      min-height: 100vh; display: flex;
-      align-items: center; justify-content: center;
-      background: var(--grey);
-    }
-    .auth-box {
-      background: var(--white); border-radius: var(--radius);
-      box-shadow: var(--shadow); padding: 48px 40px;
-      text-align: center; max-width: 400px; width: 100%;
-    }
-    .auth-box h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px; margin-bottom: 8px;
-    }
-    .auth-box h2 span { color: var(--red); }
-    .auth-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-
-    /* ── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 960px) {
-      .dash-main { grid-template-columns: 1fr; }
-      .dash-right { order: -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    }
-    @media (max-width: 640px) {
-      .dash-main { padding: 20px 16px 60px; gap: 24px; }
-      .dash-hero  { padding: 16px; }
-      .dash-hero::after { display: none; }
-      .dash-hero-stats { display: none; }
-      .dash-right { grid-template-columns: 1fr; }
-      .course-card { grid-template-columns: 44px 1fr; }
-      .course-cta { display: none; }
-    }
-  </style>
+  <!-- Shared CSS — single source of truth -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
 </head>
 <body>
 
-<!-- AUTH GUARD -->
+<!-- ── AUTH GUARD ─────────────────────────────────────────────── -->
 <div id="auth-guard" style="display:none;">
   <div class="auth-box">
     <h2>Sign In to <span>EduMY</span></h2>
@@ -381,7 +22,7 @@
   </div>
 </div>
 
-<!-- NAV (outside dashboard-root so nav.js always has access) -->
+<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
 <nav class="navbar">
   <a href="index.html" class="nav-logo">edu-my.web</a>
   <div class="nav-links">
@@ -424,10 +65,10 @@
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ── DASHBOARD ─────────────────────────────────────────────── -->
 <div id="dashboard-root" style="display:none;">
 
-  <!-- HERO -->
+  <!-- HERO BANNER -->
   <div class="dash-hero">
     <div class="dash-hero-inner">
       <div class="dash-hero-text">
@@ -451,11 +92,11 @@
     </div>
   </div>
 
-  <!-- MAIN -->
-  <main class="dash-main">
+  <!-- MAIN LAYOUT — two column -->
+  <main class="layout-main">
 
-    <!-- LEFT -->
-    <div class="dash-left">
+    <!-- LEFT / CONTENT -->
+    <div class="layout-content">
 
       <!-- MY COURSES -->
       <section>
@@ -492,7 +133,7 @@
           <h2>My Certificates</h2>
         </div>
         <div class="cert-list" id="cert-list">
-          <div style="background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);">
+          <div style="background:var(--white);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
             <div class="skeleton" style="height:44px;width:100%;border-radius:8px;"></div>
           </div>
         </div>
@@ -501,17 +142,17 @@
     </div>
 
     <!-- RIGHT / SIDEBAR -->
-    <div class="dash-right">
+    <div class="layout-sidebar">
 
       <!-- PROFILE -->
       <div class="widget">
         <div class="profile-widget">
           <div class="profile-avatar-lg" id="profile-avatar">?</div>
-          <div class="profile-name"  id="profile-name">—</div>
+          <div class="profile-name" id="profile-name">—</div>
           <div class="profile-email" id="profile-email">—</div>
           <div class="profile-stats">
             <div class="profile-stat">
-              <div class="profile-stat-num"     id="ps-enrolled">0</div>
+              <div class="profile-stat-num" id="ps-enrolled">0</div>
               <div class="profile-stat-lbl">Courses</div>
             </div>
             <div class="profile-stat">
@@ -519,12 +160,11 @@
               <div class="profile-stat-lbl">Done</div>
             </div>
             <div class="profile-stat">
-              <div class="profile-stat-num"     id="ps-certs">0</div>
+              <div class="profile-stat-num" id="ps-certs">0</div>
               <div class="profile-stat-lbl">Certs</div>
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- ANNOUNCEMENTS -->
@@ -558,9 +198,31 @@
   </main>
 </div><!-- /dashboard-root -->
 
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+    </div>
+    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
+    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
+</footer>
+
+<!-- ── WHATSAPP FLOAT ────────────────────────────────────────── -->
+<div class="help-float">
+  <span class="help-text" id="help-text">Let me know how I can help</span>
+  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
 <div id="toast"></div>
 
-<!-- FIREBASE + LOGIC -->
+<!-- ── FIREBASE + LOGIC ──────────────────────────────────────── -->
 <script type="module">
   import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -606,11 +268,10 @@
     $('auth-guard').style.display     = 'none';
     $('dashboard-root').style.display = 'block';
 
-    /* Fill name / nav — using nav.js IDs */
+    /* Fill name / nav */
     const name = user.displayName || user.email?.split('@')[0] || 'Learner';
     const ini  = initials(name);
 
-    // nav.js handles show/hide via hidden class
     const navGuest = $('nav-guest');
     const navUser  = $('nav-user');
     const mGuest   = $('nav-mobile-guest');
@@ -625,10 +286,18 @@
     if ($('dd-name'))     $('dd-name').textContent     = name;
     if ($('dd-email'))    $('dd-email').textContent    = user.email || '';
 
-    $('hero-name').textContent     = name.split(' ')[0];
-    $('profile-name').textContent  = name;
-    $('profile-email').textContent = user.email || '';
+    $('hero-name').textContent      = name.split(' ')[0];
+    $('profile-name').textContent   = name;
+    $('profile-email').textContent  = user.email || '';
     $('profile-avatar').textContent = ini;
+
+    /* Check admin */
+    try {
+      const ud = await getDoc(doc(db, 'users', user.uid));
+      const ia = ud.exists() && ud.data().role === 'admin';
+      window.cacheAuthUser?.(user, ia);
+      if (ia) window.setAdminNav?.(true);
+    } catch(e) { window.cacheAuthUser?.(user, false); }
 
     /* Load in parallel */
     await Promise.all([
@@ -638,7 +307,7 @@
     ]);
   });
 
-  /* ENROLLMENTS */
+  /* ── ENROLLMENTS ────────────────────────────────────────────── */
   async function loadEnrollments(uid) {
     try {
       const snap = await getDocs(query(collection(db,'enrollments'), where('userId','==',uid)));
@@ -664,7 +333,7 @@
       let completed = 0;
 
       enrollments.forEach(enr => {
-        const c    = cMap[enr.courseId];
+        const c = cMap[enr.courseId];
         if (!c) return;
         const prog = Math.min(100, Math.max(0, enr.progress ?? 0));
         const done = prog >= 100;
@@ -672,7 +341,7 @@
 
         const card = document.createElement('div');
         card.className = 'course-card';
-        card.onclick   = () => window.location = 'courses.html';
+        card.onclick   = () => window.location = 'player.html?id=' + c.id;
         card.innerHTML = `
           <div class="course-emoji"></div>
           <div class="course-info">
@@ -695,7 +364,6 @@
             </button>
           </div>
         `;
-        /* emoji fix: innerHTML not textContent */
         card.querySelector('.course-emoji').innerHTML = c.thumbnailEmoji || '📚';
         list.appendChild(card);
       });
@@ -728,7 +396,7 @@
     $('ps-completed').textContent   = completed;
   }
 
-  /* CERTIFICATES */
+  /* ── CERTIFICATES ───────────────────────────────────────────── */
   async function loadCerts(uid, enrolled, cMap) {
     try {
       const snap = await getDocs(query(collection(db,'certificates'), where('userId','==',uid)));
@@ -767,17 +435,17 @@
 
     } catch(e) {
       console.error(e);
-      $('cert-list').innerHTML = '<p style="padding:16px;font-size:13px;color:var(--muted);">Could not load certificates.</p>';
+      $('cert-list').innerHTML = '<p style="padding:16px;font-size:13px;color:var(--gray-500);">Could not load certificates.</p>';
     }
   }
 
-  /* ANNOUNCEMENTS */
+  /* ── ANNOUNCEMENTS ──────────────────────────────────────────── */
   async function loadAnnouncements() {
     try {
       const snap = await getDocs(query(collection(db,'announcements'), orderBy('createdAt','desc'), limit(5)));
       const list = $('ann-list');
       if (snap.empty) {
-        list.innerHTML = '<p style="font-size:13px;color:var(--muted);">No announcements right now.</p>';
+        list.innerHTML = '<p style="font-size:13px;color:var(--gray-500);">No announcements right now.</p>';
         return;
       }
       list.innerHTML = '';
@@ -794,11 +462,11 @@
         list.appendChild(el);
       });
     } catch(e) {
-      $('ann-list').innerHTML = '<p style="font-size:13px;color:var(--muted);">Could not load announcements.</p>';
+      $('ann-list').innerHTML = '<p style="font-size:13px;color:var(--gray-500);">Could not load announcements.</p>';
     }
   }
 
-  /* RECOMMENDED */
+  /* ── RECOMMENDED ────────────────────────────────────────────── */
   async function loadRecommended(uid) {
     try {
       const enrSnap  = await getDocs(query(collection(db,'enrollments'), where('userId','==',uid)));
@@ -809,7 +477,7 @@
       const list      = $('rec-list');
 
       if (!available.length) {
-        list.innerHTML = '<p style="font-size:13px;color:var(--muted);">You\'re enrolled in all available courses!</p>';
+        list.innerHTML = '<p style="font-size:13px;color:var(--gray-500);">You\'re enrolled in all available courses!</p>';
         return;
       }
 
@@ -818,7 +486,7 @@
         const c    = d.data();
         const card = document.createElement('div');
         card.className = 'rec-card';
-        card.onclick   = () => window.location = 'courses.html';
+        card.onclick   = () => window.location = 'course.html?id=' + d.id;
         card.innerHTML = `
           <div class="rec-emoji"></div>
           <div class="rec-info">
@@ -832,11 +500,11 @@
       });
 
     } catch(e) {
-      $('rec-list').innerHTML = '<p style="font-size:13px;color:var(--muted);">Could not load recommendations.</p>';
+      $('rec-list').innerHTML = '<p style="font-size:13px;color:var(--gray-500);">Could not load recommendations.</p>';
     }
   }
 
-  /* SIGN OUT */
+  /* ── SIGN OUT ───────────────────────────────────────────────── */
   const logoutBtn       = $('btn-logout');
   const logoutBtnMobile = $('btn-logout-mobile');
   const doLogout = async () => {
@@ -846,8 +514,10 @@
   };
   if (logoutBtn)       logoutBtn.addEventListener('click', doLogout);
   if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', doLogout);
-</script>
 
-  <script src="js/nav.js"></script>
+  /* WhatsApp help float */
+  setTimeout(() => { const t = $('help-text'); if (t) t.classList.add('visible'); }, 4000);
+</script>
+<script src="js/nav.js"></script>
 </body>
 </html>
