@@ -14,7 +14,7 @@
 <body>
 
 <!-- ── AUTH GUARD ─────────────────────────────────────────────── -->
-<div id="auth-guard" style="display:none;">
+<div id="auth-guard">
   <div class="auth-box">
     <h2>Sign In to <span>EduMY</span></h2>
     <p>You need to be logged in to view your dashboard.</p>
@@ -66,28 +66,13 @@
 </div>
 
 <!-- ── DASHBOARD ─────────────────────────────────────────────── -->
-<div id="dashboard-root" style="display:none;">
+<div id="dashboard-root">
 
-  <!-- HERO BANNER -->
-  <div class="dash-hero">
-    <div class="dash-hero-inner">
-      <div class="dash-hero-text">
-        <h1>Welcome back,<br><span id="hero-name">Learner</span>!</h1>
-        <p>Continue where you left off — your progress is saved.</p>
-      </div>
-      <div class="dash-hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num" id="stat-enrolled">—</div>
-          <div class="hero-stat-label">Enrolled</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num accent" id="stat-completed">—</div>
-          <div class="hero-stat-label">Completed</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num" id="stat-certs">—</div>
-          <div class="hero-stat-label">Certs Earned</div>
-        </div>
+  <!-- PAGE HEADER — matches courses page height -->
+  <div class="page-header dash-header">
+    <div class="page-header-inner">
+      <div>
+        <h1>WELCOME BACK, <span id="hero-name" style="color:var(--red);">LEARNER</span>!</h1>
       </div>
     </div>
   </div>
@@ -286,7 +271,7 @@
     if ($('dd-name'))     $('dd-name').textContent     = name;
     if ($('dd-email'))    $('dd-email').textContent    = user.email || '';
 
-    $('hero-name').textContent      = name.split(' ')[0];
+    $('hero-name').textContent      = (name.split(' ')[0]).toUpperCase();
     $('profile-name').textContent   = name;
     $('profile-email').textContent  = user.email || '';
     $('profile-avatar').textContent = ini;
@@ -390,8 +375,6 @@
   }
 
   function setStats(enrolled, completed) {
-    $('stat-enrolled').textContent  = enrolled;
-    $('stat-completed').textContent = completed;
     $('ps-enrolled').textContent    = enrolled;
     $('ps-completed').textContent   = completed;
   }
