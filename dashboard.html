@@ -385,7 +385,6 @@
     try {
       const snap = await getDocs(query(collection(db,'certificates'), where('userId','==',uid)));
       const n    = snap.size;
-      $('stat-certs').textContent = n;
       $('ps-certs').textContent   = n;
 
       const list = $('cert-list');
