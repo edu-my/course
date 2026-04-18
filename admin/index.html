@@ -17,23 +17,23 @@
     .nav-link{color:rgba(255,255,255,.6);}
     .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.08);color:white;}
     .nav-user-name{color:rgba(255,255,255,.8);}
-    .nav-avatar{background:var(--orange);}
+    .nav-avatar{background:var(--red);}
     .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
-    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,.06);}
-    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
-    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
-    .admin-nav-item:hover{background:rgba(255,255,255,.04);color:white;}
-    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);color:white;}
-    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;}
+    .admin-sidebar{background:#F0F2F5;padding:1.5rem 0;border-right:1px solid #e0e0e0;}
+    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#aaa;padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:#6B6B6B;text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(215,43,43,.05);color:var(--dark);}
+    .admin-nav-item.active{border-left-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
+    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;color:#999;}
     .admin-badge{margin-left:auto;background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;}
     .admin-main{padding:2rem;overflow-y:auto;}
     .page-title{font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;}
     .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem;}
-    .kpi-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);border-top:3px solid var(--red);}
+    .kpi-card{background:white;border-radius:var(--radius-lg);padding:1rem 1.15rem;box-shadow:var(--shadow-sm);border-top:3px solid var(--red);}
     .kpi-card.green{border-top-color:var(--green);} .kpi-card.blue{border-top-color:var(--blue);} .kpi-card.orange{border-top-color:var(--orange);}
-    .kpi-icon{font-size:2rem;margin-bottom:.75rem;}
-    .kpi-num{font-family:Bebas Neue,sans-serif;font-size:2.5rem;color:var(--dark);letter-spacing:1px;line-height:1;}
-    .kpi-label{font-size:.8rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:.25rem;}
+    .kpi-icon{font-size:1.25rem;margin-bottom:.4rem;}
+    .kpi-num{font-family:Bebas Neue,sans-serif;font-size:1.75rem;color:var(--dark);letter-spacing:1px;line-height:1;}
+    .kpi-label{font-size:.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:.15rem;}
     .panel{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.5rem;}
     .panel-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between;background:var(--off-white);}
     .panel-header h3{font-size:.92rem;font-weight:700;}
@@ -64,7 +64,6 @@
       <a href="index.html" class="nav-link active">Admin</a>
       <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
