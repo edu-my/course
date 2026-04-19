@@ -170,7 +170,7 @@ onAuthStateChanged(auth,async(user)=>{
     mg?.classList.remove("hidden");mu?.classList.add("hidden");
     userStatus={};
   }
-  if(coursesLoaded) renderCourses();
+  await loadCourses();
 });
 
 document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
@@ -375,7 +375,6 @@ if(params.get("cat")){
 }
 
 /* ── INIT ─────────────────────────────────────────────────────── */
-loadCourses();
 setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
 </script>
 <script src="js/nav.js"></script>
