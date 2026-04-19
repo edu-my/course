@@ -134,6 +134,7 @@ let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={
 let currentView="grid"; // "grid" or "list"
 let currentPage=1;
 const PER_PAGE=6;
+let coursesLoaded=false;
 
 /* ── AUTH ──────────────────────────────────────────────────────── */
 onAuthStateChanged(auth,async(user)=>{
@@ -169,7 +170,7 @@ onAuthStateChanged(auth,async(user)=>{
     mg?.classList.remove("hidden");mu?.classList.add("hidden");
     userStatus={};
   }
-  renderCourses();
+  if(coursesLoaded) renderCourses();
 });
 
 document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
@@ -181,6 +182,7 @@ async function loadCourses(){
     const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
     allCourses=[];
     snap.forEach(d=>allCourses.push({id:d.id,...d.data()}));
+    coursesLoaded=true;
     const hc=document.getElementById("header-count");
     if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
     renderCourses();
