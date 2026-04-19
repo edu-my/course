@@ -170,7 +170,13 @@ onAuthStateChanged(auth,async(user)=>{
     mg?.classList.remove("hidden");mu?.classList.add("hidden");
     userStatus={};
   }
-  await loadCourses();
+  if(user){
+    await loadCourses();
+  }else{
+    document.getElementById("courses-container").innerHTML='<div class="empty-state"><div class="empty-icon">🔒</div><h3>Sign in to browse courses</h3><p>Log in to view available courses and enroll.</p><a href="login.html" class="btn-red">Log In</a></div>';
+    document.getElementById("results-bar").innerHTML='';
+    document.getElementById("header-count").textContent='';
+  }
 });
 
 document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
