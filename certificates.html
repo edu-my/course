@@ -127,6 +127,11 @@
   const auth=getAuth(app);
   const db=getFirestore(app);
 
+  /* Expose for downloadCert (window scope needs access) */
+  window._fbDb=db;
+  window._fbDoc=doc;
+  window._fbGetDoc=getDoc;
+
   function waitForAuth() {
     return new Promise((resolve) => {
       const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
@@ -192,7 +197,7 @@
       let creditHours="";
       try{
         const cid=decodeURIComponent(courseIdEnc||"");
-        if(cid){const cs=await getDoc(doc(db,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}
+        if(cid){const cs=await window._fbGetDoc(window._fbDoc(window._fbDb,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}
       }catch(e){}
       pdfDoc.setFillColor(255,255,255);pdfDoc.rect(0,0,W,H,"F");
       pdfDoc.setDrawColor(215,43,43);pdfDoc.setLineWidth(3);pdfDoc.rect(10,10,W-20,H-20,"S");
