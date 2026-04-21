@@ -3,230 +3,233 @@
 <head>
   <meta charset="UTF-8"/>
   <script src="js/theme.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Certificates — iCraftCourse</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>My Certificates — edu-my.web</title>
+
+  <!-- Shared CSS — single source of truth -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+
   <style>
-    .page-header{background:var(--dark);padding:2.5rem var(--page-padding);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .page-header h1{font-family:Bebas Neue,sans-serif;font-size:2.5rem;letter-spacing:1.5px;color:white;}
-    .page-header p{color:rgba(255,255,255,.5);font-size:.9rem;}
-    .certs-wrap{padding:3rem var(--page-padding);max-width:1100px;margin:0 auto;}
+    .certs-wrap{padding:3rem var(--content-padding);max-width:var(--max-width);margin:0 auto;}
     .certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .cert-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;box-shadow:var(--shadow-sm);}
+    .cert-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-200);overflow:hidden;box-shadow:var(--shadow-sm);}
     .cert-card-header{background:linear-gradient(135deg,var(--red),var(--red-dark));padding:2rem;text-align:center;}
-    .cert-card-header h3{color:white;font-family:Bebas Neue,sans-serif;font-size:1.5rem;letter-spacing:1px;margin-top:.5rem;}
+    .cert-card-header h3{color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;margin-top:.5rem;}
     .cert-card-body{padding:1.25rem;}
     .cert-course-name{font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:.4rem;}
-    .cert-meta{font-size:.8rem;color:var(--gray);margin-bottom:.35rem;}
-    .cert-id{font-size:.72rem;color:var(--gray-mid);font-family:monospace;background:var(--off-white);padding:.25rem .5rem;border-radius:4px;display:inline-block;}
-    .cert-card-footer{padding:1rem 1.25rem;border-top:1px solid var(--gray-light);display:flex;gap:.75rem;}
-    .empty-state{text-align:center;padding:4rem;background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);}
+    .cert-meta{font-size:.8rem;color:var(--gray-600);margin-bottom:.35rem;}
+    .cert-id{font-size:.72rem;color:var(--gray-400);font-family:monospace;background:var(--off-white);padding:.25rem .5rem;border-radius:4px;display:inline-block;}
+    .cert-card-footer{padding:1rem 1.25rem;border-top:1px solid var(--gray-200);display:flex;gap:.75rem;}
     @media(max-width:768px){.certs-grid{grid-template-columns:1fr;}}
-
-    /* DARK MODE NAV */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">iC</span>edu-my.web</a>
-    <div class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="courses.html" class="nav-link">Courses</a><a href="dashboard.html" class="nav-link active">Dashboard</a></div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
-    
-    <div class="nav-actions" id="nav-guest">
-      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
-    </div>
-    <div class="nav-user hidden" id="nav-user">
-      <div class="nav-avatar" id="nav-avatar">U</div>
-      <div class="nav-user-name" id="nav-name">User</div>
-      <div class="nav-dropdown">
-        <div class="nav-dropdown-header">
-          <div class="nav-dropdown-name" id="dd-name">User</div>
-          <div class="nav-dropdown-email" id="dd-email"></div>
-        </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
-      </div>
-    </div>
-    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
-  </nav>
-  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">edu-my.web</a>
+  <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
     <a href="courses.html" class="nav-link">Courses</a>
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <div class="nav-actions" id="nav-mobile-guest">
-      <a href="login.html" class="btn btn-secondary">Log In</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
-    </div>
-    <div class="hidden" id="nav-mobile-user">
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+    <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
     </div>
   </div>
-  <div class="page-header">
-    <div><h1>MY CERTIFICATES</h1><p>Your earned CPD certificates.</p></div>
-    <a href="courses.html" class="btn btn-primary">Earn More</a>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link">Courses</a>
+  <a href="dashboard.html" class="nav-link active">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
   </div>
-  <div class="certs-wrap">
-    <div class="certs-grid" id="certs-grid">
-      <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;"><div class="spinner spinner-sm"></div>&nbsp;Loading...</div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
+
+<!-- ── PAGE HEADER ────────────────────────────────────────────── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <h1>MY CERTIFICATES</h1>
+      <p>Your earned CPD certificates</p>
     </div>
+    <a href="courses.html" class="btn btn-primary btn-sm">Earn More</a>
   </div>
-  <script type="module">
-    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import {getFirestore,collection,query,where,getDocs,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-    const app=initializeApp({
-      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
-      authDomain:"kolamdata.firebaseapp.com",
-      projectId:"kolamdata",
-      storageBucket:"kolamdata.firebasestorage.app",
-      messagingSenderId:"16403132310",
-      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
-    }); const auth=getAuth(app); const db=getFirestore(app);
-    
-    // #### waitForAuth — resolves once Firebase confirms auth state ####
-    function waitForAuth() {
-      return new Promise((resolve) => {
-        const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
-      });
-    }
-    waitForAuth().then(async(user)=>{
-      if(!user){ location.href="login.html"; return; }
-      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
-      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
-      if(user){
-        g?.classList.add("hidden");u?.classList.remove("hidden");
-        mg?.classList.add("hidden");mu?.classList.remove("hidden");
-        const n=user.displayName||"User",el=id=>document.getElementById(id);
-        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
-        if(el("nav-name"))el("nav-name").textContent=n;
-        if(el("dd-name"))el("dd-name").textContent=n;
-        if(el("dd-email"))el("dd-email").textContent=user.email||"";
-        window.cacheAuthUser?.(user, false);
-      }else{
-        g?.classList.remove("hidden");u?.classList.add("hidden");
-        mg?.classList.remove("hidden");mu?.classList.add("hidden");
-      }
-      await loadCerts(user);
+</div>
+
+<!-- ── CERTIFICATES GRID ─────────────────────────────────────── -->
+<div class="certs-wrap">
+  <div class="certs-grid" id="certs-grid">
+    <div class="loading-text" style="grid-column:1/-1;padding:2rem;justify-content:center;"><div class="spinner spinner-sm"></div>&nbsp;Loading...</div>
+  </div>
+</div>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+    </div>
+    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
+    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
+</footer>
+
+<!-- ── WHATSAPP FLOAT ────────────────────────────────────────── -->
+<div class="help-float">
+  <span class="help-text" id="help-text">Let me know how I can help</span>
+  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- ── FIREBASE + LOGIC ──────────────────────────────────────── -->
+<script type="module">
+  import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import {getFirestore,collection,query,where,getDocs,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  const app=initializeApp({
+    apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+    authDomain:"kolamdata.firebaseapp.com",
+    projectId:"kolamdata",
+    storageBucket:"kolamdata.firebasestorage.app",
+    messagingSenderId:"16403132310",
+    appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+  });
+  const auth=getAuth(app);
+  const db=getFirestore(app);
+
+  function waitForAuth() {
+    return new Promise((resolve) => {
+      const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
     });
-    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
-    async function loadCerts(user){
-      const grid=document.getElementById("certs-grid");
-      try{
-        const snap=await getDocs(query(collection(db,"certificates"),where("userId","==",user.uid)));
-        const certs=[];snap.forEach(d=>certs.push({id:d.id,...d.data()}));
-        if(!certs.length){
-          grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div style="font-size:3rem">&#127942;</div><h3 style="margin:.75rem 0 .5rem">No certificates yet</h3><p style="margin-bottom:1.25rem">Complete a course to earn your first CPD certificate!</p><a href="courses.html" class="btn btn-primary">Browse Courses</a></div>';
-          return;
-        }
-        grid.innerHTML=certs.map(c=>{
-          const date=c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"}):"&#8212;";
-          return '<div class="cert-card">'
-            +'<div class="cert-card-header"><div style="font-size:2.5rem">&#127942;</div><h3>Certificate of<br/>Completion</h3></div>'
-            +'<div class="cert-card-body">'
-            +'<div class="cert-course-name">'+(c.courseName||"Course")+'</div>'
-            +'<div class="cert-meta">Issued to: <strong>'+(c.userName||"Student")+'</strong></div>'
-            +'<div class="cert-meta">Date: <strong>'+date+'</strong></div>'
-            +'<div class="cert-id">'+(c.certId||c.id)+'</div></div>'
-            +'<div class="cert-card-footer">'
-            +'<button class="btn btn-primary btn-sm" onclick="downloadCert(\''+c.id+'\',\''+( c.certId||c.id)+'\',\''+encodeURIComponent(c.userName||"")+'\',\''+encodeURIComponent(c.courseName||"")+'\',\''+date+'\',\''+encodeURIComponent(c.courseId||"")+'\')">&#x1F4C4; Download PDF</button>'
-            +'<a href="player.html?id='+(c.courseId||"")+'" class="btn btn-secondary btn-sm">Revisit</a>'
-            +'</div></div>';
-        }).join("");
-      }catch(e){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><p>Error: '+e.message+'</p></div>';}
+  }
+
+  waitForAuth().then(async(user)=>{
+    if(!user){ location.href="login.html"; return; }
+    const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+    const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+    if(user){
+      g?.classList.add("hidden");u?.classList.remove("hidden");
+      mg?.classList.add("hidden");mu?.classList.remove("hidden");
+      const n=user.displayName||"User",el=id=>document.getElementById(id);
+      if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+      if(el("nav-name"))el("nav-name").textContent=n;
+      if(el("dd-name"))el("dd-name").textContent=n;
+      if(el("dd-email"))el("dd-email").textContent=user.email||"";
+      window.cacheAuthUser?.(user, false);
+    }else{
+      g?.classList.remove("hidden");u?.classList.add("hidden");
+      mg?.classList.remove("hidden");mu?.classList.add("hidden");
     }
-    window.downloadCert=async function(certId,certCode,nameEnc,courseEnc,date,courseIdEnc){
-      const btn=event.target;btn.textContent="Generating...";btn.disabled=true;
+    await loadCerts(user);
+  });
+
+  document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+  document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
+  async function loadCerts(user){
+    const grid=document.getElementById("certs-grid");
+    try{
+      const snap=await getDocs(query(collection(db,"certificates"),where("userId","==",user.uid)));
+      const certs=[];snap.forEach(d=>certs.push({id:d.id,...d.data()}));
+      if(!certs.length){
+        grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏆</div><h3>No certificates yet</h3><p>Complete a course to earn your first CPD certificate!</p><a href="courses.html" class="btn-red">Browse Courses</a></div>';
+        return;
+      }
+      grid.innerHTML=certs.map(c=>{
+        const date=c.issuedAt?.toDate?c.issuedAt.toDate().toLocaleDateString("en-MY",{day:"numeric",month:"long",year:"numeric"}):"—";
+        return '<div class="cert-card">'
+          +'<div class="cert-card-header"><div style="font-size:2.5rem">🏆</div><h3>Certificate of<br/>Completion</h3></div>'
+          +'<div class="cert-card-body">'
+          +'<div class="cert-course-name">'+(c.courseName||"Course")+'</div>'
+          +'<div class="cert-meta">Issued to: <strong>'+(c.userName||"Student")+'</strong></div>'
+          +'<div class="cert-meta">Date: <strong>'+date+'</strong></div>'
+          +'<div class="cert-id">'+(c.certId||c.id)+'</div></div>'
+          +'<div class="cert-card-footer">'
+          +'<button class="btn btn-primary btn-sm" onclick="downloadCert(\''+c.id+'\',\''+(c.certId||c.id)+'\',\''+encodeURIComponent(c.userName||"")+'\',\''+encodeURIComponent(c.courseName||"")+'\',\''+date+'\',\''+encodeURIComponent(c.courseId||"")+'\')">📄 Download PDF</button>'
+          +'<a href="player.html?id='+(c.courseId||"")+'" class="btn btn-secondary btn-sm">Revisit</a>'
+          +'</div></div>';
+      }).join("");
+    }catch(e){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><p>Error: '+e.message+'</p></div>';}
+  }
+
+  window.downloadCert=async function(certId,certCode,nameEnc,courseEnc,date,courseIdEnc){
+    const btn=event.target;btn.textContent="Generating...";btn.disabled=true;
+    try{
+      await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+      const {jsPDF}=window.jspdf;
+      const pdfDoc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+      const W=297,H=210,name=decodeURIComponent(nameEnc),course=decodeURIComponent(courseEnc);
+      let creditHours="";
       try{
-        await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
-        const {jsPDF}=window.jspdf;
-        const doc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
-        const W=297,H=210,name=decodeURIComponent(nameEnc),course=decodeURIComponent(courseEnc);
-        // Fetch credit hours from course
-        let creditHours="";
-        try{
-          const cid=decodeURIComponent(courseIdEnc||"");
-          if(cid){const cs=await getDoc(doc(db,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}
-        }catch(e){}
-        doc.setFillColor(255,255,255);doc.rect(0,0,W,H,"F");
-        doc.setDrawColor(215,43,43);doc.setLineWidth(3);doc.rect(10,10,W-20,H-20,"S");
-        doc.setLineWidth(.5);doc.rect(14,14,W-28,H-28,"S");
-        doc.setFillColor(215,43,43);doc.rect(10,10,W-20,35,"F");
-        doc.setTextColor(255,255,255);doc.setFontSize(26);doc.setFont("helvetica","bold");
-        doc.text("iCraftCourse",W/2,30,{align:"center"});
-        doc.setTextColor(26,26,26);doc.setFontSize(34);
-        doc.text("CERTIFICATE OF COMPLETION",W/2,72,{align:"center"});
-        doc.setDrawColor(215,43,43);doc.setLineWidth(1);doc.line(50,79,W-50,79);
-        doc.setFontSize(12);doc.setFont("helvetica","normal");doc.setTextColor(107,107,107);
-        doc.text("This is to certify that",W/2,92,{align:"center"});
-        doc.setFontSize(30);doc.setFont("helvetica","bold");doc.setTextColor(26,26,26);
-        doc.text(name,W/2,110,{align:"center"});
-        doc.setFontSize(12);doc.setFont("helvetica","normal");doc.setTextColor(107,107,107);
-        doc.text("has successfully completed the course:",W/2,123,{align:"center"});
-        doc.setFontSize(18);doc.setFont("helvetica","bold");doc.setTextColor(215,43,43);
-        doc.text(course,W/2,138,{align:"center"});
-        doc.setFontSize(11);doc.setFont("helvetica","normal");doc.setTextColor(107,107,107);
-        doc.text("Date of Completion: "+date,W/2,152,{align:"center"});
-        doc.setDrawColor(215,43,43);doc.setLineWidth(.5);doc.line(50,159,W-50,159);
-        doc.setFontSize(8);doc.setTextColor(150,150,150);
-        doc.text("Certificate ID: "+certCode,W/2,167,{align:"center"});
-        doc.setFillColor(215,43,43);doc.roundedRect(W/2-25,172,50,11,3,3,"F");
-        doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont("helvetica","bold");
-        doc.text("CPD ACCREDITED",W/2,179,{align:"center"});
+        const cid=decodeURIComponent(courseIdEnc||"");
+        if(cid){const cs=await getDoc(doc(db,"courses",cid));if(cs.exists())creditHours=cs.data().totalDuration||"";}
+      }catch(e){}
+      pdfDoc.setFillColor(255,255,255);pdfDoc.rect(0,0,W,H,"F");
+      pdfDoc.setDrawColor(215,43,43);pdfDoc.setLineWidth(3);pdfDoc.rect(10,10,W-20,H-20,"S");
+      pdfDoc.setLineWidth(.5);pdfDoc.rect(14,14,W-28,H-28,"S");
+      pdfDoc.setFillColor(215,43,43);pdfDoc.rect(10,10,W-20,35,"F");
+      pdfDoc.setTextColor(255,255,255);pdfDoc.setFontSize(26);pdfDoc.setFont("helvetica","bold");
+      pdfDoc.text("edu-my.web",W/2,30,{align:"center"});
+      pdfDoc.setTextColor(26,26,26);pdfDoc.setFontSize(34);
+      pdfDoc.text("CERTIFICATE OF COMPLETION",W/2,72,{align:"center"});
+      pdfDoc.setDrawColor(215,43,43);pdfDoc.setLineWidth(1);pdfDoc.line(50,79,W-50,79);
+      pdfDoc.setFontSize(12);pdfDoc.setFont("helvetica","normal");pdfDoc.setTextColor(107,107,107);
+      pdfDoc.text("This is to certify that",W/2,92,{align:"center"});
+      pdfDoc.setFontSize(30);pdfDoc.setFont("helvetica","bold");pdfDoc.setTextColor(26,26,26);
+      pdfDoc.text(name,W/2,110,{align:"center"});
+      pdfDoc.setFontSize(12);pdfDoc.setFont("helvetica","normal");pdfDoc.setTextColor(107,107,107);
+      pdfDoc.text("has successfully completed the course:",W/2,123,{align:"center"});
+      pdfDoc.setFontSize(18);pdfDoc.setFont("helvetica","bold");pdfDoc.setTextColor(215,43,43);
+      pdfDoc.text(course,W/2,138,{align:"center"});
+      pdfDoc.setFontSize(11);pdfDoc.setFont("helvetica","normal");pdfDoc.setTextColor(107,107,107);
+      pdfDoc.text("Date of Completion: "+date,W/2,152,{align:"center"});
+      pdfDoc.setDrawColor(215,43,43);pdfDoc.setLineWidth(.5);pdfDoc.line(50,159,W-50,159);
+      pdfDoc.setFontSize(8);pdfDoc.setTextColor(150,150,150);
+      pdfDoc.text("Certificate ID: "+certCode,W/2,167,{align:"center"});
+      pdfDoc.setFillColor(215,43,43);pdfDoc.roundedRect(W/2-25,172,50,11,3,3,"F");
+      pdfDoc.setTextColor(255,255,255);pdfDoc.setFontSize(9);pdfDoc.setFont("helvetica","bold");
+      pdfDoc.text("CPD ACCREDITED",W/2,179,{align:"center"});
+      pdfDoc.setFontSize(11);pdfDoc.setFont("helvetica","normal");pdfDoc.setTextColor(26,26,26);
+      if(creditHours){pdfDoc.text("Total Credit Hours: "+creditHours,W/2,194,{align:"center"});}
+      pdfDoc.setFontSize(8);pdfDoc.setTextColor(150,150,150);
+      pdfDoc.text("This certificate was digitally issued by edu-my.web. Verify at: edu-my.github.io/course",W/2,205,{align:"center"});
+      pdfDoc.save("edu-my-Certificate-"+certCode+".pdf");
+    }catch(e){alert("Could not generate PDF: "+e.message);}
+    btn.textContent="📄 Download PDF";btn.disabled=false;
+  };
 
-        // Credit hours line
-        doc.setFontSize(11);doc.setFont("helvetica","normal");doc.setTextColor(26,26,26);
-        if(creditHours){doc.text("Total Credit Hours: "+creditHours,W/2,194,{align:"center"});}
-
-        // Digital issue note (no signature needed)
-        doc.setFontSize(8);doc.setTextColor(150,150,150);
-        doc.text("This certificate was digitally issued by iCraftCourse. Verify at: edu-my.github.io/course",W/2,205,{align:"center"});
-
-        doc.save("iCraftCourse-Certificate-"+certCode+".pdf");
-      }catch(e){alert("Could not generate PDF: "+e.message);}
-      btn.textContent="&#x1F4C4; Download PDF";btn.disabled=false;
-    };
-  </script>
-  <script src="js/nav.js"></script>
-
-  <!-- FLOATING WHATSAPP -->
-  <style>
-    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
-    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
-    .help-text.visible{max-width:240px;opacity:1;}
-    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
-    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
-    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
-    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
-    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
-    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
-  </style>
-  <div class="help-float">
-    <span class="help-text" id="help-text">Let me know how I can help</span>
-    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
-      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-  </div>
-  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
-  <!-- END FLOATING WHATSAPP -->
+  setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
+</script>
+<script src="js/nav.js"></script>
 </body>
 </html>
