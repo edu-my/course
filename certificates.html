@@ -109,9 +109,6 @@
   </a>
 </div>
 
-<!-- ── PRELOAD jsPDF — loaded BEFORE the module script ────────── -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <!-- ── FIREBASE + LOGIC ──────────────────────────────────────── -->
 <script type="module">
   import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
@@ -205,6 +202,17 @@
     btn.disabled=true;
 
     try{
+      /* Load jsPDF on first click */
+      if(!window.jspdf){
+        await new Promise((resolve,reject)=>{
+          const s=document.createElement("script");
+          s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+          s.onload=resolve;
+          s.onerror=()=>reject(new Error("Failed to load PDF library"));
+          document.head.appendChild(s);
+        });
+      }
+
       /* Credit hours lookup — doc/getDoc are in module scope, no window hack needed */
       let creditHours="";
       try{
@@ -214,7 +222,7 @@
         }
       }catch(ex){}
 
-      /* Generate PDF — jsPDF is preloaded via script tag above */
+      /* Generate PDF */
       const {jsPDF}=window.jspdf;
       const pdf=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
       const W=297,H=210;
