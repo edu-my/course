@@ -212,9 +212,13 @@
       const snap=await getDocs(collection(db,"payments"));
       allPayments=[];snap.forEach(d=>allPayments.push({id:d.id,...d.data()}));
       allPayments.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
+      const pendingCount=allPayments.filter(p=>p.status==="pending").length;
+      document.getElementById("pending-badge").textContent=pendingCount;
       renderPayments();
     }).catch(()=>{});
     function renderPayments(){
+      const pending=allPayments.filter(p=>p.status==="pending");
+      document.getElementById("pending-badge").textContent=pending.length;
       const filtered=activeFilter==="all"?allPayments:allPayments.filter(p=>p.status===activeFilter);
       const titles={pending:"Pending Payments",approved:"Approved",rejected:"Rejected",all:"All Payments"};
       document.getElementById("table-title").textContent=titles[activeFilter];
