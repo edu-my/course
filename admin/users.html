@@ -17,14 +17,14 @@
     .nav-link{color:rgba(255,255,255,.6);}
     .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.08);color:white;}
     .nav-user-name{color:rgba(255,255,255,.8);}
-    .nav-avatar{background:var(--orange);}
+    .nav-avatar{background:var(--red);}
     .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
-    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,.06);}
-    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
-    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
-    .admin-nav-item:hover{background:rgba(255,255,255,.04);color:white;}
-    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);color:white;}
-    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;}
+    .admin-sidebar{background:#F0F2F5;padding:1.5rem 0;border-right:1px solid #e0e0e0;}
+    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#aaa;padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:#6B6B6B;text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(215,43,43,.05);color:var(--dark);}
+    .admin-nav-item.active{border-left-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
+    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;color:#999;}
     .admin-badge{margin-left:auto;background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;}
     .admin-main{padding:2rem;overflow-y:auto;}
     .page-title{font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
@@ -82,18 +82,20 @@
     .role-badge{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;}
     .role-admin{background:var(--orange-light);color:var(--orange);}
     .role-student{background:var(--blue-light);color:var(--blue);}
+    .nav-mobile-drawer{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+    .nav-mobile-drawer .nav-link:hover,.nav-mobile-drawer .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    .nav-mobile-drawer .nav-actions{border-top-color:rgba(255,255,255,.08);}
     @media(max-width:1024px){.kpi-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:768px){.admin-wrap{grid-template-columns:1fr;}.admin-sidebar{display:none;}}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="../index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="../index.html" class="nav-logo">edu-my.web</a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Admin</a>
-      <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
@@ -110,6 +112,23 @@
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
   </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <div class="sidebar-section" style="padding:.25rem 0 .5rem">Main</div>
+    <a href="index.html" class="nav-link">&#128202; Overview</a>
+    <div class="sidebar-section" style="padding:.75rem 0 .5rem">Manage</div>
+    <a href="courses.html" class="nav-link">&#128218; Courses</a>
+    <a href="payments.html" class="nav-link">&#128179; Payments</a>
+    <a href="users.html" class="nav-link active">&#128101; Users</a>
+    <a href="stats.html" class="nav-link">&#128200; Stats</a>
+    <div class="sidebar-section" style="padding:.75rem 0 .5rem">Site</div>
+    <a href="index.html" class="nav-link">&#128295; Admin Panel</a>
+    <a href="../index.html" class="nav-link">&#127760; View Site</a>
+    <a href="../courses.html" class="nav-link">&#128269; View Courses</a>
+    <div class="nav-actions" style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);flex-direction:column;width:100%">
+      <a href="../profile.html" class="btn btn-secondary" style="width:100%">&#128100; My Profile</a>
+      <button class="btn btn-danger" id="btn-logout-mobile" style="width:100%">&#128682; Log Out</button>
+    </div>
+  </div>
   <div class="admin-wrap">    <aside class="admin-sidebar"><div class="sidebar-section">Main</div><a href="index.html" class="admin-nav-item"><span class="ni">&#128202;</span> Overview</a><div class="sidebar-section">Manage</div><a href="courses.html" class="admin-nav-item"><span class="ni">&#128218;</span> Courses</a><a href="payments.html" class="admin-nav-item"><span class="ni">&#128179;</span> Payments <span class="admin-badge" id="pending-badge">0</span></a><a href="users.html" class="admin-nav-item  active"><span class="ni">&#128101;</span> Users</a><a href="stats.html" class="admin-nav-item"><span class="ni">&#128200;</span> Stats</a><div class="sidebar-section">Content</div><a href="ticker.html" class="admin-nav-item"><span class="ni">📢</span> News Ticker</a><div class="sidebar-section">Site</div><a href="../index.html" class="admin-nav-item"><span class="ni">&#127760;</span> View Site</a><a href="../courses.html" class="admin-nav-item"><span class="ni">&#128269;</span> View Courses</a></aside>
     <main class="admin-main">
       <div class="page-title">&#128101; User Management</div>
