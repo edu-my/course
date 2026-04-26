@@ -176,6 +176,7 @@
       </div>
     </div>
   </div>
+  <script src="../js/admin-badge.js"></script>
   <script type="module">
     
     import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
@@ -219,6 +220,7 @@
     function renderPayments(){
       const pending=allPayments.filter(p=>p.status==="pending");
       document.getElementById("pending-badge").textContent=pending.length;
+      cachePendingCount(pending.length);
       const filtered=activeFilter==="all"?allPayments:allPayments.filter(p=>p.status===activeFilter);
       const titles={pending:"Pending Payments",approved:"Approved",rejected:"Rejected",all:"All Payments"};
       document.getElementById("table-title").textContent=titles[activeFilter];

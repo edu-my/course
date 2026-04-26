@@ -62,6 +62,7 @@
     <a href="../index.html" class="nav-logo">edu-my.web</a>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">Admin</a>
+      <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
@@ -137,6 +138,7 @@
     </main>
   </div>
 
+  <script src="../js/admin-badge.js"></script>
   <script type="module">
     import {initializeApp}   from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
@@ -192,6 +194,7 @@
         el("kpi-pending").textContent = pending.length;
         el("kpi-revenue").textContent = revenue.toFixed(2);
         el("pending-badge").textContent = pending.length;
+        cachePendingCount(pending.length);
 
         const pt = el("pending-table");
         pt.innerHTML = pending.length
