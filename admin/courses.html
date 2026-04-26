@@ -17,18 +17,18 @@
     .nav-link{color:rgba(255,255,255,.6);}
     .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.08);color:white;}
     .nav-user-name{color:rgba(255,255,255,.8);}
-    .nav-avatar{background:var(--orange);}
+    .nav-avatar{background:var(--red);}
     .admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - var(--nav-height));}
-    .admin-sidebar{background:var(--dark);padding:1.5rem 0;border-right:1px solid rgba(255,255,255,.06);}
-    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
-    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
-    .admin-nav-item:hover{background:rgba(255,255,255,.04);color:white;}
-    .admin-nav-item.active{border-left-color:var(--red);background:rgba(215,43,43,.1);color:white;}
-    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;}
+    .admin-sidebar{background:#F0F2F5;padding:1.5rem 0;border-right:1px solid #e0e0e0;}
+    .sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#aaa;padding:.5rem 1.25rem .25rem;margin-top:.75rem;}
+    .admin-nav-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 1.25rem;color:#6B6B6B;text-decoration:none;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent;}
+    .admin-nav-item:hover{background:rgba(215,43,43,.05);color:var(--dark);}
+    .admin-nav-item.active{border-left-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
+    .admin-nav-item .ni{font-size:1rem;width:20px;text-align:center;color:#999;}
     .admin-badge{margin-left:auto;background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;}
     .admin-main{padding:2rem;overflow-y:auto;}
     .page-title{font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:1.5px;color:var(--dark);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-    .course-admin-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;margin-bottom:1rem;}
+    .course-admin-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);overflow:hidden;margin-bottom:1rem;box-shadow:var(--shadow-sm);}
     .course-admin-header{padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;}
     .course-emoji{font-size:2rem;flex-shrink:0;}
     .course-info{flex:1;min-width:0;}
@@ -59,7 +59,7 @@
     .lesson-row input:focus,.lesson-row select:focus{border-color:var(--red);}
     .lesson-url{grid-column:1/-1;border:1px solid var(--gray-light);border-radius:var(--radius);padding:.4rem .75rem;font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;width:100%;}
     .lesson-url:focus{border-color:var(--red);}
-    .panel-empty{background:white;border-radius:var(--radius-lg);padding:3rem;text-align:center;color:var(--gray);}
+    .panel-empty{background:white;border-radius:var(--radius-lg);padding:3rem;text-align:center;color:var(--gray);box-shadow:var(--shadow-sm);}
     .toast{position:fixed;bottom:2rem;right:2rem;background:#1E8A4C;color:white;padding:.85rem 1.5rem;border-radius:var(--radius);font-weight:600;font-size:.9rem;z-index:1000;transform:translateY(100px);opacity:0;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.2);}
     .toast.show{transform:translateY(0);opacity:1;}
     .nav-mobile-drawer{background:var(--dark);border-bottom-color:var(--red);}
@@ -71,12 +71,10 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="../index.html" class="nav-logo"><span class="nav-logo-badge">eD</span>edu-my.web</a>
+    <a href="../index.html" class="nav-logo">edu-my.web</a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Admin</a>
-      <a href="../index.html" class="nav-link">&#8592; View Site</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
       <div class="nav-avatar" id="nav-avatar">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
