@@ -11,10 +11,7 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/nav.css"/>
   <style>
-    .page-header{background:var(--dark);padding:2.5rem var(--page-padding);border-bottom:1px solid var(--red);}
-    .page-header h1{font-family:Bebas Neue,sans-serif;font-size:2.5rem;letter-spacing:1.5px;color:white;}
-    .page-header p{color:rgba(255,255,255,.5);font-size:.9rem;}
-    .profile-wrap{padding:3rem var(--page-padding);max-width:700px;margin:0 auto;}
+.profile-wrap{padding:3rem var(--page-padding);max-width:700px;margin:0 auto;}
     .profile-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.5rem;}
     .profile-card-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-light);background:var(--off-white);display:flex;align-items:center;gap:.75rem;}
     .profile-card-header h3{font-size:1rem;font-weight:700;}
@@ -82,8 +79,18 @@
   </div>
 </div>
 
-<div class="page-header"><h1>MY PROFILE</h1><p>Manage your account settings.</p></div>
-  <div class="profile-wrap">
+<!-- ── PAGE HEADER — full-bleed dark bar ─────────────────────── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <h1>MY PROFILE</h1>
+      <p>Manage your account settings.</p>
+    </div>
+    
+  </div>
+</div>
+
+<div class="profile-wrap">
     <div class="profile-card">
       <div class="profile-card-header"><span>&#128100;</span><h3>Profile Information</h3></div>
       <div class="profile-card-body">
