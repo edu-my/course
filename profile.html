@@ -8,8 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
   <style>
 .profile-wrap{padding:3rem var(--page-padding);max-width:700px;margin:0 auto;}
     .profile-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.5rem;}
@@ -23,20 +24,7 @@
     .danger-zone{border:1px solid var(--red-mid);border-radius:var(--radius-lg);padding:1.5rem;background:var(--red-light);}
     .danger-zone h4{color:var(--red);margin-bottom:.5rem;}
     .danger-zone p{font-size:.83rem;color:var(--gray);margin-bottom:1rem;}
-
-    /* DARK MODE NAV */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
-  </style>
+</style>
 </head>
 <body>
   <nav class="navbar">
@@ -79,15 +67,13 @@
   </div>
 </div>
 
-<!-- ── PAGE HEADER — full-bleed dark bar ─────────────────────── -->
 <div class="page-header">
   <div class="page-header-inner">
     <div>
       <h1>MY PROFILE</h1>
       <p>Manage your account settings.</p>
     </div>
-    
-  </div>
+</div>
 </div>
 
 <div class="profile-wrap">
