@@ -250,11 +250,12 @@
   flex-shrink: 0;
 }
 
-.thumb-ai       { background: #FFEAEA; }
-.thumb-soft     { background: #EAF0FF; }
-.thumb-personal { background: #EAFFF2; }
-.thumb-education{ background: #FFF8EA; }
-.thumb-default  { background: #F5F0FF; }
+.thumb-dark     { background: #1A1A1A; }
+.thumb-ai       { background: #1A1A1A; }
+.thumb-soft     { background: #1A1A1A; }
+.thumb-personal { background: #1A1A1A; }
+.thumb-education{ background: #1A1A1A; }
+.thumb-default  { background: #1A1A1A; }
 
 .course-badge {
   position: absolute;
@@ -264,6 +265,27 @@
   border-radius: 12px;
   font-size: .68rem;
   font-weight: 700;
+}
+
+.badge-paid-dark {
+  background: var(--red);
+  color: var(--white);
+}
+
+.badge-free-dark {
+  background: var(--green-light);
+  color: var(--green);
+}
+
+.course-cat-label {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: .6rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.35);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
 }
 
 .course-body {
