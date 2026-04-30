@@ -34,6 +34,7 @@
         <div class="nav-dropdown-email" id="dd-email"></div>
       </div>
       <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">🏆</span> My Certificates</a>
       <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
       <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
     </div>
@@ -106,7 +107,7 @@
       <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
     </div>
     <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
-    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
     <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
   </div>
   <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
@@ -128,7 +129,7 @@ import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://ww
 
 const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
 const auth=getAuth(app),db=getFirestore(app);
-const bgMap={"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+const bgMap={"AI":"thumb-dark","Soft Skills":"thumb-dark","Personal Development":"thumb-dark","Education":"thumb-dark"};
 let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
 let currentView="grid"; // "grid" or "list"
 let currentPage=1;
@@ -210,12 +211,17 @@ function getCourseBtn(c){
 /* ── RENDER — grid card ───────────────────────────────────────── */
 function renderGridCard(c){
   const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
-  const bg=bgMap[c.category]||"thumb-default",btn=getCourseBtn(c);
+  const btn=getCourseBtn(c);
   const emoji=c.thumbnailEmoji||"📚";
+  const cat=c.category||"General";
   return `<div class="course-card-grid" onclick="location.href='${btn.href}'">
-    <div class="course-thumb ${bg}">${emoji}<span class="course-badge ${isFree?'badge-free':'badge-paid'}">${price}</span></div>
+    <div class="course-thumb thumb-dark">
+      ${emoji}
+      <span class="course-badge ${isFree?'badge-free-dark':'badge-paid-dark'}">${price}</span>
+      <span class="course-cat-label">${cat}</span>
+    </div>
     <div class="course-body">
-      <div class="course-cat">${c.category||"General"}</div>
+      <div class="course-cat">${cat}</div>
       <div class="course-title">${c.title}</div>
       <div class="course-desc">${c.description||""}</div>
       <div class="course-footer">
