@@ -8,8 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
   <style>
     .course-hero{background:var(--dark);padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
     .breadcrumb{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1rem;}
@@ -72,8 +73,6 @@
       <a href="courses.html" class="nav-link active">Courses</a>
       <a href="dashboard.html" class="nav-link">Dashboard</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
-    
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -86,10 +85,9 @@
           <div class="nav-dropdown-name" id="dd-name">User</div>
           <div class="nav-dropdown-email" id="dd-email"></div>
         </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
       </div>
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
@@ -165,11 +163,10 @@
 
     // Load page once auth is confirmed
     waitForAuth().then(async (user) => {
+      if (!user) { location.href = "login.html"; return; }
       currentUser = user;
       // Check if admin
-      if(user){
-        try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window._coursePageAdmin=true;window.setAdminNav?.(true);}}catch(e){}
-      }
+      try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window._coursePageAdmin=true;window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}else{window.cacheAuthUser?.(user,false);}}catch(e){window.cacheAuthUser?.(user,false);}
       await loadPage(user);
     });
 
