@@ -144,6 +144,14 @@
       .hiw-grid{grid-template-columns:1fr 1fr;}
     }
     @media(max-width:580px){.hiw-grid{grid-template-columns:1fr;}}
+
+    /* WhatsApp float */
+    .help-float{position:fixed;bottom:28px;right:28px;display:flex;align-items:center;gap:10px;z-index:150;}
+    .help-text{background:#fff;color:#1a1a1a;font-size:.78rem;font-weight:600;padding:8px 14px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.1);opacity:0;transform:translateX(10px);transition:opacity .4s,transform .4s;pointer-events:none;white-space:nowrap;}
+    .help-text.visible{opacity:1;transform:translateX(0);}
+    .help-wa{width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.1);transition:transform .2s;}
+    .help-wa:hover{transform:scale(1.08);}
+    .help-wa svg{width:26px;height:26px;}
   </style>
 </head>
 <body>
@@ -287,7 +295,7 @@
       <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
     </div>
     <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
-    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="certificates.html">Certificates</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="profile.html">My Profile</a></li></ul></div>
     <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
   </div>
   <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
