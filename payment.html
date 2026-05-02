@@ -4,12 +4,13 @@
   <meta charset="UTF-8"/>
   <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment — iCraftCourse</title>
+  <title>Payment — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
   <style>
     .payment-page{min-height:calc(100vh - var(--nav-height));background:var(--off-white);padding:3rem var(--page-padding);}
     .payment-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
@@ -32,31 +33,16 @@
     .status-step strong{display:block;font-size:.9rem;color:var(--dark);margin-bottom:.15rem;}
     .status-step span{font-size:.8rem;color:var(--gray);}
     @media(max-width:768px){.payment-wrap{grid-template-columns:1fr;}}
-
-    /* DARK MODE NAV */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">iC</span>edu-my.<span>web</span></a>
+    <a href="index.html" class="nav-logo">edu-my.web</a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
       <a href="courses.html" class="nav-link">Courses</a>
       <a href="dashboard.html" class="nav-link">Dashboard</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
-    
     <div class="nav-actions" id="nav-guest">
       <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
       <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
@@ -69,10 +55,9 @@
           <div class="nav-dropdown-name" id="dd-name">User</div>
           <div class="nav-dropdown-email" id="dd-email"></div>
         </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">&#128100;</span> My Profile</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
       </div>
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
