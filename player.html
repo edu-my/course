@@ -4,18 +4,26 @@
   <meta charset="UTF-8"/>
   <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Course Player — iCraftCourse</title>
+  <title>Course Player — edu-my.web</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/nav.css"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
   <style>
-    body{background:#111;}
-    .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    body{background:var(--off-white);}
+    /* Player navbar — dark to match sidebar context */
+    .navbar{background:var(--dark);border-bottom-color:var(--red);}
+    .nav-logo{color:var(--red);}
     .nav-link{color:rgba(255,255,255,.6);}
     .nav-link:hover{color:white;background:rgba(255,255,255,.05);}
     .nav-user-name{color:rgba(255,255,255,.8);}
+    .nav-avatar{background:var(--red);}
+    .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
+    .nav-dropdown-header{background:#161616;}
+    .nav-dropdown-name,.nav-dropdown-item{color:rgba(255,255,255,.8);}
+    .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
     .player-wrap{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - var(--nav-height));overflow:hidden;}
     .sidebar{background:#1A1A1A;border-right:1px solid #2A2A2A;display:flex;flex-direction:column;overflow:hidden;}
     .sidebar-header{padding:1.25rem;border-bottom:1px solid #2A2A2A;flex-shrink:0;}
@@ -44,49 +52,34 @@
     .les-btn-name{flex:1;font-size:.8rem;color:rgba(255,255,255,.55);}
     .les-btn-dur{font-size:.68rem;color:rgba(255,255,255,.25);}
     .les-btn-check{font-size:.75rem;flex-shrink:0;}
-    .player-main{display:flex;flex-direction:column;overflow:hidden;background:#111;}
+    .player-main{display:flex;flex-direction:column;overflow:hidden;background:var(--off-white);}
     .video-cont{position:relative;width:100%;background:#000;flex-shrink:0;}
     .video-cont iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
     .placeholder{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:#1A1A1A;color:rgba(255,255,255,.3);font-size:.9rem;}
-    .info-bar{padding:1.25rem 1.5rem;border-bottom:1px solid #2A2A2A;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;}
-    .info-mod{font-size:.72rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:.25rem;}
-    .info-title{font-size:1.1rem;font-weight:700;color:white;}
+    .info-bar{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-200);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;background:var(--white);}
+    .info-mod{font-size:.72rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:1px;margin-bottom:.25rem;}
+    .info-title{font-size:1.1rem;font-weight:700;color:var(--dark);}
     .info-actions{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
     .btn-complete{background:var(--green);color:white;border:none;padding:.6rem 1.25rem;border-radius:var(--radius);font-family:DM Sans,sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap;}
     .btn-complete:hover{background:#166b39;}
-    .btn-complete.done{background:#2A2A2A;color:rgba(255,255,255,.4);cursor:default;}
+    .btn-complete.done{background:var(--gray-200);color:var(--gray-500);cursor:default;}
     .btn-next{background:var(--red);color:white;border:none;padding:.6rem 1.25rem;border-radius:var(--radius);font-family:DM Sans,sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap;}
     .btn-next:hover{background:var(--red-dark);}
     .btn-next:disabled{opacity:.4;cursor:not-allowed;}
-    .cert-banner{margin:1.25rem 1.5rem;background:rgba(30,138,76,.15);border:1px solid rgba(30,138,76,.3);border-radius:var(--radius);padding:1rem 1.25rem;display:none;align-items:center;gap:1rem;}
+    .cert-banner{margin:1.25rem 1.5rem;background:var(--green-light);border:1px solid var(--green);border-radius:var(--radius);padding:1rem 1.25rem;display:none;align-items:center;gap:1rem;color:var(--dark);}
     .cert-banner.show{display:flex;}
-    .player-loading{position:fixed;inset:0;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:rgba(255,255,255,.5);z-index:10;}
+    .player-loading{position:fixed;inset:0;background:var(--off-white);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:var(--gray-500);z-index:10;}
     .player-loading.hidden{display:none;}
     @media(max-width:768px){.player-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.sidebar{height:auto;max-height:40vh;border-right:none;border-bottom:1px solid #2A2A2A;}}
-
-    /* DARK MODE NAV */
-    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
-    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
-    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
-    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
-    [data-theme="dark"] .nav-hamburger span{background:white;}
-    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
-    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
-    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
-    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
-    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
-    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">eD</span>edu-my.web</a>
+    <a href="index.html" class="nav-logo">edu-my.web</a>
     <div class="nav-links">
-      <a href="courses.html" class="nav-link">&#8592; Courses</a>
+      <a href="courses.html" class="nav-link">← Courses</a>
       <a href="dashboard.html" class="nav-link">Dashboard</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()" ><div class="tt-track"><div class="tt-knob"></div></div></button>
-    
     <div class="nav-user hidden" id="nav-user">
       <div class="nav-avatar" id="nav-avatar">U</div>
       <div class="nav-user-name" id="nav-name">User</div>
@@ -95,9 +88,9 @@
           <div class="nav-dropdown-name" id="dd-name">User</div>
           <div class="nav-dropdown-email" id="dd-email"></div>
         </div>
-        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">&#128202;</span> My Dashboard</a>
-        <a href="certificates.html" class="nav-dropdown-item"><span class="item-icon">&#127942;</span> My Certificates</a>
-        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">&#128682;</span> Log Out</button>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
       </div>
     </div>
     <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
