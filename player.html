@@ -56,9 +56,9 @@
     .video-cont{position:relative;width:100%;background:#000;flex-shrink:0;}
     .video-cont iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
     .placeholder{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:#1A1A1A;color:rgba(255,255,255,.3);font-size:.9rem;}
-    .info-bar{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-200);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;background:var(--white);}
-    .info-mod{font-size:.72rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:1px;margin-bottom:.25rem;}
-    .info-title{font-size:1.1rem;font-weight:700;color:var(--dark);}
+    .info-bar{padding:.75rem 1.5rem;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;background:var(--gray-100);}
+    .info-mod{font-size:.68rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:1px;}
+    .info-title{font-size:.85rem;font-weight:600;color:var(--gray-600);display:inline;margin-left:.5rem;}
     .info-actions{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
     .btn-complete{background:var(--green);color:white;border:none;padding:.6rem 1.25rem;border-radius:var(--radius);font-family:DM Sans,sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s;white-space:nowrap;}
     .btn-complete:hover{background:#166b39;}
@@ -129,12 +129,12 @@
         </div>
       </div>
       <div class="cert-banner" id="cert-banner">
-        <div style="font-size:2rem;flex-shrink:0">&#127942;</div>
+        <div style="font-size:2rem;flex-shrink:0">🏆</div>
         <div>
-          <strong style="display:block;color:white;font-size:.95rem;margin-bottom:.2rem">Course complete! Certificate ready.</strong>
-          <span style="font-size:.82rem;color:rgba(255,255,255,.5)">Download your CPD certificate now.</span>
+          <strong style="display:block;color:var(--dark);font-size:.95rem;margin-bottom:.2rem">Course complete! Certificate ready.</strong>
+          <span style="font-size:.82rem;color:var(--gray-500);">Download your CPD certificate from the dashboard.</span>
         </div>
-        <a href="certificates.html" class="btn btn-success btn-sm" style="flex-shrink:0">Get Certificate &#8594;</a>
+        <a href="dashboard.html" class="btn btn-success btn-sm" style="flex-shrink:0">Go to Dashboard →</a>
       </div>
     </div>
   </div>
