@@ -77,9 +77,8 @@
       <a href="index.html" class="nav-link">Admin</a>
       <a href="../index.html" class="nav-link">← View Site</a>
     </div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="(function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('edumytheme',n);})()"><div class="tt-track"><div class="tt-knob"></div></div></button>
     <div class="nav-user" id="nav-user" style="margin-left:auto">
-      <div class="nav-avatar" id="nav-avatar">A</div>
+      <div class="nav-avatar" id="nav-avatar" style="background:var(--red)">A</div>
       <div class="nav-user-name" id="nav-name">Admin</div>
       <div class="nav-dropdown">
         <div class="nav-dropdown-header">
@@ -187,6 +186,7 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="../js/admin-badge.js"></script>
   <script src="../js/admin-badge.js"></script>
   <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
