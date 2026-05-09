@@ -102,6 +102,8 @@ setTimeout(function() {
 // #### ADMIN LINK INJECTION ####
 window.setAdminNav = function(isAdmin) {
   if (!isAdmin) return;
+  // Skip injection on admin pages — they already have the link
+  if (window.location.pathname.indexOf("/admin/") !== -1) return;
   var navUser  = document.getElementById("nav-user");
   var dropdown = navUser ? navUser.querySelector(".nav-dropdown") : null;
   var logout   = dropdown ? dropdown.querySelector(".danger") : null;
