@@ -445,13 +445,12 @@
       const data = {
         title, description:desc,
         category:       document.getElementById("c-cat").value,
-        thumbnailEmoji: document.getElementById("c-emoji").value.trim() || "&#128218;",
+        thumbnailEmoji: document.getElementById("c-emoji").value.trim() || "📚",
         isFree,
         price:          isFree ? 0 : parseFloat(document.getElementById("c-price").value||0),
         totalDuration:  document.getElementById("c-dur").value.trim(),
         isPublished:    document.getElementById("c-pub").value === "true",
         modules:        collectModules(),
-        enrollmentCount: editingId ? undefined : 0,
       };
       if (!editingId) data.enrollmentCount = 0;
       const btn = document.getElementById("btn-save");
