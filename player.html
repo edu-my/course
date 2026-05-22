@@ -58,6 +58,7 @@
     .player-main{display:flex;flex-direction:column;overflow:hidden;background:var(--off-white);}
     .video-cont{position:relative;width:100%;background:#000;flex-shrink:0;}
     .video-cont iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
+    .embed-overlay{position:absolute;top:0;right:0;width:60px;height:60px;z-index:5;cursor:default;}
     .placeholder{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:#1A1A1A;color:rgba(255,255,255,.3);font-size:.9rem;}
     .info-bar{padding:.75rem 1.5rem;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;flex-shrink:0;background:var(--gray-100);}
     .info-mod{font-size:.68rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:1px;}
@@ -124,6 +125,7 @@
           <p>Select a lesson to begin</p>
         </div>
         <iframe id="video-iframe" src="" allowfullscreen style="display:none"></iframe>
+        <div class="embed-overlay"></div>
       </div>
       <div class="info-bar">
         <div>
@@ -293,7 +295,7 @@
             +'<span class="les-btn-dur">'+(l.duration||"")+'</span>'
             +'<span class="les-btn-check">'+(d?"&#9989;":"")+'</span></button>';
         }).join("");
-        return '<div class="mod-group open" id="mg-'+mi+'">'
+        return '<div class="mod-group" id="mg-'+mi+'">'
           +'<div class="mod-toggle" onclick="document.getElementById(\'mg-'+mi+'\').classList.toggle(\'open\')">'
           +'<div class="mod-num">'+(mi+1)+'</div>'
           +'<div class="mod-name">'+m.title+'</div>'
@@ -307,6 +309,12 @@
       const m = (courseData.modules||[])[mi]; if(!m) return;
       const l = (m.lessons||[])[li]; if(!l) return;
       currentLesson = l;
+
+      // Expand only the active module, collapse others
+      document.querySelectorAll(".mod-group").forEach((g, i) => {
+        if (i === mi) g.classList.add("open");
+        else g.classList.remove("open");
+      });
 
       document.querySelectorAll(".les-btn").forEach(b => b.classList.remove("active"));
       const ab = document.getElementById("lb-"+l.lessonId);
