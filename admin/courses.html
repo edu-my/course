@@ -148,8 +148,8 @@
       <div class="panel">
         <div class="panel-header"><h3>All Courses</h3></div>
         <table class="admin-table">
-          <thead><tr><th>Course</th><th>Category</th><th>Price</th><th>Modules</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody id="courses-list"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</td></tr></tbody>
+          <thead><tr><th>Course</th><th>Category</th><th>Price</th><th>Modules</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="courses-list"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)"><div class="spinner spinner-sm" style="margin:0 auto .5rem"></div>Loading...</td></tr></tbody>
         </table>
       </div>
     </main>
@@ -280,17 +280,19 @@
       const data = filtered || allCourses;
       document.getElementById("course-count").textContent = data.length + " course" + (data.length!==1?"s":"");
       if (!data.length) {
-        list.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">No courses found.</td></tr>';
+        list.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)">No courses found.</td></tr>';
         return;
       }
       list.innerHTML = data.map(c => {
         const pub=c.isPublished===true, free=c.isFree===true;
         const mods=(c.modules||[]).length, lessons=(c.modules||[]).reduce((s,m)=>s+(m.lessons||[]).length,0);
+        const dur=c.totalDuration||"—";
         return `<tr>
           <td><div class="course-name-cell"><span class="emoji">${c.thumbnailEmoji||"📚"}</span><span class="name">${c.title}</span></div></td>
           <td>${c.category||"General"}</td>
           <td>${free?"Free":"RM "+parseFloat(c.price||0).toFixed(2)}</td>
           <td>${mods} mod · ${lessons} les</td>
+          <td>${dur}</td>
           <td><div class="toggle-wrap" onclick="togglePublish('${c.id}',${pub})"><div class="toggle ${pub?"on":""}"></div><span style="color:${pub?"var(--green)":"var(--gray)"}">${pub?"Live":"Draft"}</span></div></td>
           <td><div class="td-actions"><button class="btn btn-secondary btn-sm" onclick="openEdit('${c.id}')">✏️ Edit</button><a href="../course.html?id=${c.id}" target="_blank" class="btn btn-secondary btn-sm">👁️ View</a></div></td>
         </tr>`;
