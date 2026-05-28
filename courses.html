@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
   <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
@@ -213,6 +216,8 @@ function renderGridCard(c){
   const btn=getCourseBtn(c);
   const emoji=c.thumbnailEmoji||"📚";
   const cat=c.category||"General";
+  const dur=c.totalDuration||"";
+  const mods=(c.modules||[]).length;
   return `<div class="course-card-grid" onclick="location.href='${btn.href}'">
     <div class="course-thumb thumb-dark">
       ${emoji}
@@ -223,6 +228,7 @@ function renderGridCard(c){
       <div class="course-cat">${cat}</div>
       <div class="course-title">${c.title}</div>
       <div class="course-desc">${c.description||""}</div>
+      <div class="course-duration">${dur?'⏱ '+dur:''}${dur&&mods?' · ':mods?'':''}${mods} module${mods!==1?'s':''}</div>
       <div class="course-footer">
         <div class="course-price ${isFree?"free":""}">${price}</div>
         <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
@@ -237,6 +243,7 @@ function renderListRow(c){
   const btn=getCourseBtn(c);
   const emoji=c.thumbnailEmoji||"📚";
   const mods=(c.modules||[]).length;
+  const dur=c.totalDuration||"";
   return `<div class="course-card-row" onclick="location.href='${btn.href}'">
     <div class="course-emoji">${emoji}</div>
     <div class="course-info">
@@ -246,6 +253,7 @@ function renderListRow(c){
         <span>${c.category||"General"}</span>
         <span>·</span>
         <span>${mods} module${mods!==1?'s':''}</span>
+        ${dur?'<span>·</span><span>⏱ '+dur+'</span>':''}
       </div>
     </div>
     <div class="course-price ${isFree?"free":""}">${price}</div>
