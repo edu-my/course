@@ -184,14 +184,19 @@
           return;
         }
         courseData = {id:cs.id,...cs.data()};
-        document.title = courseData.title + " — iCraftCourse";
+        document.title = courseData.title + " — edu-my.web";
 
         if (user) {
-          const es = await getDoc(doc(db,"enrollments",user.uid+"_"+courseId));
-          enrollDoc = es.exists() ? es.data() : null;
-          if (!enrollDoc) {
-            const ps = await getDocs(query(collection(db,"payments"),where("userId","==",user.uid),where("courseId","==",courseId)));
-            if (!ps.empty) enrollDoc = {status:ps.docs[0].data().status};
+          try {
+            const es = await getDoc(doc(db,"enrollments",user.uid+"_"+courseId));
+            enrollDoc = es.exists() ? es.data() : null;
+            if (!enrollDoc) {
+              const ps = await getDocs(query(collection(db,"payments"),where("userId","==",user.uid),where("courseId","==",courseId)));
+              if (!ps.empty) enrollDoc = {status:ps.docs[0].data().status};
+            }
+          } catch(enrollErr) {
+            console.warn("Could not check enrollment status:", enrollErr.message);
+            enrollDoc = null;
           }
         }
         renderPage();
