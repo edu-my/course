@@ -213,6 +213,7 @@
   background: var(--red-light);
   color: var(--red);
   font-weight: 600;
+  transition: none; 
 }
 
 .nav-actions {
