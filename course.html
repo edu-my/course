@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+  <script src="js/theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course — iCraftCourse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    .course-hero{background:var(--dark);padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
+    .breadcrumb{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1rem;}
+    .breadcrumb a{color:rgba(255,255,255,.4);text-decoration:none;}
+    .course-hero-cat{display:inline-block;background:rgba(215,43,43,.3);color:#FF9090;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.3rem .8rem;border-radius:20px;margin-bottom:1rem;}
+    .course-hero h1{font-family:Bebas Neue,sans-serif;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:1.5px;color:var(--white);line-height:1.05;margin-bottom:1rem;}
+    .course-hero-desc{color:rgba(255,255,255,.65);font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:1.5rem;}
+    .course-stats{display:flex;gap:1.5rem;flex-wrap:wrap;}
+    .course-stat{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,255,.6);}
+    .course-stat strong{color:white;}
+    .enroll-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);position:sticky;top:calc(var(--nav-height) + 1rem);}
+    .enroll-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+    .thumb-ai{background:linear-gradient(135deg,#FFEAEA,#FFD0D0);}
+    .thumb-soft{background:linear-gradient(135deg,#EAF0FF,#D0DEFF);}
+    .thumb-personal{background:linear-gradient(135deg,#EAFFF2,#C8F5D8);}
+    .thumb-education{background:linear-gradient(135deg,#FFF8EA,#FFE9B0);}
+    .thumb-default{background:linear-gradient(135deg,#F0EDFF,#DDD5FF);}
+    .enroll-body{padding:1.5rem;}
+    .enroll-price{font-family:Bebas Neue,sans-serif;font-size:2.5rem;color:var(--dark);letter-spacing:1px;margin-bottom:.25rem;}
+    .enroll-price.free{color:var(--green);}
+    .enroll-sub{font-size:.8rem;color:var(--gray);margin-bottom:1.25rem;}
+    .enroll-perks{display:flex;flex-direction:column;gap:.6rem;margin:1.25rem 0;}
+    .enroll-perk{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--gray);}
+    .enroll-status{padding:.75rem 1rem;border-radius:var(--radius);font-size:.85rem;font-weight:600;text-align:center;margin-bottom:.75rem;}
+    .status-pending{background:var(--orange-light);color:var(--orange);}
+    .status-enrolled{background:var(--green-light);color:var(--green);}
+    .course-body-wrap{padding:3rem var(--page-padding);display:grid;grid-template-columns:1fr 340px;gap:3rem;}
+    .module-item{border:1px solid var(--gray-light);border-radius:var(--radius);margin-bottom:.5rem;overflow:hidden;}
+    .module-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--off-white);cursor:pointer;}
+    .module-num{width:28px;height:28px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;}
+    .module-name{font-weight:700;font-size:.92rem;flex:1;}
+    .module-item.open .module-chevron{transform:rotate(180deg);}
+    .module-chevron{color:var(--gray);font-size:.75rem;transition:transform .2s;}
+    .lesson-list{display:none;flex-direction:column;}
+    .module-item.open .lesson-list{display:flex;}
+    .lesson-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem .75rem 3.5rem;border-top:1px solid var(--gray-light);font-size:.85rem;color:var(--gray);}
+    .lesson-name{flex:1;} .lesson-dur{font-size:.75rem;color:var(--gray-mid);}
+    .page-loading{min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:var(--gray);}
+    @media(max-width:900px){.course-hero{grid-template-columns:1fr;}.course-body-wrap{grid-template-columns:1fr;}.enroll-card{position:static;}}
+
+    /* DARK MODE NAV */
+    [data-theme="dark"] .navbar{background:#1A1A1A;border-bottom-color:var(--red);}
+    [data-theme="dark"] .nav-link{color:rgba(255,255,255,.65);}
+    [data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{background:rgba(215,43,43,.15);color:white;}
+    [data-theme="dark"] .nav-user-name{color:rgba(255,255,255,.85);}
+    [data-theme="dark"] .nav-hamburger span{background:white;}
+    [data-theme="dark"] .nav-dropdown{background:#1E1E1E;border-color:rgba(255,255,255,.1);}
+    [data-theme="dark"] .nav-dropdown-header{background:#161616;}
+    [data-theme="dark"] .nav-dropdown-name,[data-theme="dark"] .nav-dropdown-item{color:rgba(255,255,255,.8);}
+    [data-theme="dark"] .nav-dropdown-item:hover{background:rgba(255,255,255,.05);color:var(--red);}
+    [data-theme="dark"] .nav-mobile-drawer{background:#1A1A1A;}
+    [data-theme="dark"] .nav-mobile-drawer .nav-link{color:rgba(255,255,255,.65);}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:.5rem;"><span style="width:28px;height:28px;background:#D72B2B;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif;font-size:.62rem;font-weight:800;color:white;letter-spacing:-.5px;flex-shrink:0">iC</span>edu-my.<span>web</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link active">Courses</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+    <div class="nav-actions" id="nav-guest">
+      <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="nav-user hidden" id="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <div class="nav-user-name" id="nav-name">User</div>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name" id="dd-name">User</div>
+          <div class="nav-dropdown-email" id="dd-email"></div>
+        </div>
+        <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+        <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+        <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <div class="nav-actions" id="nav-mobile-guest">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="hidden" id="nav-mobile-user">
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+    </div>
+  </div>
+
+  <div id="course-content">
+    <div class="page-loading"><div class="spinner"></div><p>Loading course...</p></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const app = initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    });
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    const courseId = new URLSearchParams(location.search).get("id");
+    if (!courseId) location.href = "courses.html";
+
+    const bgMap = {"AI":"thumb-ai","Soft Skills":"thumb-soft","Personal Development":"thumb-personal","Education":"thumb-education"};
+    let currentUser = null;
+    let courseData  = null;
+    let enrollDoc   = null;
+
+    // #### AUTH STATE — waitForAuth pattern ####
+    function waitForAuth() {
+      return new Promise((resolve) => {
+        const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
+      });
+    }
+
+    // Also keep onAuthStateChanged running for navbar updates
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+      if (user) {
+        g?.classList.add("hidden"); u?.classList.remove("hidden");
+        mg?.classList.add("hidden"); mu?.classList.remove("hidden");
+        const n=user.displayName||"User", el=id=>document.getElementById(id);
+        if(el("nav-avatar")) el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+        if(el("nav-name"))   el("nav-name").textContent=n;
+        if(el("dd-name"))    el("dd-name").textContent=n;
+        if(el("dd-email"))   el("dd-email").textContent=user.email||"";
+      } else {
+        g?.classList.remove("hidden"); u?.classList.add("hidden");
+        mg?.classList.remove("hidden"); mu?.classList.add("hidden");
+      }
+    });
+
+    // Load page once auth is confirmed
+    waitForAuth().then(async (user) => {
+      if (!user) { location.href = "login.html"; return; }
+      currentUser = user;
+      // Check if admin
+      try{const ud=await getDoc(doc(db,"users",user.uid));if(ud.exists()&&ud.data().role==="admin"){window._coursePageAdmin=true;window.setAdminNav?.(true);window.cacheAuthUser?.(user,true);}else{window.cacheAuthUser?.(user,false);}}catch(e){window.cacheAuthUser?.(user,false);}
+      await loadPage(user);
+    });
+
+    document.getElementById("btn-logout")?.addEventListener("click", () => signOut(auth).then(() => location.href="index.html"));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click", () => signOut(auth).then(() => location.href="index.html"));
+
+    async function loadPage(user) {
+      try {
+        const cs = await getDoc(doc(db,"courses",courseId));
+        if (!cs.exists()) {
+          document.getElementById("course-content").innerHTML = '<div class="page-loading"><p>Course not found. <a href="courses.html">Back</a></p></div>';
+          return;
+        }
+        courseData = {id:cs.id,...cs.data()};
+        document.title = courseData.title + " — edu-my.web";
+
+        if (user) {
+          try {
+            const es = await getDoc(doc(db,"enrollments",user.uid+"_"+courseId));
+            enrollDoc = es.exists() ? es.data() : null;
+            if (!enrollDoc) {
+              const ps = await getDocs(query(collection(db,"payments"),where("userId","==",user.uid),where("courseId","==",courseId)));
+              if (!ps.empty) enrollDoc = {status:ps.docs[0].data().status};
+            }
+          } catch(enrollErr) {
+            console.warn("Could not check enrollment status:", enrollErr.message);
+            enrollDoc = null;
+          }
+        }
+        renderPage();
+      } catch(e) {
+        document.getElementById("course-content").innerHTML = '<div class="page-loading"><p>Error loading course: '+e.message+'</p></div>';
+      }
+    }
+
+    function renderPage() {
+      const c=courseData, isFree=c.isFree===true, price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+      const bg=bgMap[c.category]||"thumb-default", mods=c.modules||[];
+      const totalLessons=mods.reduce((s,m)=>s+(m.lessons?m.lessons.length:0),0);
+
+      let enrollSection = "";
+      if (enrollDoc && (enrollDoc.status==="approved" || (isFree && enrollDoc.enrollmentId))) {
+        enrollSection = '<div class="enroll-status status-enrolled">✅ You are enrolled!</div><a href="player.html?id='+c.id+'" class="btn btn-success btn-block btn-lg">▶️ Start Course →</a>';
+      } else if (enrollDoc && enrollDoc.status==="pending") {
+        enrollSection = '<div class="enroll-status status-pending">&#9203; Payment pending approval</div>';
+      } else if (window._coursePageAdmin) {
+        enrollSection = '<a href="player.html?id='+c.id+'" class="btn btn-secondary btn-block btn-lg">View Course &#8594;</a>';
+      } else if (!currentUser) {
+        enrollSection = '<a href="login.html" class="btn btn-primary btn-block btn-lg">'+(isFree?"&#x1F193; Start Free — Login First":"Login to Enroll")+'</a>';
+      } else if (isFree) {
+        enrollSection = '<button class="btn btn-success btn-block btn-lg" id="btn-enroll-free">&#x1F193; Start Free Now</button>';
+      } else {
+        enrollSection = '<button class="btn btn-primary btn-block btn-lg" id="btn-enroll-paid">Enroll &mdash; '+price+'</button>';
+      }
+
+      const modHtml = mods.length ? mods.map((m,i) => {
+        const ll=(m.lessons||[]).map(l=>'<div class="lesson-item"><span>'+(l.type==="video"?"&#9654;":"&#x1F4C4;")+'</span><span class="lesson-name">'+l.title+'</span><span class="lesson-dur">'+(l.duration||"")+'</span></div>').join("");
+        return '<div class="module-item'+(i===0?" open":"")+'" onclick="this.classList.toggle(\'open\')">'
+          +'<div class="module-header"><div class="module-num">'+(i+1)+'</div><div class="module-name">'+m.title+'</div>'
+          +'<span style="font-size:.78rem;color:var(--gray)">'+(m.lessons||[]).length+' lessons</span>'
+          +'<span class="module-chevron">&#9660;</span></div>'
+          +'<div class="lesson-list">'+ll+'</div></div>';
+      }).join("") : '<p style="color:var(--gray);font-size:.88rem;padding:1rem;background:var(--off-white);border-radius:var(--radius)">Course content coming soon.</p>';
+
+      document.getElementById("course-content").innerHTML =
+        '<div class="course-hero"><div>'
+        +'<div class="breadcrumb"><a href="courses.html">Courses</a> &#8250; '+(c.category||"General")+' &#8250; '+c.title+'</div>'
+        +'<div class="course-hero-cat">'+(c.category||"General")+'</div>'
+        +'<h1>'+c.title+'</h1>'
+        +'<p class="course-hero-desc">'+(c.description||"")+'</p>'
+        +'<div class="course-stats">'
+        +(c.totalDuration?'<div class="course-stat">&#9201; <strong>'+c.totalDuration+'</strong></div>':"")
+        +(mods.length?'<div class="course-stat">&#128230; <strong>'+mods.length+' modules</strong></div>':"")
+        +(totalLessons?'<div class="course-stat">&#128214; <strong>'+totalLessons+' lessons</strong></div>':"")
+        +'<div class="course-stat">&#127942; <strong>Certificate included</strong></div>'
+        +'</div></div>'
+        +'<div class="enroll-card"><div class="enroll-thumb '+bg+'">'+(c.thumbnailEmoji||"&#128218;")+'</div>'
+        +'<div class="enroll-body"><div class="enroll-price'+(isFree?" free":"")+'">'+price+'</div>'
+        +'<div class="enroll-sub">'+(isFree?"No payment required":"One-time payment")+'</div>'
+        +enrollSection
+        +'<div class="enroll-perks">'
+        +'<div class="enroll-perk">&#128241; Access on any device</div>'
+        +'<div class="enroll-perk">&#127942; Certificate on completion</div>'
+        +'<div class="enroll-perk">&#9854; Lifetime access</div>'
+        +'</div></div></div></div>'
+        +'<div class="course-body-wrap"><div>'
+        +'<h2 style="font-family:Bebas Neue,sans-serif;font-size:1.8rem;letter-spacing:1px;margin-bottom:1rem">COURSE CURRICULUM</h2>'
+        +modHtml+'</div><div></div></div>';
+
+      document.getElementById("btn-enroll-free")?.addEventListener("click", enrollFree);
+      document.getElementById("btn-enroll-paid")?.addEventListener("click", () => {
+        if (!currentUser) { location.href="login.html"; return; }
+        location.href = "payment.html?course="+courseId;
+      });
+    }
+
+    async function enrollFree() {
+      if (!currentUser) { location.href="login.html"; return; }
+      const btn = document.getElementById("btn-enroll-free");
+      btn.disabled=true; btn.textContent="Enrolling...";
+      try {
+        const enrollId = currentUser.uid+"_"+courseId;
+        await setDoc(doc(db,"enrollments",enrollId), {
+          enrollmentId:enrollId, userId:currentUser.uid, courseId,
+          courseName:courseData.title, enrolledAt:serverTimestamp(),
+          completedLessons:[], progressPercent:0, isCompleted:false,
+          completedAt:null, lastLessonId:null, certificateIssued:false
+        });
+        location.href = "player.html?id="+courseId;
+      } catch(e) {
+        btn.disabled=false;
+        btn.textContent="&#x1F193; Start Free Now";
+        alert("Enrollment failed: "+e.message);
+      }
+    }
+  </script>
+  <script src="js/nav.js"></script>
+
+  <!-- FLOATING WHATSAPP -->
+  <style>
+    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
+    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
+    .help-text.visible{max-width:240px;opacity:1;}
+    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
+    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
+    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
+    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
+    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
+    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
+  </style>
+  <div class="help-float">
+    <span class="help-text" id="help-text">Let me know how I can help</span>
+    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
+  <!-- END FLOATING WHATSAPP -->
+</body>
+</html>
