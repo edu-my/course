@@ -189,9 +189,14 @@
 
     /* ── INTERACTIVE PREVIEW ────────────────────────────────────── */
     .preview-section {
-      background: #111;
-      display: grid; grid-template-columns: 260px 1fr; min-height: 420px;
-    }
+  background: #111;
+  display: grid;
+  grid-template-columns: min(260px, 100%) 1fr;
+  min-height: 420px;
+}
+@container (max-width: 900px) {
+  .preview-section { grid-template-columns: 1fr; }
+}
     .preview-sidebar { background: #1a1a1a; border-right: 1px solid rgba(255,255,255,.06); padding: 1.5rem 0; }
     .preview-sidebar-title {
       font-size: .58rem; font-weight: 700; letter-spacing: 2.5px;
