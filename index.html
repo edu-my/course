@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="css/nprogress.css"/>
 
   <style>
+      html, body { overflow-x: hidden; }
     /* ── HERO ──────────────────────────────────────────────────── */
     .hero {
       background: #D72B2B;
@@ -268,6 +269,8 @@
   .preview-item { flex-direction: column !important; gap: .1rem; padding: .6rem .85rem; border-left: none !important; border-bottom: 3px solid transparent; white-space: nowrap; flex-shrink: 0; min-width: 120px; }
   .preview-item.active { border-left-color: transparent !important; border-bottom-color: #D72B2B !important; background: rgba(215,43,43,.1); }
   .preview-item-sub { display: none; }
+  .preview-item { white-space: normal; max-width: 140px; overflow: hidden; }
+  .preview-item-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .preview-panel { padding: 1.25rem !important; }
   .hiw-grid { grid-template-columns: 1fr 1fr; }
 }
