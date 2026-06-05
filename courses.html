@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+  <script src="js/theme.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>All Courses — edu-my.web</title>
+
+  <!-- Shared CSS — single source of truth -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+
+  <!-- Google Fonts — matching landing page -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ── DESIGN TOKENS ───────────────────────────────────────────── */
+    :root {
+      --dk:  #1a1a1a;
+      --rd:  #e03030;
+      --rd2: #b82424;
+      --off: #f5f4f1;
+      --mu:  #6b6b6b;
+      --br:  #e0deda;
+      --wh:  #ffffff;
+    }
+
+    /* ── BASE ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: var(--off); }
+
+    /* ── ANIMATIONS ──────────────────────────────────────────────── */
+    @keyframes em-fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes em-fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── NAVBAR ──────────────────────────────────────────────────── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      background: var(--dk);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      color: var(--rd) !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      text-decoration: none !important;
+    }
+    /* hide the old centre nav-links */
+    .nav-links { display: none !important; }
+
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
+    .btn.btn-secondary.btn-sm {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 6px 14px;
+      border: 0.5px solid rgba(255,255,255,0.22);
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .btn.btn-secondary.btn-sm:hover { border-color: rgba(255,255,255,0.5); }
+    .btn.btn-primary.btn-sm {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      background: var(--rd);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn.btn-primary.btn-sm:hover { background: var(--rd2); }
+
+    /* nav avatar / user state */
+    .nav-user { display: flex; align-items: center; gap: 10px; position: relative; cursor: pointer; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--rd); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .nav-user-name { font-size: 13px; color: rgba(255,255,255,0.8); }
+    .nav-dropdown {
+      display: none; position: absolute; top: calc(100% + 10px); right: 0;
+      background: var(--wh); border: 0.5px solid var(--br);
+      border-radius: 8px; min-width: 200px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 200;
+    }
+    .nav-user:hover .nav-dropdown { display: block; }
+    .nav-dropdown-header { padding: 14px 16px; border-bottom: 0.5px solid var(--br); }
+    .nav-dropdown-name { font-size: 13px; font-weight: 600; color: var(--dk); }
+    .nav-dropdown-email { font-size: 12px; color: var(--mu); margin-top: 2px; }
+    .nav-dropdown-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; font-size: 13px; color: var(--dk);
+      text-decoration: none; cursor: pointer; background: none; border: none; width: 100%;
+      transition: background 0.15s;
+    }
+    .nav-dropdown-item:hover { background: var(--off); }
+    .nav-dropdown-item.danger { color: var(--rd); }
+    .hidden { display: none !important; }
+
+    /* hamburger — keep for mobile */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 1px; }
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-actions { display: none; }
+      .nav-user { display: none; }
+    }
+
+    /* mobile drawer */
+    .nav-mobile-drawer {
+      display: none; flex-direction: column; gap: 4px;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--dk); z-index: 200; padding: 60px 24px 24px;
+    }
+    .nav-mobile-drawer.open { display: flex; }
+    .nav-mobile-drawer .nav-link {
+      font-size: 15px; color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 0;
+      border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── PAGE HERO ───────────────────────────────────────────────── */
+    .page-header {
+      padding: 52px 32px 40px;
+      background: var(--dk);
+      animation: em-fadeUp 0.5s ease both;
+    }
+    .page-header-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rd);
+      margin-bottom: 12px;
+      font-family: 'Inter', sans-serif;
+      animation: em-fadeUp 0.5s 0.08s ease both;
+    }
+    .page-header h1 {
+      font-size: 44px;
+      line-height: 1.02;
+      color: #fff;
+      margin: 0 0 10px;
+      animation: em-fadeUp 0.5s 0.12s ease both;
+    }
+    .page-header h1 strong {
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      display: block;
+    }
+    .page-header h1 em {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      display: block;
+    }
+    .page-header p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
+      margin: 0;
+      animation: em-fadeUp 0.5s 0.18s ease both;
+    }
+    /* hide the old count span inside header — we restyle it */
+    .page-header-count {
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 4px;
+      display: block;
+    }
+    /* old inner wrapper — flatten it */
+    .page-header-inner { display: block; }
+
+    /* ── FILTER BAR ──────────────────────────────────────────────── */
+    .filter-bar {
+      background: var(--rd);
+      position: sticky;
+      top: 57px;
+      z-index: 90;
+      animation: em-fadeIn 0.4s 0.28s ease both;
+    }
+    .filter-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 32px;
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+    .filter-pills { display: flex; gap: 7px; flex-wrap: wrap; }
+    .filter-pill {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 5px 13px;
+      border-radius: 100px;
+      border: 0.5px solid rgba(255,255,255,0.35);
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .filter-pill:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+    .filter-pill.active {
+      background: #fff;
+      color: var(--rd);
+      border-color: #fff;
+      font-weight: 600;
+    }
+    /* search wrap */
+    .search-wrap {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.12);
+      border: 0.5px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      padding: 5px 12px;
+      transition: background 0.18s;
+    }
+    .search-wrap:focus-within { background: rgba(255,255,255,0.2); }
+    .search-icon { font-size: 14px; }
+    .search-input {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      width: 160px;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.55); }
+    /* view toggle */
+    .view-toggle { display: flex; gap: 4px; margin-left: 8px; }
+    .view-toggle-btn {
+      font-size: 14px;
+      padding: 5px 8px;
+      border: 0.5px solid rgba(255,255,255,0.3);
+      border-radius: 5px;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .view-toggle-btn.active, .view-toggle-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+
+    /* ── RESULTS BAR ─────────────────────────────────────────────── */
+    .layout-single { max-width: 1200px; margin: 0 auto; padding: 24px 32px; }
+    .results-bar {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--mu);
+      margin-bottom: 16px;
+      animation: em-fadeIn 0.4s 0.35s ease both;
+    }
+    .results-bar strong { color: var(--dk); }
+
+    /* ── COURSE GRID ─────────────────────────────────────────────── */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .courses-list { display: flex; flex-direction: column; gap: 10px; }
+
+    /* GRID CARD */
+    .course-card-grid {
+      background: var(--wh);
+      border-radius: 10px;
+      border: 0.5px solid var(--br);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: em-fadeUp 0.4s ease both;
+    }
+    .course-card-grid:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
+    .course-thumb {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      background: var(--dk);
+      position: relative;
+    }
+    .course-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+    .badge-free-dark { background: var(--rd); color: #fff; }
+    .badge-paid-dark { background: rgba(255,255,255,0.15); color: #fff; border: 0.5px solid rgba(255,255,255,0.3); }
+    .course-cat-label {
+      position: absolute;
+      bottom: 10px; right: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .course-body { padding: 16px; }
+    .course-cat {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mu);
+      margin-bottom: 5px;
+    }
+    .course-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      line-height: 1.3;
+      color: var(--dk);
+      margin-bottom: 6px;
+    }
+    .course-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--mu);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+    .course-duration {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--mu);
+      margin-bottom: 12px;
+    }
+    .course-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 0.5px solid var(--br);
+    }
+    .course-price {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dk);
+    }
+    .course-price.free { color: var(--rd); }
+    .course-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .course-btn.red   { background: var(--rd); color: #fff; }
+    .course-btn.red:hover { background: var(--rd2); }
+    .course-btn.green { background: var(--dk); color: #fff; }
+    .course-btn.green:hover { background: #2e2e2e; }
+    .course-btn.amber { background: #f59e0b; color: #fff; }
+    .course-btn.ghost { background: var(--off); color: var(--dk); border: 0.5px solid var(--br); }
+
+    /* LIST ROW */
+    .course-card-row {
+      background: var(--wh);
+      border: 0.5px solid var(--br);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+      animation: em-fadeUp 0.35s ease both;
+    }
+    .course-card-row:hover { background: var(--off); transform: translateX(3px); }
+    .course-emoji { font-size: 28px; flex-shrink: 0; width: 44px; text-align: center; }
+    .course-info { flex: 1; }
+    .course-info h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 15px;
+      color: var(--dk);
+      margin: 0 0 5px;
+    }
+    .course-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--mu);
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+    .badge-free { background: var(--rd); color: #fff; }
+    .badge-paid { background: var(--dk); color: #fff; }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--mu);
+      grid-column: 1 / -1;
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--dk); margin: 0 0 8px; }
+    .empty-state p { font-size: 13px; margin: 0 0 16px; }
+    .btn-red {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      background: var(--rd);
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-red:hover { background: var(--rd2); }
+
+    /* ── PAGINATION ──────────────────────────────────────────────── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 28px;
+      padding-bottom: 8px;
+    }
+    .pagination-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 6px 12px;
+      border: 0.5px solid var(--br);
+      border-radius: 6px;
+      background: var(--wh);
+      color: var(--dk);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .pagination-btn:hover:not(:disabled) { background: var(--off); border-color: var(--dk); }
+    .pagination-btn.active { background: var(--rd); color: #fff; border-color: var(--rd); }
+    .pagination-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .pagination-info { font-size: 13px; color: var(--mu); padding: 0 4px; }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    .footer {
+      background: var(--dk);
+      color: rgba(255,255,255,0.5);
+      padding: 40px 32px 24px;
+      margin-top: 48px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto 28px;
+    }
+    .footer-brand p { font-size: 13px; line-height: 1.6; margin-top: 10px; }
+    .footer-col h5 {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin: 0 0 10px;
+    }
+    .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+    .footer-col a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.18s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding-top: 20px;
+      border-top: 0.5px solid rgba(255,255,255,0.08);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+      .footer-bottom { flex-direction: column; gap: 6px; }
+      .layout-single { padding: 16px; }
+      .filter-bar-inner { padding: 10px 16px; }
+      .page-header { padding: 36px 16px 28px; }
+      .page-header h1 { font-size: 30px; }
+      .navbar { padding: 12px 16px; }
+    }
+
+    /* ── WHATSAPP FLOAT ──────────────────────────────────────────── */
+    .help-float {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 300;
+    }
+    .help-text {
+      background: var(--dk);
+      color: #fff;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .help-text.visible { opacity: 1; transform: translateX(0); }
+    .help-wa {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      transition: transform 0.2s;
+    }
+    .help-wa:hover { transform: scale(1.08); }
+    .help-wa svg { width: 24px; height: 24px; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link active">Courses</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+    </div>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link active">Courses</a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
+
+<!-- ── PAGE HERO ──────────────────────────────────────────────── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-eyebrow">✦ CPD accredited</div>
+    <h1>
+      <strong>ALL COURSES.</strong>
+      <em>Pick yours.</em>
+    </h1>
+    <p>Free and paid &nbsp;·&nbsp; Built for Malaysian educators &nbsp;·&nbsp; <span id="header-count"></span></p>
+  </div>
+</div>
+
+<!-- ── FILTER BAR ─────────────────────────────────────────────── -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="free">Free</button>
+      <button class="filter-pill" data-filter="paid">Paid</button>
+      <button class="filter-pill" data-filter="AI">AI</button>
+      <button class="filter-pill" data-filter="Soft Skills">Soft Skills</button>
+      <button class="filter-pill" data-filter="Personal Development">Personal Dev</button>
+      <button class="filter-pill" data-filter="Education">Education</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search courses..."/>
+    </div>
+    <div class="view-toggle">
+      <button class="view-toggle-btn" id="view-list" title="List view">☰</button>
+      <button class="view-toggle-btn active" id="view-grid" title="Grid view">▦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COURSES CONTENT ────────────────────────────────────────── -->
+<div class="layout-single">
+  <div class="results-bar" id="results-bar">Loading...</div>
+  <div class="courses-grid" id="courses-container">
+    <div class="empty-state">Loading courses...</div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
+      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+    </div>
+    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="profile.html">My Profile</a></li></ul></div>
+    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
+</footer>
+
+<!-- ── WHATSAPP FLOAT ────────────────────────────────────────── -->
+<div class="help-float">
+  <span class="help-text" id="help-text">Let me know how I can help</span>
+  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- ── FIREBASE + LOGIC — UNCHANGED ──────────────────────────── -->
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
+const auth=getAuth(app),db=getFirestore(app);
+const bgMap={"AI":"thumb-dark","Soft Skills":"thumb-dark","Personal Development":"thumb-dark","Education":"thumb-dark"};
+let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
+let currentView="grid";
+let currentPage=1;
+const PER_PAGE=6;
+let coursesLoaded=false;
+
+onAuthStateChanged(auth,async(user)=>{
+  currentUser=user;
+  const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+  const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+  if(user){
+    g?.classList.add("hidden");u?.classList.remove("hidden");
+    mg?.classList.add("hidden");mu?.classList.remove("hidden");
+    const n=user.displayName||"User",el=id=>document.getElementById(id);
+    if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+    if(el("nav-name"))el("nav-name").textContent=n;
+    if(el("dd-name"))el("dd-name").textContent=n;
+    if(el("dd-email"))el("dd-email").textContent=user.email||"";
+    try{
+      const ud=await getDoc(doc(db,"users",user.uid));
+      const ia=ud.exists()&&ud.data().role==="admin";
+      isAdmin=ia;
+      window.cacheAuthUser?.(user,ia);
+      if(ia)window.setAdminNav?.(true);
+    }catch(e){window.cacheAuthUser?.(user,false);}
+    try{
+      const [es,ps]=await Promise.all([
+        getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),
+        getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))
+      ]);
+      userStatus={};
+      es.forEach(d=>{userStatus[d.data().courseId]="enrolled";});
+      ps.forEach(d=>{const p=d.data();if(!userStatus[p.courseId])userStatus[p.courseId]=p.status;});
+    }catch(e){}
+    await loadCourses();
+  }else{
+    g?.classList.remove("hidden");u?.classList.add("hidden");
+    mg?.classList.remove("hidden");mu?.classList.add("hidden");
+    userStatus={};
+    document.getElementById("courses-container").innerHTML='<div class="empty-state"><div class="empty-icon">🔒</div><h3>Sign in to browse courses</h3><p>Log in to view available courses and enroll.</p><a href="login.html" class="btn-red">Log In</a></div>';
+    document.getElementById("results-bar").innerHTML='';
+    document.getElementById("header-count").textContent='';
+  }
+});
+
+document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
+async function loadCourses(){
+  try{
+    const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
+    allCourses=[];
+    snap.forEach(d=>allCourses.push({id:d.id,...d.data()}));
+    coursesLoaded=true;
+    const hc=document.getElementById("header-count");
+    if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
+    renderCourses();
+  }catch(e){
+    document.getElementById("courses-container").innerHTML='<div class="empty-state">Could not load courses: '+e.message+'</div>';
+  }
+}
+
+function getCourseBtn(c){
+  const isFree=c.isFree===true,st=userStatus[c.id];
+  if(isAdmin)         return {cls:"ghost",  label:"View Course", href:"player.html?id="+c.id};
+  if(st==="enrolled") return {cls:"green",  label:"▶ Continue",  href:"player.html?id="+c.id};
+  if(st==="approved") return {cls:"green",  label:"✓ Start Now", href:"player.html?id="+c.id};
+  if(st==="pending")  return {cls:"amber",  label:"⏳ Pending",   href:"payment.html?course="+c.id};
+  if(isFree)          return {cls:"green",  label:"Start Free",  href:"course.html?id="+c.id};
+  return                     {cls:"red",    label:"Enroll Now",  href:"course.html?id="+c.id};
+}
+
+function renderGridCard(c){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const btn=getCourseBtn(c);
+  const emoji=c.thumbnailEmoji||"📚";
+  const cat=c.category||"General";
+  const dur=c.totalDuration||"";
+  const mods=(c.modules||[]).length;
+  return `<div class="course-card-grid" onclick="location.href='${btn.href}'">
+    <div class="course-thumb thumb-dark">
+      ${emoji}
+      <span class="course-badge ${isFree?'badge-free-dark':'badge-paid-dark'}">${price}</span>
+      <span class="course-cat-label">${cat}</span>
+    </div>
+    <div class="course-body">
+      <div class="course-cat">${cat}</div>
+      <div class="course-title">${c.title}</div>
+      <div class="course-desc">${c.description||""}</div>
+      <div class="course-duration">${dur?'⏱ '+dur:''}${dur&&mods?' · ':mods?'':''}${mods} module${mods!==1?'s':''}</div>
+      <div class="course-footer">
+        <div class="course-price ${isFree?"free":""}">${price}</div>
+        <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderListRow(c){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const btn=getCourseBtn(c);
+  const emoji=c.thumbnailEmoji||"📚";
+  const mods=(c.modules||[]).length;
+  const dur=c.totalDuration||"";
+  return `<div class="course-card-row" onclick="location.href='${btn.href}'">
+    <div class="course-emoji">${emoji}</div>
+    <div class="course-info">
+      <h3>${c.title}</h3>
+      <div class="course-meta">
+        <span class="badge ${isFree?'badge-free':'badge-paid'}">${isFree?'Free':'Paid'}</span>
+        <span>${c.category||"General"}</span>
+        <span>·</span>
+        <span>${mods} module${mods!==1?'s':''}</span>
+        ${dur?'<span>·</span><span>⏱ '+dur+'</span>':''}
+      </div>
+    </div>
+    <div class="course-price ${isFree?"free":""}">${price}</div>
+    <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+  </div>`;
+}
+
+function renderCourses(){
+  const container=document.getElementById("courses-container");
+  const bar=document.getElementById("results-bar");
+  const filtered=allCourses.filter(c=>{
+    const mf=activeFilter==="all"
+      ||(activeFilter==="free"&&c.isFree===true)
+      ||(activeFilter==="paid"&&c.isFree!==true)
+      ||c.category===activeFilter;
+    const ms=!searchTerm||c.title.toLowerCase().includes(searchTerm)||(c.description||"").toLowerCase().includes(searchTerm);
+    return mf&&ms;
+  });
+  const totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
+  if(currentPage>totalPages) currentPage=totalPages;
+  const start=(currentPage-1)*PER_PAGE;
+  const paged=filtered.slice(start,start+PER_PAGE);
+  bar.innerHTML=filtered.length
+    ? `Showing <strong>${start+1}–${Math.min(start+PER_PAGE,filtered.length)}</strong> of <strong>${filtered.length}</strong> courses`
+    : `Showing <strong>0</strong> of <strong>${allCourses.length}</strong> courses`;
+  if(!filtered.length){
+    container.className=currentView==="grid"?"courses-grid":"courses-list";
+    container.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>No courses found</h3><p>Try adjusting your filters or search term.</p></div>';
+    renderPagination(0);
+    return;
+  }
+  container.className=currentView==="grid"?"courses-grid":"courses-list";
+  container.innerHTML=paged.map(c=>currentView==="grid"?renderGridCard(c):renderListRow(c)).join("");
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  const el=document.getElementById("pagination");
+  if(totalPages<=1){el.innerHTML="";return;}
+  let html='';
+  html+=`<button class="pagination-btn" ${currentPage===1?'disabled':''} data-page="${currentPage-1}">‹ Prev</button>`;
+  const maxVisible=5;
+  let startP=Math.max(1,currentPage-Math.floor(maxVisible/2));
+  let endP=Math.min(totalPages,startP+maxVisible-1);
+  if(endP-startP<maxVisible-1) startP=Math.max(1,endP-maxVisible+1);
+  if(startP>1){html+=`<button class="pagination-btn" data-page="1">1</button>`;if(startP>2)html+=`<span class="pagination-info">…</span>`;}
+  for(let i=startP;i<=endP;i++){html+=`<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;}
+  if(endP<totalPages){if(endP<totalPages-1)html+=`<span class="pagination-info">…</span>`;html+=`<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`;}
+  html+=`<button class="pagination-btn" ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Next ›</button>`;
+  el.innerHTML=html;
+  el.querySelectorAll('.pagination-btn:not(:disabled)').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      currentPage=parseInt(btn.dataset.page);
+      renderCourses();
+      document.querySelector('.filter-bar').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+}
+
+document.getElementById("view-list").addEventListener("click",()=>{
+  currentView="list";
+  document.getElementById("view-list").classList.add("active");
+  document.getElementById("view-grid").classList.remove("active");
+  currentPage=1;renderCourses();
+});
+document.getElementById("view-grid").addEventListener("click",()=>{
+  currentView="grid";
+  document.getElementById("view-grid").classList.add("active");
+  document.getElementById("view-list").classList.remove("active");
+  currentPage=1;renderCourses();
+});
+
+document.querySelectorAll(".filter-pill").forEach(p=>p.addEventListener("click",()=>{
+  document.querySelectorAll(".filter-pill").forEach(x=>x.classList.remove("active"));
+  p.classList.add("active");
+  activeFilter=p.dataset.filter;
+  currentPage=1;renderCourses();
+}));
+
+document.getElementById("search-input").addEventListener("input",e=>{
+  searchTerm=e.target.value.toLowerCase().trim();
+  currentPage=1;renderCourses();
+});
+
+const params=new URLSearchParams(location.search);
+if(params.get("filter")==="free"){
+  activeFilter="free";
+  document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter==="free"));
+}
+if(params.get("cat")){
+  activeFilter=params.get("cat");
+  document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter===activeFilter));
+}
+
+setTimeout(()=>{const t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
