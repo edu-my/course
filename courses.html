@@ -3,33 +3,26 @@
 <head>
   <meta charset="UTF-8"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
   <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>All Courses — edu-my.web</title>
   <link rel="stylesheet" href="css/base.css"/>
   <link rel="stylesheet" href="css/layout.css"/>
   <link rel="stylesheet" href="css/components.css"/>
-  <!-- Editorial redesign — loaded last so it wins the cascade -->
   <link rel="stylesheet" href="css/editorial.css"/>
 </head>
 <body>
 
-<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
 <nav class="navbar">
   <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
-  <!-- Courses + Dashboard tabs beside logo -->
-  <div class="nav-tabs">
-    <a href="courses.html" class="nav-tab active">Courses</a>
-    <a href="dashboard.html" class="nav-tab">Dashboard</a>
+  <div class="em-nav-tabs">
+    <a href="courses.html" class="em-nav-tab active">Courses</a>
+    <a href="dashboard.html" class="em-nav-tab">Dashboard</a>
   </div>
-  <!-- Guest actions -->
   <div class="nav-actions" id="nav-guest">
     <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
     <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
   </div>
-  <!-- Logged-in user -->
   <div class="nav-user hidden" id="nav-user">
     <div class="nav-avatar" id="nav-avatar">U</div>
     <div class="nav-user-name" id="nav-name">User</div>
@@ -60,19 +53,16 @@
   </div>
 </div>
 
-<!-- ── PAGE HERO ──────────────────────────────────────────────── -->
+<!-- HERO -->
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="page-header-eyebrow">✦ CPD accredited</div>
-    <h1>
-      <strong>ALL COURSES.</strong>
-      <em>Pick yours.</em>
-    </h1>
+    <div class="em-eyebrow">✦ CPD accredited</div>
+    <h1><strong>ALL COURSES.</strong><em>Pick yours.</em></h1>
     <p>Free and paid &nbsp;·&nbsp; Built for Malaysian educators &nbsp;·&nbsp; <span id="header-count"></span></p>
   </div>
 </div>
 
-<!-- ── FILTER BAR ─────────────────────────────────────────────── -->
+<!-- FILTER BAR -->
 <div class="filter-bar">
   <div class="filter-bar-inner">
     <div class="filter-pills">
@@ -95,30 +85,27 @@
   </div>
 </div>
 
-<!-- ── COURSES CONTENT ────────────────────────────────────────── -->
+<!-- CONTENT -->
 <div class="layout-single">
-  <div class="results-bar" id="results-bar">Loading...</div>
-  <div class="courses-grid" id="courses-container">
-    <div class="empty-state">Loading courses...</div>
-  </div>
-  <div class="pagination" id="pagination"></div>
+  <div class="em-results" id="results-bar">Loading...</div>
+  <div class="em-courses-grid" id="courses-container"></div>
+  <div class="em-pagination" id="pagination"></div>
 </div>
 
-<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
-      <p>CPD-accredited online learning in soft skills, personal development, education, and AI.</p>
+      <p>CPD-accredited online learning for Malaysian educators.</p>
     </div>
     <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
-    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">My Dashboard</a></li><li><a href="profile.html">My Profile</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">Dashboard</a></li><li><a href="profile.html">My Profile</a></li></ul></div>
     <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
   </div>
-  <div class="footer-bottom"><span>© 2025 edu-my.web. All rights reserved.</span><span>Made for Malaysian learners 🇲🇾</span></div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web</span><span>Made for Malaysian learners 🇲🇾</span></div>
 </footer>
 
-<!-- ── WHATSAPP FLOAT ────────────────────────────────────────── -->
 <div class="help-float">
   <span class="help-text" id="help-text">Let me know how I can help</span>
   <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
@@ -126,7 +113,6 @@
   </a>
 </div>
 
-<!-- ── FIREBASE + LOGIC — UNCHANGED ──────────────────────────── -->
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
@@ -134,18 +120,18 @@ import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://ww
 
 const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
 const auth=getAuth(app),db=getFirestore(app);
-let allCourses=[],activeFilter="all",searchTerm="",currentUser=null,userStatus={},isAdmin=false;
+let allCourses=[],activeFilter="all",searchTerm="",userStatus={},isAdmin=false;
 let currentView="grid",currentPage=1;
 const PER_PAGE=6;
 
-onAuthStateChanged(auth,async(user)=>{
-  currentUser=user;
+onAuthStateChanged(auth,async user=>{
   const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
   const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
   if(user){
     g?.classList.add("hidden");u?.classList.remove("hidden");
     mg?.classList.add("hidden");mu?.classList.remove("hidden");
-    const n=user.displayName||"User",el=id=>document.getElementById(id);
+    const n=user.displayName||"User";
+    const el=id=>document.getElementById(id);
     if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
     if(el("nav-name"))el("nav-name").textContent=n;
     if(el("dd-name"))el("dd-name").textContent=n;
@@ -161,9 +147,8 @@ onAuthStateChanged(auth,async(user)=>{
   }else{
     g?.classList.remove("hidden");u?.classList.add("hidden");
     mg?.classList.remove("hidden");mu?.classList.add("hidden");
-    userStatus={};
-    document.getElementById("courses-container").innerHTML='<div class="empty-state"><div class="empty-icon">🔒</div><h3>Sign in to browse courses</h3><p>Log in to view available courses and enroll.</p><a href="login.html" class="btn-red">Log In</a></div>';
-    document.getElementById("results-bar").innerHTML='';
+    document.getElementById("courses-container").innerHTML='<div class="em-empty"><div class="em-empty-icon">🔒</div><h3>Sign in to browse courses</h3><p>Log in to view available courses.</p><a href="login.html" class="em-btn-rd">Log In</a></div>';
+    document.getElementById("results-bar").textContent='';
     document.getElementById("header-count").textContent='';
   }
 });
@@ -178,7 +163,9 @@ async function loadCourses(){
     const hc=document.getElementById("header-count");
     if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
     renderCourses();
-  }catch(e){document.getElementById("courses-container").innerHTML='<div class="empty-state">Could not load courses: '+e.message+'</div>';}
+  }catch(e){
+    document.getElementById("courses-container").innerHTML='<div class="em-empty"><div class="em-empty-icon">⚠️</div><h3>Could not load courses</h3><p>'+e.message+'</p></div>';
+  }
 }
 
 function getCourseBtn(c){
@@ -194,16 +181,20 @@ function getCourseBtn(c){
 function renderGridCard(c){
   const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
   const btn=getCourseBtn(c),emoji=c.thumbnailEmoji||"📚",cat=c.category||"General",dur=c.totalDuration||"",mods=(c.modules||[]).length;
-  return `<div class="course-card-grid" onclick="location.href='${btn.href}'">
-    <div class="course-thumb thumb-dark">${emoji}<span class="course-badge ${isFree?'badge-free-dark':'badge-paid-dark'}">${price}</span><span class="course-cat-label">${cat}</span></div>
-    <div class="course-body">
-      <div class="course-cat">${cat}</div>
-      <div class="course-title">${c.title}</div>
-      <div class="course-desc">${c.description||""}</div>
-      <div class="course-duration">${dur?'⏱ '+dur:''}${dur&&mods?' · ':mods?'':''}${mods} module${mods!==1?'s':''}</div>
-      <div class="course-footer">
-        <div class="course-price ${isFree?"free":""}">${price}</div>
-        <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+  return `<div class="em-card" onclick="location.href='${btn.href}'">
+    <div class="em-thumb">
+      ${emoji}
+      <span class="em-price-badge ${isFree?'free':'paid'}">${price}</span>
+      <span class="em-cat-label">${cat}</span>
+    </div>
+    <div class="em-body">
+      <div class="em-cat">${cat}</div>
+      <div class="em-title">${c.title}</div>
+      <div class="em-desc">${c.description||""}</div>
+      <div class="em-dur">${dur?'⏱ '+dur:''} ${mods} module${mods!==1?'s':''}</div>
+      <div class="em-footer">
+        <div class="em-price ${isFree?'free':''}">${price}</div>
+        <button class="em-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
       </div>
     </div>
   </div>`;
@@ -212,13 +203,18 @@ function renderGridCard(c){
 function renderListRow(c){
   const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
   const btn=getCourseBtn(c),emoji=c.thumbnailEmoji||"📚",mods=(c.modules||[]).length,dur=c.totalDuration||"";
-  return `<div class="course-card-row" onclick="location.href='${btn.href}'">
-    <div class="course-emoji">${emoji}</div>
-    <div class="course-info"><h3>${c.title}</h3>
-      <div class="course-meta"><span class="badge ${isFree?'badge-free':'badge-paid'}">${isFree?'Free':'Paid'}</span><span>${c.category||"General"}</span><span>·</span><span>${mods} module${mods!==1?'s':''}</span>${dur?'<span>·</span><span>⏱ '+dur+'</span>':''}</div>
+  return `<div class="em-row" onclick="location.href='${btn.href}'">
+    <div class="em-row-emoji">${emoji}</div>
+    <div class="em-row-info">
+      <h3>${c.title}</h3>
+      <div class="em-row-meta">
+        <span class="em-badge ${isFree?'free':'paid'}">${isFree?'Free':'Paid'}</span>
+        <span>${cat}</span><span>·</span><span>${mods} module${mods!==1?'s':''}</span>
+        ${dur?'<span>·</span><span>⏱ '+dur+'</span>':''}
+      </div>
     </div>
-    <div class="course-price ${isFree?"free":""}">${price}</div>
-    <button class="course-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+    <div class="em-price ${isFree?'free':''}">${price}</div>
+    <button class="em-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
   </div>`;
 }
 
@@ -232,9 +228,14 @@ function renderCourses(){
   const totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
   if(currentPage>totalPages)currentPage=totalPages;
   const start=(currentPage-1)*PER_PAGE,paged=filtered.slice(start,start+PER_PAGE);
-  bar.innerHTML=filtered.length?`Showing <strong>${start+1}–${Math.min(start+PER_PAGE,filtered.length)}</strong> of <strong>${filtered.length}</strong> courses`:`Showing <strong>0</strong> of <strong>${allCourses.length}</strong> courses`;
-  if(!filtered.length){container.className=currentView==="grid"?"courses-grid":"courses-list";container.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>No courses found</h3><p>Try adjusting your filters or search term.</p></div>';renderPagination(0);return;}
-  container.className=currentView==="grid"?"courses-grid":"courses-list";
+  bar.innerHTML=filtered.length
+    ?`Showing <strong>${start+1}–${Math.min(start+PER_PAGE,filtered.length)}</strong> of <strong>${filtered.length}</strong> courses`
+    :`<strong>0</strong> courses match`;
+  container.className=currentView==="grid"?"em-courses-grid":"em-courses-list";
+  if(!filtered.length){
+    container.innerHTML='<div class="em-empty"><div class="em-empty-icon">🔍</div><h3>No courses found</h3><p>Try adjusting your filters.</p></div>';
+    renderPagination(0);return;
+  }
   container.innerHTML=paged.map(c=>currentView==="grid"?renderGridCard(c):renderListRow(c)).join("");
   renderPagination(totalPages);
 }
@@ -242,15 +243,17 @@ function renderCourses(){
 function renderPagination(totalPages){
   const el=document.getElementById("pagination");
   if(totalPages<=1){el.innerHTML="";return;}
-  let html=`<button class="pagination-btn" ${currentPage===1?'disabled':''} data-page="${currentPage-1}">‹ Prev</button>`;
-  const maxVisible=5;let startP=Math.max(1,currentPage-Math.floor(maxVisible/2));let endP=Math.min(totalPages,startP+maxVisible-1);
-  if(endP-startP<maxVisible-1)startP=Math.max(1,endP-maxVisible+1);
-  if(startP>1){html+=`<button class="pagination-btn" data-page="1">1</button>`;if(startP>2)html+=`<span class="pagination-info">…</span>`;}
-  for(let i=startP;i<=endP;i++)html+=`<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-  if(endP<totalPages){if(endP<totalPages-1)html+=`<span class="pagination-info">…</span>`;html+=`<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`;}
-  html+=`<button class="pagination-btn" ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Next ›</button>`;
+  let html=`<button class="em-page-btn" ${currentPage===1?'disabled':''} data-page="${currentPage-1}">‹ Prev</button>`;
+  let startP=Math.max(1,currentPage-2),endP=Math.min(totalPages,startP+4);
+  if(endP-startP<4)startP=Math.max(1,endP-4);
+  if(startP>1){html+=`<button class="em-page-btn" data-page="1">1</button>`;if(startP>2)html+=`<span class="em-page-info">…</span>`;}
+  for(let i=startP;i<=endP;i++)html+=`<button class="em-page-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+  if(endP<totalPages){if(endP<totalPages-1)html+=`<span class="em-page-info">…</span>`;html+=`<button class="em-page-btn" data-page="${totalPages}">${totalPages}</button>`;}
+  html+=`<button class="em-page-btn" ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Next ›</button>`;
   el.innerHTML=html;
-  el.querySelectorAll('.pagination-btn:not(:disabled)').forEach(btn=>{btn.addEventListener('click',()=>{currentPage=parseInt(btn.dataset.page);renderCourses();document.querySelector('.filter-bar').scrollIntoView({behavior:'smooth',block:'start'});});});
+  el.querySelectorAll('.em-page-btn:not(:disabled)').forEach(btn=>{
+    btn.addEventListener('click',()=>{currentPage=parseInt(btn.dataset.page);renderCourses();document.querySelector('.filter-bar').scrollIntoView({behavior:'smooth',block:'start'});});
+  });
 }
 
 document.getElementById("view-list").addEventListener("click",()=>{currentView="list";document.getElementById("view-list").classList.add("active");document.getElementById("view-grid").classList.remove("active");currentPage=1;renderCourses();});
