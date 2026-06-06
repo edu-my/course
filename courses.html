@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>All Courses — edu-my.web</title>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/editorial.css"/>
+  <!-- FIX: hide guest nav instantly before body renders if session cached -->
+  <script>
+  (function(){
+    try{
+      if(sessionStorage.getItem('icraftuser')){
+        var s=document.createElement('style');
+        s.id='em-antiflicker';
+        s.textContent='#nav-guest,#nav-mobile-guest{display:none!important}';
+        document.head.appendChild(s);
+      }
+    }catch(e){}
+  })();
+  </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
+  <div class="em-nav-tabs">
+    <a href="courses.html" class="em-nav-tab active">Courses</a>
+    <a href="dashboard.html" class="em-nav-tab">Dashboard</a>
+  </div>
+  <div class="nav-actions" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+    </div>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link active">Courses</a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
+  <div class="nav-actions" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="em-eyebrow">✦ CPD accredited</div>
+    <h1><strong>ALL COURSES.</strong><em>Pick yours.</em></h1>
+    <p>Free and paid &nbsp;·&nbsp; Built for Malaysian educators &nbsp;·&nbsp; <span id="header-count"></span></p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="free">Free</button>
+      <button class="filter-pill" data-filter="paid">Paid</button>
+      <button class="filter-pill" data-filter="AI">AI</button>
+      <button class="filter-pill" data-filter="Soft Skills">Soft Skills</button>
+      <button class="filter-pill" data-filter="Personal Development">Personal Dev</button>
+      <button class="filter-pill" data-filter="Education">Education</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search courses..."/>
+    </div>
+    <div class="view-toggle">
+      <button class="view-toggle-btn" id="view-list" title="List view">☰</button>
+      <button class="view-toggle-btn active" id="view-grid" title="Grid view">▦</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT — flush left, no centering padding -->
+<div class="em-layout-courses">
+  <div class="em-results" id="results-bar">Loading...</div>
+  <div class="em-courses-grid" id="courses-container"></div>
+  <div class="em-pagination" id="pagination"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
+      <p>CPD-accredited online learning for Malaysian educators.</p>
+    </div>
+    <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html?filter=free">Free Courses</a></li></ul></div>
+    <div class="footer-col"><h5>Account</h5><ul><li><a href="dashboard.html">Dashboard</a></li><li><a href="profile.html">My Profile</a></li></ul></div>
+    <div class="footer-col"><h5>Support</h5><ul><li><a href="https://wa.me/60108402462" target="_blank">WhatsApp Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 edu-my.web</span><span>Made for Malaysian learners 🇲🇾</span></div>
+</footer>
+
+<div class="help-float">
+  <span class="help-text" id="help-text">Let me know how I can help</span>
+  <a class="help-wa" href="https://wa.me/60108402462" target="_blank">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+import {getFirestore,collection,getDocs,query,where,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",authDomain:"kolamdata.firebaseapp.com",projectId:"kolamdata",storageBucket:"kolamdata.firebasestorage.app",messagingSenderId:"16403132310",appId:"1:16403132310:web:464c4ad2d19812f95077b7"});
+const auth=getAuth(app),db=getFirestore(app);
+let allCourses=[],activeFilter="all",searchTerm="",userStatus={},isAdmin=false;
+let currentView="grid",currentPage=1;
+const PER_PAGE=6;
+
+onAuthStateChanged(auth,async user=>{
+  // Remove anti-flicker style now that Firebase has resolved
+  const afs=document.getElementById('em-antiflicker');
+  if(afs)afs.remove();
+
+  const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+  const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+  if(user){
+    g?.classList.add("hidden");u?.classList.remove("hidden");
+    mg?.classList.add("hidden");mu?.classList.remove("hidden");
+    const n=user.displayName||"User";
+    const el=id=>document.getElementById(id);
+    if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+    if(el("nav-name"))el("nav-name").textContent=n;
+    if(el("dd-name"))el("dd-name").textContent=n;
+    if(el("dd-email"))el("dd-email").textContent=user.email||"";
+    try{const ud=await getDoc(doc(db,"users",user.uid));const ia=ud.exists()&&ud.data().role==="admin";isAdmin=ia;window.cacheAuthUser?.(user,ia);if(ia)window.setAdminNav?.(true);}catch(e){window.cacheAuthUser?.(user,false);}
+    try{
+      const [es,ps]=await Promise.all([getDocs(query(collection(db,"enrollments"),where("userId","==",user.uid))),getDocs(query(collection(db,"payments"),where("userId","==",user.uid)))]);
+      userStatus={};
+      es.forEach(d=>{userStatus[d.data().courseId]="enrolled";});
+      ps.forEach(d=>{const p=d.data();if(!userStatus[p.courseId])userStatus[p.courseId]=p.status;});
+    }catch(e){}
+    await loadCourses();
+  }else{
+    g?.classList.remove("hidden");u?.classList.add("hidden");
+    mg?.classList.remove("hidden");mu?.classList.add("hidden");
+    document.getElementById("courses-container").innerHTML='<div class="em-empty"><div class="em-empty-icon">🔒</div><h3>Sign in to browse courses</h3><p>Log in to view available courses.</p><a href="login.html" class="em-btn-rd">Log In</a></div>';
+    document.getElementById("results-bar").textContent='';
+    document.getElementById("header-count").textContent='';
+  }
+});
+
+document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+
+async function loadCourses(){
+  try{
+    const snap=await getDocs(query(collection(db,"courses"),where("isPublished","==",true)));
+    allCourses=[];snap.forEach(d=>allCourses.push({id:d.id,...d.data()}));
+    const hc=document.getElementById("header-count");
+    if(hc)hc.textContent=allCourses.length+" course"+(allCourses.length!==1?"s":"");
+    renderCourses();
+  }catch(e){
+    document.getElementById("courses-container").innerHTML='<div class="em-empty"><div class="em-empty-icon">⚠️</div><h3>Could not load courses</h3><p>'+e.message+'</p></div>';
+  }
+}
+
+function getCourseBtn(c){
+  const isFree=c.isFree===true,st=userStatus[c.id];
+  if(isAdmin)         return {cls:"ghost",label:"View Course",href:"player.html?id="+c.id};
+  if(st==="enrolled") return {cls:"green",label:"▶ Continue", href:"player.html?id="+c.id};
+  if(st==="approved") return {cls:"green",label:"✓ Start Now",href:"player.html?id="+c.id};
+  if(st==="pending")  return {cls:"amber",label:"⏳ Pending",  href:"payment.html?course="+c.id};
+  if(isFree)          return {cls:"green",label:"Start Free", href:"course.html?id="+c.id};
+  return                     {cls:"red",  label:"Enroll Now", href:"course.html?id="+c.id};
+}
+
+// EDITORIAL CARD — no thumbnail, newspaper column style
+function renderGridCard(c,isFirst=false){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const cat=c.category||"General",dur=c.totalDuration||"",mods=(c.modules||[]).length;
+  const href=(()=>{const btn=getCourseBtn(c);return btn.href;})();
+  return `<div class="em-card${isFirst?' em-card-wide':''}" onclick="location.href='${href}'">
+    <div class="em-card-inner">
+      <div class="em-card-top">
+        <span class="em-cat">${cat}</span>
+        <span class="em-card-arrow">→</span>
+      </div>
+      <div class="em-title">${c.title}</div>
+      <div class="em-desc">${c.description||""}</div>
+      <div class="em-card-meta">
+        <span class="em-price-tag ${isFree?'free':'paid'}">${price}</span>
+        ${mods?`<span class="em-meta-item">⏱ ${mods} module${mods!==1?'s':''}</span>`:''}
+        ${dur?`<span class="em-meta-item">${dur}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderListRow(c){
+  const isFree=c.isFree===true,price=isFree?"FREE":"RM "+parseFloat(c.price||0).toFixed(2);
+  const cat=c.category||"General",mods=(c.modules||[]).length,dur=c.totalDuration||"";
+  const emoji=c.thumbnailEmoji||"📚";
+  const btn=getCourseBtn(c);
+  return `<div class="em-row" onclick="location.href='${btn.href}'">
+    <div class="em-row-emoji">${emoji}</div>
+    <div class="em-row-info">
+      <h3>${c.title}</h3>
+      <div class="em-row-meta">
+        <span class="em-badge ${isFree?'free':'paid'}">${isFree?'Free':'Paid'}</span>
+        <span>${cat}</span><span>·</span><span>${mods} module${mods!==1?'s':''}</span>
+        ${dur?'<span>·</span><span>⏱ '+dur+'</span>':''}
+      </div>
+    </div>
+    <div class="em-price ${isFree?'free':''}">${price}</div>
+    <button class="em-btn ${btn.cls}" onclick="event.stopPropagation();location.href='${btn.href}'">${btn.label}</button>
+  </div>`;
+}
+
+function renderCourses(){
+  const container=document.getElementById("courses-container"),bar=document.getElementById("results-bar");
+  const filtered=allCourses.filter(c=>{
+    const mf=activeFilter==="all"||(activeFilter==="free"&&c.isFree===true)||(activeFilter==="paid"&&c.isFree!==true)||c.category===activeFilter;
+    const ms=!searchTerm||c.title.toLowerCase().includes(searchTerm)||(c.description||"").toLowerCase().includes(searchTerm);
+    return mf&&ms;
+  });
+  const totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
+  if(currentPage>totalPages)currentPage=totalPages;
+  const start=(currentPage-1)*PER_PAGE,paged=filtered.slice(start,start+PER_PAGE);
+  bar.innerHTML=filtered.length
+    ?`Showing <strong>${start+1}–${Math.min(start+PER_PAGE,filtered.length)}</strong> of <strong>${filtered.length}</strong> courses`
+    :`<strong>0</strong> courses match`;
+  container.className=currentView==="grid"?"em-courses-grid":"em-courses-list";
+  if(!filtered.length){
+    container.innerHTML='<div class="em-empty"><div class="em-empty-icon">🔍</div><h3>No courses found</h3><p>Try adjusting your filters.</p></div>';
+    renderPagination(0);return;
+  }
+  // First card on page 1 gets wide treatment
+  container.innerHTML=paged.map((c,i)=>currentView==="grid"?renderGridCard(c,i===0&&currentPage===1):renderListRow(c)).join("");
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  const el=document.getElementById("pagination");
+  if(totalPages<=1){el.innerHTML="";return;}
+  let html=`<button class="em-page-btn" ${currentPage===1?'disabled':''} data-page="${currentPage-1}">‹ Prev</button>`;
+  let startP=Math.max(1,currentPage-2),endP=Math.min(totalPages,startP+4);
+  if(endP-startP<4)startP=Math.max(1,endP-4);
+  if(startP>1){html+=`<button class="em-page-btn" data-page="1">1</button>`;if(startP>2)html+=`<span class="em-page-info">…</span>`;}
+  for(let i=startP;i<=endP;i++)html+=`<button class="em-page-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+  if(endP<totalPages){if(endP<totalPages-1)html+=`<span class="em-page-info">…</span>`;html+=`<button class="em-page-btn" data-page="${totalPages}">${totalPages}</button>`;}
+  html+=`<button class="em-page-btn" ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Next ›</button>`;
+  el.innerHTML=html;
+  el.querySelectorAll('.em-page-btn:not(:disabled)').forEach(btn=>{
+    btn.addEventListener('click',()=>{currentPage=parseInt(btn.dataset.page);renderCourses();document.querySelector('.filter-bar').scrollIntoView({behavior:'smooth',block:'start'});});
+  });
+}
+
+document.getElementById("view-list").addEventListener("click",()=>{currentView="list";document.getElementById("view-list").classList.add("active");document.getElementById("view-grid").classList.remove("active");currentPage=1;renderCourses();});
+document.getElementById("view-grid").addEventListener("click",()=>{currentView="grid";document.getElementById("view-grid").classList.add("active");document.getElementById("view-list").classList.remove("active");currentPage=1;renderCourses();});
+document.querySelectorAll(".filter-pill").forEach(p=>p.addEventListener("click",()=>{document.querySelectorAll(".filter-pill").forEach(x=>x.classList.remove("active"));p.classList.add("active");activeFilter=p.dataset.filter;currentPage=1;renderCourses();}));
+document.getElementById("search-input").addEventListener("input",e=>{searchTerm=e.target.value.toLowerCase().trim();currentPage=1;renderCourses();});
+
+const params=new URLSearchParams(location.search);
+if(params.get("filter")==="free"){activeFilter="free";document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter==="free"));}
+if(params.get("cat")){activeFilter=params.get("cat");document.querySelectorAll(".filter-pill").forEach(p=>p.classList.toggle("active",p.dataset.filter===activeFilter));}
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
