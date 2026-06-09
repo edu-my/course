@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — edu-my.web</title>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/editorial.css?v=3"/>
+  <style>
+.profile-wrap{padding:3rem var(--page-padding);max-width:700px;margin:0 auto;}
+    .profile-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--gray-light);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.5rem;}
+    .profile-card-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gray-light);background:var(--off-white);display:flex;align-items:center;gap:.75rem;}
+    .profile-card-header h3{font-size:1rem;font-weight:700;}
+    .profile-card-body{padding:1.5rem;}
+    .profile-avatar-section{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-light);}
+    .profile-avatar-big{width:80px;height:80px;background:var(--red);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;font-size:1.8rem;font-weight:700;flex-shrink:0;}
+    .success-msg{display:none;background:var(--green-light);color:#0f5c30;border-left:4px solid var(--green);padding:.75rem 1rem;border-radius:var(--radius);margin-bottom:1rem;font-size:.88rem;}
+    .success-msg.show{display:block;}
+    .danger-zone{border:1px solid var(--red-mid);border-radius:var(--radius-lg);padding:1.5rem;background:var(--red-light);}
+    .danger-zone h4{color:var(--red);margin-bottom:.5rem;}
+    .danger-zone p{font-size:.83rem;color:var(--gray);margin-bottom:1rem;}
+</style>
+</head>
+<body>
+  <nav class="navbar">
+  <a href="index.html" class="nav-logo">EDU-MY.WEB</a>
+  <div class="em-nav-tabs">
+    <a href="courses.html" class="em-nav-tab">Courses</a>
+    <a href="dashboard.html" class="em-nav-tab">Dashboard</a>
+  </div>
+  <div class="nav-actions hidden" id="nav-guest">
+    <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+  </div>
+  <div class="nav-user hidden" id="nav-user">
+    <div class="nav-avatar" id="nav-avatar">U</div>
+    <div class="nav-user-name" id="nav-name">User</div>
+    <div class="nav-dropdown">
+      <div class="nav-dropdown-header">
+        <div class="nav-dropdown-name" id="dd-name">User</div>
+        <div class="nav-dropdown-email" id="dd-email"></div>
+      </div>
+      <a href="dashboard.html" class="nav-dropdown-item"><span class="item-icon">📊</span> My Dashboard</a>
+      <a href="profile.html" class="nav-dropdown-item"><span class="item-icon">👤</span> My Profile</a>
+      <button class="nav-dropdown-item danger" id="btn-logout"><span class="item-icon">🚪</span> Log Out</button>
+    </div>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+  <div class="nav-mobile-drawer" id="nav-mobile-drawer">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="courses.html" class="nav-link active">Courses</a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
+  <div class="nav-actions hidden" id="nav-mobile-guest">
+    <a href="login.html" class="btn btn-secondary">Log In</a>
+    <a href="register.html" class="btn btn-primary">Get Started</a>
+  </div>
+  <div class="hidden" id="nav-mobile-user">
+    <a href="dashboard.html" class="nav-link">My Dashboard</a>
+    <button class="btn btn-secondary" id="btn-logout-mobile">Log Out</button>
+  </div>
+</div>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="em-eyebrow">✦ Account</div>
+    <h1><strong>MY PROFILE.</strong><em>Your details.</em></h1>
+    <p>Manage your account settings.</p>
+  </div>
+</div>
+
+<div class="profile-wrap">
+    <div class="profile-card">
+      <div class="profile-card-header"><span>&#128100;</span><h3>Profile Information</h3></div>
+      <div class="profile-card-body">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar-big" id="profile-avatar">U</div>
+          <div><h4 id="profile-display-name">Loading...</h4><p id="profile-email-display" style="font-size:.85rem;color:var(--gray)"></p></div>
+        </div>
+        <div class="success-msg" id="profile-success">&#9989; Profile updated!</div>
+        <div class="alert alert-error" id="profile-error" style="display:none"></div>
+        <div class="form-group">
+          <label class="form-label" for="p-name">Full Name</label>
+          <input type="text" id="p-name" class="form-control" placeholder="Your full name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="p-email" class="form-control" readonly style="background:var(--off-white);cursor:not-allowed"/>
+        </div>
+        <button class="btn btn-primary" id="btn-save-profile">Save Changes</button>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-header"><span>&#128274;</span><h3>Change Password</h3></div>
+      <div class="profile-card-body">
+        <div class="success-msg" id="pass-success">&#9989; Password updated!</div>
+        <div class="alert alert-error" id="pass-error" style="display:none"></div>
+        <div class="form-group">
+          <label class="form-label" for="p-cur">Current Password</label>
+          <input type="password" id="p-cur" class="form-control" placeholder="Current password"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-new">New Password</label>
+          <input type="password" id="p-new" class="form-control" placeholder="Minimum 6 characters"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-confirm">Confirm New Password</label>
+          <input type="password" id="p-confirm" class="form-control" placeholder="Re-enter new password"/>
+        </div>
+        <button class="btn btn-primary" id="btn-change-pass">Update Password</button>
+      </div>
+    </div>
+    <div class="danger-zone">
+      <h4>&#9888;&#65039; Sign Out</h4>
+      <p>End your current session. You can log back in anytime.</p>
+      <button class="btn btn-danger btn-sm" id="btn-signout">Sign Out</button>
+    </div>
+  </div>
+  <script type="module">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import {getAuth,onAuthStateChanged,signOut,updateProfile,updatePassword,EmailAuthProvider,reauthenticateWithCredential} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import {getFirestore,doc,updateDoc} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const app=initializeApp({
+      apiKey:"AIzaSyCpXYFftiB-agrY44eGKdFyUPm-t7FXbUk",
+      authDomain:"kolamdata.firebaseapp.com",
+      projectId:"kolamdata",
+      storageBucket:"kolamdata.firebasestorage.app",
+      messagingSenderId:"16403132310",
+      appId:"1:16403132310:web:464c4ad2d19812f95077b7"
+    }); const auth=getAuth(app); const db=getFirestore(app);
+    let currentUser=null;
+    
+    // #### waitForAuth — resolves once Firebase confirms auth state ####
+    function waitForAuth() {
+      return new Promise((resolve) => {
+        const unsub = onAuthStateChanged(auth, (user) => { unsub(); resolve(user); });
+      });
+    }
+    waitForAuth().then(async(user)=>{
+      if(!user){ location.href="login.html"; return; }
+      currentUser=user;
+      const g=document.getElementById("nav-guest"),u=document.getElementById("nav-user");
+      const mg=document.getElementById("nav-mobile-guest"),mu=document.getElementById("nav-mobile-user");
+      if(user){
+        g?.classList.add("hidden");u?.classList.remove("hidden");
+        mg?.classList.add("hidden");mu?.classList.remove("hidden");
+        const n=user.displayName||"User",el=id=>document.getElementById(id);
+        if(el("nav-avatar"))el("nav-avatar").textContent=n.charAt(0).toUpperCase();
+        if(el("nav-name"))el("nav-name").textContent=n;
+        if(el("dd-name"))el("dd-name").textContent=n;
+        if(el("dd-email"))el("dd-email").textContent=user.email||"";
+        window.cacheAuthUser?.(user, false);
+      }else{
+        g?.classList.remove("hidden");u?.classList.add("hidden");
+        mg?.classList.remove("hidden");mu?.classList.add("hidden");
+      }
+      const name=user.displayName||"User";
+      document.getElementById("profile-avatar").textContent=name.charAt(0).toUpperCase();
+      document.getElementById("profile-display-name").textContent=name;
+      document.getElementById("profile-email-display").textContent=user.email||"";
+      document.getElementById("p-name").value=name;
+      document.getElementById("p-email").value=user.email||"";
+    });
+    document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+    document.getElementById("btn-save-profile").addEventListener("click",async()=>{
+      const name=document.getElementById("p-name").value.trim();
+      const err=document.getElementById("profile-error"),suc=document.getElementById("profile-success");
+      err.style.display="none";suc.classList.remove("show");
+      if(!name){err.textContent="Please enter your name.";err.style.display="flex";return;}
+      const btn=document.getElementById("btn-save-profile");btn.disabled=true;btn.textContent="Saving...";
+      try{
+        await updateProfile(currentUser,{displayName:name});
+        await updateDoc(doc(db,"users",currentUser.uid),{displayName:name});
+        document.getElementById("profile-avatar").textContent=name.charAt(0).toUpperCase();
+        document.getElementById("profile-display-name").textContent=name;
+        if(document.getElementById("nav-avatar"))document.getElementById("nav-avatar").textContent=name.charAt(0).toUpperCase();
+        if(document.getElementById("nav-name"))document.getElementById("nav-name").textContent=name;
+        if(document.getElementById("dd-name"))document.getElementById("dd-name").textContent=name;
+        suc.classList.add("show");
+      }catch(e){err.textContent="Failed: "+e.message;err.style.display="flex";}
+      btn.disabled=false;btn.textContent="Save Changes";
+    });
+    document.getElementById("btn-change-pass").addEventListener("click",async()=>{
+      const cur=document.getElementById("p-cur").value;
+      const nw=document.getElementById("p-new").value;
+      const con=document.getElementById("p-confirm").value;
+      const err=document.getElementById("pass-error"),suc=document.getElementById("pass-success");
+      err.style.display="none";suc.classList.remove("show");
+      if(!cur){err.textContent="Enter current password.";err.style.display="flex";return;}
+      if(nw.length<6){err.textContent="New password must be at least 6 characters.";err.style.display="flex";return;}
+      if(nw!==con){err.textContent="Passwords do not match.";err.style.display="flex";return;}
+      const btn=document.getElementById("btn-change-pass");btn.disabled=true;btn.textContent="Updating...";
+      try{
+        const cred=EmailAuthProvider.credential(currentUser.email,cur);
+        await reauthenticateWithCredential(currentUser,cred);
+        await updatePassword(currentUser,nw);
+        document.getElementById("p-cur").value="";document.getElementById("p-new").value="";document.getElementById("p-confirm").value="";
+        suc.classList.add("show");
+      }catch(e){
+        const msg=e.code==="auth/wrong-password"||e.code==="auth/invalid-credential"?"Current password is incorrect.":"Error: "+e.message;
+        err.textContent=msg;err.style.display="flex";
+      }
+      btn.disabled=false;btn.textContent="Update Password";
+    });
+    document.getElementById("btn-signout").addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
+  </script>
+  <script src="js/nav.js"></script>
+
+  <!-- FLOATING WHATSAPP -->
+  <style>
+    .help-float{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:.75rem;}
+    .help-text{background:white;border:1px solid var(--gray-light);border-radius:25px;padding:.55rem 1.1rem;font-size:.85rem;color:var(--dark);box-shadow:0 4px 20px rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;max-width:0;opacity:0;transition:max-width .6s ease,opacity .4s ease;}
+    .help-text.visible{max-width:240px;opacity:1;}
+    .help-wa{width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;position:relative;}
+    .help-wa svg{width:28px;height:28px;position:relative;z-index:2;}
+    .help-wa::before,.help-wa::after{content:'';position:absolute;border-radius:50%;background:rgba(37,211,102,.4);animation:wa-pulse 2s ease-out infinite;}
+    .help-wa::before{width:54px;height:54px;animation-delay:0s;}
+    .help-wa::after{width:54px;height:54px;animation-delay:.6s;}
+    @keyframes wa-pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2);opacity:0;}}
+  </style>
+  <div class="help-float">
+    <span class="help-text" id="help-text">Let me know how I can help</span>
+    <a class="help-wa" href="https://wa.me/60108402462" target="_blank" title="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+  <script>setTimeout(function(){var t=document.getElementById("help-text");if(t)t.classList.add("visible");},4000);</script>
+  <!-- END FLOATING WHATSAPP -->
+</body>
+</html>
