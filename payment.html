@@ -130,7 +130,13 @@
         if(el("dd-email"))el("dd-email").textContent=user.email||"";
         window.cacheAuthUser?.(user,false);
       }else{g?.classList.remove("hidden");u?.classList.add("hidden");mg?.classList.remove("hidden");mu?.classList.add("hidden");}
-      await loadPage();
+      // #### FIX: show an error instead of an endless spinner ####
+      try{ await loadPage(); }
+      catch(e){
+        console.error("loadPage failed:",e);
+        document.getElementById("payment-wrap").innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--red)">Could not load payment details: '+e.message+'<br/><a href="courses.html">Back to courses</a></div>';
+        return;
+      }
       loadQRCode();
     });
     document.getElementById("btn-logout")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));document.getElementById("btn-logout-mobile")?.addEventListener("click",()=>signOut(auth).then(()=>{window.clearAuthCache?.();location.href="index.html";}));
@@ -244,7 +250,7 @@
         '<div style="grid-column:1/-1;max-width:560px;margin:0 auto;width:100%">'
         +'<div style="text-align:center;margin-bottom:2rem">'
         +'<div style="font-size:3rem;margin-bottom:.75rem">'+(approved?"&#127881;":rejected?"&#10060;":"&#9203;")+'</div>'
-        +'<h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem;font-weight:400">'+(approved?"PAYMENT APPROVED!":rejected?"PAYMENT REJECTED":"RECEIPT SUBMITTED")+'</h2>'
+        +'<h2 style="font-family:\'DM Serif Display\',serif;font-size:1.8rem;font-weight:400">'+(approved?"PAYMENT APPROVED!":rejected?"PAYMENT REJECTED":"RECEIPT SUBMITTED")+'</h2>'
         +'<p style="color:var(--gray);font-size:.9rem">'+(approved?"Course access unlocked.":rejected?"Please resubmit.":"We will review within 24 hours.")+'</p>'
         +'</div>'
         +'<div class="pay-card"><h3>PAYMENT STATUS</h3>'
